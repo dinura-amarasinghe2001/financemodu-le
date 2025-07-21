@@ -1,0 +1,106 @@
+<!-- Dialog Title -->
+<h2
+  class="flex flex-col items-center p-3 text-center text-xl font-semibold text-gray-800 dark:text-white"
+>
+  {{ data?.treatment?.id ? "Update Treatment" : "Create Treatment" }}
+</h2>
+
+<!-- Responsive Form Grid -->
+<mat-dialog-content class="p-4">
+  <form
+    [formGroup]="treatmentForm"
+    class="grid grid-cols-1 md:grid-cols-2 gap-4"
+  >
+    <!-- Vehicle Model -->
+    <mat-form-field appearance="outline">
+      <mat-label>Vehicle Model</mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="vehicleModelControl"
+        [matAutocomplete]="autoModel"
+        placeholder="Type to find Vehicle Model"
+        (focus)="onModelFocus()"
+      />
+      <mat-autocomplete
+        #autoModel="matAutocomplete"
+        [displayWith]="displayVehicleModel"
+        (optionSelected)="onSelectVehicleModel($event)"
+      >
+        <mat-option
+          *ngFor="let model of filteredVehicleModels$ | async"
+          [value]="model"
+        >
+          {{ model.modelName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <!-- Treatment Type -->
+    <mat-form-field appearance="outline">
+      <mat-label>Treatment Type</mat-label>
+      <mat-select formControlName="treatmentType">
+        <mat-option *ngFor="let type of treatmentTypes" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Conditional Fields -->
+    <mat-form-field appearance="outline" *ngIf="isPart">
+      <mat-label>Part Name</mat-label>
+      <input matInput formControlName="partName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isPart">
+      <mat-label>Part Number</mat-label>
+      <input matInput formControlName="partNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isPaint">
+      <mat-label>Paint Name</mat-label>
+      <input matInput formControlName="paintName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isRepair">
+      <mat-label>Repair Name</mat-label>
+      <input matInput formControlName="repairName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isFittingCharge">
+      <mat-label>Fitting Charge Name</mat-label>
+      <input matInput formControlName="fittingChargeName" />
+    </mat-form-field>
+
+    <!-- Common Fields -->
+    <mat-form-field appearance="outline" *ngIf="isPart">
+      <mat-label>Available Quantity</mat-label>
+      <input matInput type="number" formControlName="availableQuantity" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<!-- Dialog Actions -->
+<mat-dialog-actions class="flex flex-col items-center p-4 text-center">
+  <div class="flex flex-wrap justify-center gap-4">
+    <button
+      mat-button
+      class="rounded-lg bg-gray-200 px-4 py-2 text-2xl text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-button
+      class="rounded-lg bg-red-500 px-4 py-2 text-2xl text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+      (click)="submitTreatment()"
+    >
+      {{ data?.treatment?.id ? "Update" : "Create" }}
+    </button>
+  </div>
+</mat-dialog-actions>

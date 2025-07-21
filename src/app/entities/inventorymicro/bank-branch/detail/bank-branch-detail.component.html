@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (bankBranch(); as bankBranchRef) {
+      <div>
+        <h2 data-cy="bankBranchDetailsHeading"><span>Bank Branch</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ bankBranchRef.id }}</span>
+          </dd>
+          <dt><span>I D</span></dt>
+          <dd>
+            <span>{{ bankBranchRef.iD }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ bankBranchRef.name }}</span>
+          </dd>
+          <dt><span>Bank ID</span></dt>
+          <dd>
+            <span>{{ bankBranchRef.bankID }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/bank-branch', bankBranchRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

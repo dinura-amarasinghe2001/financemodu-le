@@ -1,0 +1,70 @@
+<div class="grid grid-cols-3 items-center gap-4 mb-4">
+  <!-- GRN Code -->
+  <div class="truncate">
+    <h2 class="text-lg font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+      GRN Code: {{ data.code }}
+    </h2>
+  </div>
+
+  <!-- Name -->
+  <div class="truncate">
+    <h2 class="text-lg font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+      Name: {{ data.name }}
+    </h2>
+  </div>
+
+  <!-- Close Button (aligned right) -->
+  <div class="flex justify-end">
+    <button mat-button color="warn" (click)="onClose()" aria-label="Close">
+      close 
+    </button>
+  </div>
+</div>
+
+
+
+
+<table mat-table [dataSource]="dataSource" class="w-full table-fixed border-separate border-spacing-y-1 text-sm">
+  <ng-container matColumnDef="itemName">
+    <th mat-header-cell *matHeaderCellDef class="px-2 py-2 text-left font-medium">Item Name</th>
+    <td mat-cell *matCellDef="let grnline" class="px-2 py-1">{{ grnline.itemName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="itemCode">
+    <th mat-header-cell *matHeaderCellDef class="px-2 py-2 text-left font-medium">Item Code</th>
+    <td mat-cell *matCellDef="let grnline" class="px-2 py-1">{{ grnline.itemCode }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef class="px-2 py-2 text-left font-medium">Quantity</th>
+    <td mat-cell *matCellDef="let grnline" class="px-2 py-1">{{ grnline.quantity }}</td>
+  </ng-container>
+ <ng-container matColumnDef="sellprice">
+    <th mat-header-cell *matHeaderCellDef class="px-2 py-2 text-left font-medium">Unit Price</th>
+    <td mat-cell *matCellDef="let grnline" class="px-2 py-1">{{ grnline.price}}</td>
+  </ng-container>
+  <ng-container matColumnDef="lineTotal">
+    <th mat-header-cell *matHeaderCellDef class="px-2 py-2 text-left font-medium">Line Total</th>
+    <td mat-cell *matCellDef="let grnline" class="px-2 py-1">{{ grnline.lineTotal }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="grnDisplayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: grnDisplayedColumns"></tr>
+</table>
+<div class="flex items-center justify-between mt-4">
+  <mat-paginator
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="onAddMore()"
+  >
+    Add more items
+  </button>
+</div>
+

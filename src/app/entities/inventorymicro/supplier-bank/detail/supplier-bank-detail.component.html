@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (supplierBank(); as supplierBankRef) {
+      <div>
+        <h2 data-cy="supplierBankDetailsHeading"><span>Supplier Bank</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.id }}</span>
+          </dd>
+          <dt><span>Credit Period</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.creditPeriod }}</span>
+          </dd>
+          <dt><span>Maximum Discount</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.maximumDiscount }}</span>
+          </dd>
+          <dt><span>Maximum Credit Limit</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.maximumCreditLimit }}</span>
+          </dd>
+          <dt><span>Cheque Drawn</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.chequeDrawn }}</span>
+          </dd>
+          <dt><span>Cash</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.cash }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ supplierBankRef.lmu }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/supplier-bank', supplierBankRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

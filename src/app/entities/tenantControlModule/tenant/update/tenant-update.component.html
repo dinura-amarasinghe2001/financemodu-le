@@ -1,0 +1,246 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-tenant-heading" data-cy="TenantCreateUpdateHeading">Create or edit a Tenant</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_code">Code</label>
+          <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_displayName">Display Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="displayName"
+            id="field_displayName"
+            data-cy="displayName"
+            formControlName="displayName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_tenantType">Tenant Type</label>
+          <select class="form-control" name="tenantType" formControlName="tenantType" id="field_tenantType" data-cy="tenantType">
+            <option [ngValue]="null"></option>
+            @for (tenantBusinessType of tenantBusinessTypeValues; track $index) {
+              <option [value]="tenantBusinessType">
+                {{
+                  {
+                    null: '',
+                    CORPORATE: 'CORPORATE',
+                    SME: 'SME',
+                    NON_PROFIT: 'NON_PROFIT',
+                    GOVERNMENT: 'GOVERNMENT',
+                    EDUCATIONAL: 'EDUCATIONAL',
+                    AUTOMOBILE_REPAIR: 'AUTOMOBILE_REPAIR',
+                  }[tenantBusinessType]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_levelType">Level Type</label>
+          <select class="form-control" name="levelType" formControlName="levelType" id="field_levelType" data-cy="levelType">
+            <option [ngValue]="null"></option>
+            @for (levelType of levelTypeValues; track $index) {
+              <option [value]="levelType">
+                {{
+                  {
+                    null: '',
+                    HEADQUARTERS: 'HEADQUARTERS',
+                    HEAD_BRANCH: 'HEAD_BRANCH',
+                    BRANCH: 'BRANCH',
+                    SUBBRANCH: 'SUBBRANCH',
+                    DEPARTMENT: 'DEPARTMENT',
+                    UNIT: 'UNIT',
+                    TEAM: 'TEAM',
+                  }[levelType]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_levelStatus">Level Status</label>
+          <select class="form-control" name="levelStatus" formControlName="levelStatus" id="field_levelStatus" data-cy="levelStatus">
+            <option [ngValue]="null"></option>
+            @for (levelStatus of levelStatusValues; track $index) {
+              <option [value]="levelStatus">
+                {{
+                  { null: '', ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE', UNDER_MAINTENANCE: 'UNDER_MAINTENANCE', MERGED: 'MERGED' }[
+                    levelStatus
+                  ]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_registrationNumber">Registration Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="registrationNumber"
+            id="field_registrationNumber"
+            data-cy="registrationNumber"
+            formControlName="registrationNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_taxId">Tax Id</label>
+          <input type="text" class="form-control" name="taxId" id="field_taxId" data-cy="taxId" formControlName="taxId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_active">Active</label>
+          <input type="checkbox" class="form-check" name="active" id="field_active" data-cy="active" formControlName="active" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_establishedDate">Established Date</label>
+          <div class="input-group">
+            <input
+              id="field_establishedDate"
+              data-cy="establishedDate"
+              type="text"
+              class="form-control"
+              name="establishedDate"
+              ngbDatepicker
+              #establishedDateDp="ngbDatepicker"
+              formControlName="establishedDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="establishedDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_website">Website</label>
+          <input type="text" class="form-control" name="website" id="field_website" data-cy="website" formControlName="website" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_logo">Logo</label>
+          <input type="text" class="form-control" name="logo" id="field_logo" data-cy="logo" formControlName="logo" />
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

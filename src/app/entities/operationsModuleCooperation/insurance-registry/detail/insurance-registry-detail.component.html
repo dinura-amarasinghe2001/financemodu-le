@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (insuranceRegistry(); as insuranceRegistryRef) {
+      <div>
+        <h2 data-cy="insuranceRegistryDetailsHeading"><span>Insurance Registry</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.id }}</span>
+          </dd>
+          <dt><span>Insurance Name</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.insuranceName }}</span>
+          </dd>
+          <dt><span>Remark</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.remark }}</span>
+          </dd>
+          <dt><span>Hotline</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.hotline }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ insuranceRegistryRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/insurance-registry', insuranceRegistryRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

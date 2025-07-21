@@ -1,0 +1,26 @@
+<!-- Container to center content -->
+<div class="flex flex-col items-center p-3 text-center">
+    <!-- Dialog Title -->
+    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+        Print Receipt?
+    </h2>
+
+    <!-- Dialog Actions (Centered Buttons) -->
+    <div class="mt-6 flex space-x-3">
+        <button
+            mat-button
+            class="rounded-lg bg-gray-200 px-4 py-2 text-2xl text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+            (click)="cancel()"
+        >
+            No
+        </button>
+
+        <button
+            mat-button
+            class="rounded-lg bg-red-500 px-4 py-2 text-2xl text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+            (click)="confirm()"
+        >
+            Yes
+        </button>
+    </div>
+</div>

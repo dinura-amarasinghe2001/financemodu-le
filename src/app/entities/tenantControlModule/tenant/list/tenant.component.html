@@ -1,0 +1,323 @@
+<div>
+  <h2 id="page-heading" data-cy="TenantHeading">
+    <span>Tenants</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-tenant"
+        [routerLink]="['/tenant/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Tenant</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Tenant</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Tenant"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (tenants().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Tenants found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="code">
+              <div class="d-flex">
+                <span>Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span>Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="displayName">
+              <div class="d-flex">
+                <span>Display Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tenantType">
+              <div class="d-flex">
+                <span>Tenant Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="levelType">
+              <div class="d-flex">
+                <span>Level Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="levelStatus">
+              <div class="d-flex">
+                <span>Level Status</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="registrationNumber">
+              <div class="d-flex">
+                <span>Registration Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="taxId">
+              <div class="d-flex">
+                <span>Tax Id</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span>Description</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="active">
+              <div class="d-flex">
+                <span>Active</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="establishedDate">
+              <div class="d-flex">
+                <span>Established Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="website">
+              <div class="d-flex">
+                <span>Website</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="logo">
+              <div class="d-flex">
+                <span>Logo</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdBy">
+              <div class="d-flex">
+                <span>Created By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdDate">
+              <div class="d-flex">
+                <span>Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedBy">
+              <div class="d-flex">
+                <span>Last Modified By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedDate">
+              <div class="d-flex">
+                <span>Last Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tenant of tenants(); track trackId(tenant)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/tenant', tenant.id, 'view']">{{ tenant.id }}</a>
+              </td>
+              <td>{{ tenant.code }}</td>
+              <td>{{ tenant.name }}</td>
+              <td>{{ tenant.displayName }}</td>
+              <td>
+                {{
+                  {
+                    null: '',
+                    CORPORATE: 'CORPORATE',
+                    SME: 'SME',
+                    NON_PROFIT: 'NON_PROFIT',
+                    GOVERNMENT: 'GOVERNMENT',
+                    EDUCATIONAL: 'EDUCATIONAL',
+                    AUTOMOBILE_REPAIR: 'AUTOMOBILE_REPAIR',
+                  }[tenant.tenantType ?? 'null']
+                }}
+              </td>
+              <td>
+                {{
+                  {
+                    null: '',
+                    HEADQUARTERS: 'HEADQUARTERS',
+                    HEAD_BRANCH: 'HEAD_BRANCH',
+                    BRANCH: 'BRANCH',
+                    SUBBRANCH: 'SUBBRANCH',
+                    DEPARTMENT: 'DEPARTMENT',
+                    UNIT: 'UNIT',
+                    TEAM: 'TEAM',
+                  }[tenant.levelType ?? 'null']
+                }}
+              </td>
+              <td>
+                {{
+                  { null: '', ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE', UNDER_MAINTENANCE: 'UNDER_MAINTENANCE', MERGED: 'MERGED' }[
+                    tenant.levelStatus ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ tenant.registrationNumber }}</td>
+              <td>{{ tenant.taxId }}</td>
+              <td>{{ tenant.description }}</td>
+              <td>{{ tenant.active }}</td>
+              <td>{{ tenant.establishedDate | formatMediumDate }}</td>
+              <td>{{ tenant.website }}</td>
+              <td>{{ tenant.logo }}</td>
+              <td>{{ tenant.createdBy }}</td>
+              <td>{{ tenant.createdDate | formatMediumDatetime }}</td>
+              <td>{{ tenant.lastModifiedBy }}</td>
+              <td>{{ tenant.lastModifiedDate | formatMediumDatetime }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/flag']"
+                    [queryParams]="{ 'filter[tenantId.in]': tenant.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Show Flags</span>
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/operational-unit']"
+                    [queryParams]="{ 'filter[tenantId.in]': tenant.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Show Ops Units 1</span>
+                  </button>
+                  <a [routerLink]="['/tenant', tenant.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/tenant', tenant.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(tenant)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (tenants().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

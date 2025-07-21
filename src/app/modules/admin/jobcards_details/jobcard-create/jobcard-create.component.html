@@ -1,0 +1,720 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-auto">
+  <!-- Header -->
+  <div
+    *ngIf="!jobID"
+    class="bg-default flex flex-0 flex-col dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pt-3"
+  >
+    <div class="min-w-0 flex-1 mb-6 border-b">
+      <div class="mt-2">
+        <!-- Make this a flex container to align buttons + search field -->
+        <div class="flex justify-between items-center mb-6 gap-3">
+          <!-- Search Bar -->
+          <div class="flex items-center gap-2">
+            <button
+              class="px-1 py-1 text-white rounded-xl transition-all bg-amber-400"
+            >
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+            </button>
+          </div>
+          <div class="flex w-full flex-1 items-center gap-2">
+            <div class="relative w-full">
+              <input
+                [formControl]="searchInputControl"
+                (keydown.enter)="loadEstimate()"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                [placeholder]="'Enter Estimate ID'"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <ng-container>
+                  <mat-icon
+                    class="text-current text-2xl"
+                    [svgIcon]="'mat_outline:directions_car_filled'"
+                  ></mat-icon>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <button
+            *ngIf="!jobID"
+            class="px-4 py-5 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+            mat-button
+            (click)="createJobCard()"
+          >
+            <span class="">Create</span>
+          </button>
+
+          <button
+            *ngIf="isUpdating || jobID"
+            class="px-4 py-6 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+            mat-button
+            (click)="updateJobCard()"
+          >
+            <span class="">Update</span>
+          </button>
+
+          <div class="flex flex-col gap-2 h-16">
+            <fuse-alert
+              [appearance]="'soft'"
+              [dismissible]="true"
+              [dismissed]="true"
+              [name]="'alertBox4'"
+              [type]="'warn'"
+            >
+              Please fill all required fields before submitting the form.
+            </fuse-alert>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-6 py-2 bg-gray-100" *ngIf="resentEsitamte?.length > 0">
+    <h2 class="text-2xl font-bold text-gray-800 mb-3 ml-3">Recent Estimates</h2>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"
+    >
+      <div
+        *ngFor="let estimate of resentEsitamte"
+        (click)="selectEsitamte(estimate.id)"
+        class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 group border-4 border-transparent hover:border-indigo-500"
+      >
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm text-gray-400">Estimate</span>
+          <div class="flex items-center gap-2">
+            <span
+              class="text-xs font-semibold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full group-hover:bg-indigo-200"
+            >
+              #{{ estimate.estimateID }}
+            </span>
+            <span
+              class="text-xs font-semibold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full group-hover:bg-indigo-200"
+            >
+              {{ estimate.createdDate | date: "medium" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="space-y-1 mb-2">
+          <div class="text-lg font-semibold text-gray-900 truncate">
+            {{ estimate.licenseNo }}
+          </div>
+          <div class="text-sm text-gray-600">
+            Owner:
+            <span class="font-medium text-gray-800">{{
+              estimate.vehicleOwnerName
+            }}</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end">
+          <span
+            class="text-xs text-indigo-600 font-medium group-hover:underline"
+            >Add To Job Card →</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-col gap-2 py-2 px-6"
+    *ngIf="!selectedVehicleandClientDetails?.vehicle?.licenseNo"
+  >
+    <fuse-alert
+      [appearance]="'soft'"
+      [dismissible]="true"
+      [dismissed]="true"
+      [name]="'alertBox5'"
+      [type]="'warn'"
+    >
+      Please Select Vehicle.
+    </fuse-alert>
+  </div>
+
+  <div class="flex gap-4 px-6 mt-3" *ngIf="jobCardDetails">
+    <div class="rounded-2xl w-full">
+      <div class="bg-white flex flex-col rounded-lg p-6 h-full space-y-0">
+        <div class="w-full mb-6 flex justify-between items-center">
+          <!-- Left: Job ID badge -->
+          <div>
+            <div
+              *ngIf="invoiceNumber"
+              class="text-xl text-white bg-indigo-600 rounded-full px-3 py-1 group-hover:bg-indigo-700 transition"
+            >
+              {{ invoiceNumber }}
+            </div>
+          </div>
+
+          <!-- Right: Details toggle button -->
+          <div class="flex flex-row gap-3">
+            <button
+              class="px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+              mat-button
+              (click)="toggleDetails()"
+            >
+              <span class="mr-2">Details</span>
+              <mat-icon
+                class="icon-size-5 text-white"
+                *ngIf="!showDetails"
+                [svgIcon]="'heroicons_solid:chevron-down'"
+              ></mat-icon>
+              <mat-icon
+                class="icon-size-5 text-white"
+                *ngIf="showDetails"
+                [svgIcon]="'heroicons_solid:chevron-up'"
+              ></mat-icon>
+            </button>
+
+            <button
+              *ngIf="isUpdating || jobID"
+              class="px-4 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+              mat-button
+              (click)="updateJobCard()"
+            >
+              <span class="">Update</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vehicle & Client Side-by-Side -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <!-- Vehicle Info -->
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'mat_outline:directions_car_filled'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">Vehicle</div>
+              <div class="text-lg font-semibold">
+                {{ jobCardDetails.vehicleLicenseNumber }}
+                <div
+                  class="bg-amber-500 text-white px-3 py-1 mt-2 text-sm rounded-lg"
+                >
+                  Panels: {{ jobCardDetails.numberOfPanels ?? 0 }}
+                </div>
+              </div>
+              <div class="text-sm text-gray-500">
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <div class="bg-amber-500 text-white px-3 py-1 rounded-lg">
+                    {{ jobCardDetails.vehicleBrand }}
+                  </div>
+                  <div class="bg-red-500 text-white px-3 py-1 rounded-lg">
+                    {{ jobCardDetails.vehicleModel }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Owner Info -->
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:user-circle'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">Owner</div>
+              <div class="text-lg font-semibold">
+                {{ jobCardDetails.vehicleOwnerName }}
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <div class="bg-teal-500 text-white px-3 py-1 rounded-lg">
+                  {{ jobCardDetails.vehicleOwnerContactNumber1 }}
+                </div>
+
+                <div class="bg-teal-500 text-white px-3 mt-1 py-1 rounded-lg">
+                  {{ jobCardDetails.vehicleOwnerContactNumber2 }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:clipboard-document-list'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">Insurance</div>
+              <div class="text-lg font-semibold">
+                {{ jobCardDetails.insuranceCompany }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="showDetails">
+          <div class="w-full bg-card p-6 rounded-lg mb-3">
+            <form [formGroup]="jobCardForm" class="space-y-6">
+              <!-- Top Section - 3 or 4 per row on larger screens -->
+              <div class="flex gap-4 justify-center items-center">
+                <mat-form-field class="w-full">
+                  <mat-label>Fuel Level</mat-label>
+                  <input matInput formControlName="fuelLevel" />
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500 text-lg font-semibold"
+                  >
+                    %
+                  </div>
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                  <mat-label>Owner Belongings</mat-label>
+                  <input matInput formControlName="meterReading" />
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                  <mat-label>Meter Reading</mat-label>
+                  <input matInput formControlName="meterReading" />
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500 text-lg font-semibold"
+                  >
+                    KM
+                  </div>
+                </mat-form-field>
+
+                <!-- <mat-form-field class="w-full">
+                  <mat-label>JobCard Number</mat-label>
+                  <input matInput formControlName="jobCardNumber" />
+                </mat-form-field> -->
+              </div>
+
+              <!-- Date & Time Section -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Start Date & Time -->
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Start Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      formControlName="startDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <!-- Job Complete Date -->
+                  <mat-form-field class="w-full">
+                    <mat-label>Job Complete Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="jpicker"
+                      formControlName="jobCompleteDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="jpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #jpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <!-- Booth Date -->
+                <mat-form-field class="w-full">
+                  <mat-label>Booth Date</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="bpicker"
+                    formControlName="boothDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="bpicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #bpicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Additional DateTime Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Repairing Start</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="tinkStart"
+                      formControlName="tinkeringStartDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="tinkStart"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #tinkStart></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <mat-form-field class="w-full">
+                    <mat-label>Repairing End</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="tinkEnd"
+                      formControlName="tinkeringEndDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="tinkEnd"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #tinkEnd></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Paint Start</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="paintStart"
+                      formControlName="paintStartDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="paintStart"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #paintStart></mat-datepicker>
+                  </mat-form-field>
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <mat-form-field class="w-full">
+                    <mat-label>Paint End</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="paintEnd"
+                      formControlName="paintEndDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="paintEnd"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #paintEnd></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>QC Start</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="qcStart"
+                      formControlName="qcStartDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="qcStart"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #qcStart></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <mat-form-field class="w-full">
+                    <mat-label>QC End</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="qcEnd"
+                      formControlName="qcEndDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="qcEnd"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #qcEnd></mat-datepicker>
+                  </mat-form-field>
+                </div> -->
+
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Spare Part Start</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="spStart"
+                      formControlName="sparePartStartDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="spStart"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #spStart></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <mat-form-field class="w-full">
+                    <mat-label>Spare Part End</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="spEnd"
+                      formControlName="sparePartEndDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="spEnd"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #spEnd></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Fitting Work Start</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="fwStart"
+                      formControlName="fittingStartDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="fwStart"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #fwStart></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <mat-form-field class="w-full">
+                    <mat-label>Fitting Work End</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="fwEnd"
+                      formControlName="fittingEndDateTime"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="fwEnd"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #fwEnd></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-4 mt-6 mb-3">
+    <div class="flex flex-wrap gap-1 px-2">
+      <div
+        *ngFor="let id of selectedEstimateIds"
+        (click)="filterItems(id)"
+        class="bg-amber-500 text-white text-base font-medium px-4 py-2 rounded-xl shadow-sm hover:bg-amber-600 hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer"
+      >
+        Estimate #{{ id }}
+      </div>
+    </div>
+  </div>
+
+  <div class="px-6 w-full" *ngIf="selectedTreatmentsForJobCard.length > 0">
+    <div class="p-4 bg-white rounded-lg">
+      <h2 class="text-2xl font-bold capitalize mb-4 text-indigo-600">
+        Job Estimate Details For {{ estimateDetailsFor }}
+      </h2>
+
+      <!-- Inner scrollable container -->
+      <div class="overflow-x-auto">
+        <div
+          class="flex flex-col gap-2 min-w-max text-sm text-gray-800 px-4 mb-10"
+        >
+          <!-- Headers -->
+          <div class="flex font-semibold text-gray-700">
+            <!-- <div class="w-48">Job ID</div> -->
+            <div class="w-full ml-2">Department ID</div>
+            <div class="w-full">Start Date</div>
+            <div class="w-full">End Date</div>
+            <div class="w-full">State</div>
+            <div class="w-full ml-2">Remarks</div>
+            <!-- <div class="w-56">Est. Start</div>
+            <div class="w-56">Est. End</div> -->
+            <!-- <div class="w-56">Ops Unit</div> -->
+          </div>
+
+          <!-- Inputs -->
+          <div
+            class="flex gap-4 h-full"
+            *ngFor="
+              let treatment of selectedTreatmentsForJobCard;
+              let i = index
+            "
+          >
+            <!-- Inputs as before -->
+            <!-- You can keep all your input/date components here with w-56 widths -->
+            <!-- <input
+              class="w-56 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.id"
+              type="text"
+            /> -->
+
+            <div class="relative w-full">
+              <select
+                [(ngModel)]="treatment.departmentID"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+              >
+                <option value="" disabled selected hidden>
+                  Select Department
+                </option>
+                <option value="SPARE_PARTS">SPARE_PARTS</option>
+                <option value="PAINT">PAINT</option>
+                <option value="FITTING_CHARGES">FITTING_CHARGES</option>
+                <option value="REPAIRING">REPAIRING</option>
+                <!-- <option value="TINKERING">TINKERING</option>
+                <option value="QC">QC</option>
+                <option value="SALES">SALES</option> -->
+              </select>
+            </div>
+
+            <div class="relative w-full">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="picker"
+                [(ngModel)]="treatment.startDate"
+                matInput
+                placeholder="Start date"
+              />
+              <mat-datepicker-toggle
+                [for]="picker"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </div>
+
+            <div class="relative w-full">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="end"
+                [(ngModel)]="treatment.endDate"
+                matInput
+                placeholder="End date"
+              />
+              <mat-datepicker-toggle
+                [for]="end"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #end></mat-datepicker>
+            </div>
+
+            <select
+              class="w-full p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.currentState"
+            >
+              <option value="" disabled selected hidden>Select State</option>
+              <option value="OPEN">OPEN</option>
+              <option value="CANCELED">CANCELED</option>
+              <option value="COMPLETE">COMPLETE</option>
+              <option value="CLOSED">CLOSED</option>
+              <option value="QC_PENDING">QC_PENDING</option>
+              <option value="QC_APPROVED">QC_APPROVED</option>
+              <option value="QCPD">QCPD</option>
+              <option value="QCPD_PENDING">QCPD_PENDING</option>
+              <option value="QCPD_TO_PENDING">QCPD_TO_PENDING</option>
+            </select>
+
+            <input
+              class="w-full p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.remarks"
+              type="text"
+            />
+
+            <!-- <div class="relative w-56">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="estStart"
+                [(ngModel)]="treatment.estStartDate"
+                matInput
+                placeholder="Est. Start"
+              />
+              <mat-datepicker-toggle
+                [for]="estStart"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #estStart></mat-datepicker>
+            </div>
+
+            <div class="relative w-56">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="estEnd"
+                [(ngModel)]="treatment.estEndDate"
+                matInput
+                placeholder="Est. End"
+              />
+              <mat-datepicker-toggle
+                [for]="estEnd"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #estEnd></mat-datepicker>
+            </div> -->
+
+            <!-- User Assignment UI -->
+
+            <!-- <input
+              class="w-56 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.opsUnitID"
+              type="text"
+            /> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

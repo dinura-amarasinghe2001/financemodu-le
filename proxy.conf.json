@@ -1,0 +1,22 @@
+{
+  "/api/**": {
+    "target": "http://88.223.92.162:8080/",
+    "secure": false,
+    "loglevel": "debug",
+    "changeOrigin": true
+  },
+
+  "/api/authenticate": {
+    "target": "http://88.223.92.162:8080/",
+    "secure": false,
+    "loglevel": "debug",
+    "changeOrigin": true
+  },
+
+  "/services/**": {
+    "target": "http://88.223.92.162:8080/",
+    "secure": false,
+    "loglevel": "debug",
+    "changeOrigin": true
+  }
+}

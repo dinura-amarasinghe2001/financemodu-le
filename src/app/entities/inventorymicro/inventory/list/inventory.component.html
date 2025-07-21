@@ -1,0 +1,482 @@
+<div>
+  <h2 id="page-heading" data-cy="InventoryHeading">
+    <span>Inventories</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-inventory"
+        [routerLink]="['/inventory/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Inventory</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Inventory</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Inventory"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (inventories().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Inventories found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="code">
+              <div class="d-flex">
+                <span>Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="partNumber">
+              <div class="d-flex">
+                <span>Part Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span>Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span>Description</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span>Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="classification1">
+              <div class="d-flex">
+                <span>Classification 1</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="classification2">
+              <div class="d-flex">
+                <span>Classification 2</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="classification3">
+              <div class="d-flex">
+                <span>Classification 3</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="classification4">
+              <div class="d-flex">
+                <span>Classification 4</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="classification5">
+              <div class="d-flex">
+                <span>Classification 5</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="unitOfMeasurement">
+              <div class="d-flex">
+                <span>Unit Of Measurement</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="decimalPlaces">
+              <div class="d-flex">
+                <span>Decimal Places</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isAssemblyUnit">
+              <div class="d-flex">
+                <span>Is Assembly Unit</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="assemblyUnitOf">
+              <div class="d-flex">
+                <span>Assembly Unit Of</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="reOrderLevel">
+              <div class="d-flex">
+                <span>Re Order Level</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastCost">
+              <div class="d-flex">
+                <span>Last Cost</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastSellingPrice">
+              <div class="d-flex">
+                <span>Last Selling Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmu">
+              <div class="d-flex">
+                <span>Lmu</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmd">
+              <div class="d-flex">
+                <span>Lmd</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="availableQuantity">
+              <div class="d-flex">
+                <span>Available Quantity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="hasBatches">
+              <div class="d-flex">
+                <span>Has Batches</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="itemSpecFilePath">
+              <div class="d-flex">
+                <span>Item Spec File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="itemImagePath">
+              <div class="d-flex">
+                <span>Item Image Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="returnPrice">
+              <div class="d-flex">
+                <span>Return Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="activeItem">
+              <div class="d-flex">
+                <span>Active Item</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="minStock">
+              <div class="d-flex">
+                <span>Min Stock</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maxStock">
+              <div class="d-flex">
+                <span>Max Stock</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dailyAverage">
+              <div class="d-flex">
+                <span>Daily Average</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bufferLevel">
+              <div class="d-flex">
+                <span>Buffer Level</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="leadTime">
+              <div class="d-flex">
+                <span>Lead Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bufferTime">
+              <div class="d-flex">
+                <span>Buffer Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="saftyDays">
+              <div class="d-flex">
+                <span>Safty Days</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="accountCode">
+              <div class="d-flex">
+                <span>Account Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="accountId">
+              <div class="d-flex">
+                <span>Account Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="casePackQty">
+              <div class="d-flex">
+                <span>Case Pack Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isRegistered">
+              <div class="d-flex">
+                <span>Is Registered</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="defaultStockLocationId">
+              <div class="d-flex">
+                <span>Default Stock Location Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rackNo">
+              <div class="d-flex">
+                <span>Rack No</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="commissionEmpId">
+              <div class="d-flex">
+                <span>Commission Emp Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="checkTypeId">
+              <div class="d-flex">
+                <span>Check Type Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="checkType">
+              <div class="d-flex">
+                <span>Check Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="reOrderQty">
+              <div class="d-flex">
+                <span>Re Order Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="notInInvoice">
+              <div class="d-flex">
+                <span>Not In Invoice</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (inventory of inventories(); track trackId(inventory)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/inventory', inventory.id, 'view']">{{ inventory.id }}</a>
+              </td>
+              <td>{{ inventory.code }}</td>
+              <td>{{ inventory.partNumber }}</td>
+              <td>{{ inventory.name }}</td>
+              <td>{{ inventory.description }}</td>
+              <td>{{ inventory.type }}</td>
+              <td>{{ inventory.classification1 }}</td>
+              <td>{{ inventory.classification2 }}</td>
+              <td>{{ inventory.classification3 }}</td>
+              <td>{{ inventory.classification4 }}</td>
+              <td>{{ inventory.classification5 }}</td>
+              <td>{{ inventory.unitOfMeasurement }}</td>
+              <td>{{ inventory.decimalPlaces }}</td>
+              <td>{{ inventory.isAssemblyUnit }}</td>
+              <td>{{ inventory.assemblyUnitOf }}</td>
+              <td>{{ inventory.reOrderLevel }}</td>
+              <td>{{ inventory.lastCost }}</td>
+              <td>{{ inventory.lastSellingPrice }}</td>
+              <td>{{ inventory.lmu }}</td>
+              <td>{{ inventory.lmd | formatMediumDatetime }}</td>
+              <td>{{ inventory.availableQuantity }}</td>
+              <td>{{ inventory.hasBatches }}</td>
+              <td>{{ inventory.itemSpecFilePath }}</td>
+              <td>{{ inventory.itemImagePath }}</td>
+              <td>{{ inventory.returnPrice }}</td>
+              <td>{{ inventory.activeItem }}</td>
+              <td>{{ inventory.minStock }}</td>
+              <td>{{ inventory.maxStock }}</td>
+              <td>{{ inventory.dailyAverage }}</td>
+              <td>{{ inventory.bufferLevel }}</td>
+              <td>{{ inventory.leadTime }}</td>
+              <td>{{ inventory.bufferTime }}</td>
+              <td>{{ inventory.saftyDays }}</td>
+              <td>{{ inventory.accountCode }}</td>
+              <td>{{ inventory.accountId }}</td>
+              <td>{{ inventory.casePackQty }}</td>
+              <td>{{ inventory.isRegistered }}</td>
+              <td>{{ inventory.defaultStockLocationId }}</td>
+              <td>{{ inventory.rackNo }}</td>
+              <td>{{ inventory.commissionEmpId }}</td>
+              <td>{{ inventory.checkTypeId }}</td>
+              <td>{{ inventory.checkType }}</td>
+              <td>{{ inventory.reOrderQty }}</td>
+              <td>{{ inventory.notInInvoice }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/inventory', inventory.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/inventory', inventory.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(inventory)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (inventories().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

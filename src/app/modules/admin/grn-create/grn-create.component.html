@@ -1,0 +1,589 @@
+
+<style>
+/* Container for the entire form */
+/* Outer container for the stepper */
+/* Container for the entire form */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.stepper-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  
+  background-color: #f5f7fa;
+  border-radius: 0; /* Remove rounded corners if you want edge-to-edge */
+  font-family: 'Poppins', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+
+/* Stylish box for each step */
+.step-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 12px;  /* fully rounded */
+  background: linear-gradient(to bottom right, #ffffff, #f0f2f5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e6ed;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.step-card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Angular Material Cards */
+mat-card {
+  border-radius: 12px !important;  /* fully rounded cards */
+}
+
+/* Fields inside the card */
+.form-field {
+  flex: 1 1 280px;
+  min-width: 250px;
+  border-radius:0; /* fully rounded input containers */
+  overflow: visible; /* prevent overflow of input border-radius */
+  
+}
+
+/* Angular Material fields full width */
+.mat-form-field {
+  width: 100%;
+  background-color: azure;
+  border-radius: 0px !important;  /* fully rounded */
+    overflow: visible; /* <-- Add this */
+}
+
+/* Buttons style */
+button {
+  min-width: 130px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;  /* fully rounded buttons */
+   
+  color: white;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #a5aab0;
+}
+
+/* Material table */
+.mat-table {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-radius: 9999px;  /* fully rounded */
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+.mat-form-field,
+.mat-form-field-wrapper {
+  overflow: visible !important;
+}
+/* Rounded corners on table headers and cells */
+/* Round top left and top right corners */
+th.mat-header-cell:first-child {
+  border-top-left-radius: 9999px;
+}
+th.mat-header-cell:last-child {
+  border-top-right-radius: 9999px;
+}
+
+/* Round bottom left and bottom right corners of last row cells */
+tr.mat-row:last-child td.mat-cell:first-child {
+  border-bottom-left-radius: 12px;
+}
+tr.mat-row:last-child td.mat-cell:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+th.mat-header-cell {
+  
+  font-weight: bold;
+  text-align: center;
+}
+
+td.mat-cell,
+th.mat-header-cell {
+  padding: 12px 16px;
+  text-align: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .step-card {
+    flex-direction: column;
+    padding: 1.2rem;
+  }
+
+  .form-field {
+    flex: 1 1 100%;
+  }
+
+  .step-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+ 
+ 
+</style>
+<div class="stepper-container">
+ 
+    <!-- Step 1: General Information -->
+    <!-- ... -->
+<mat-drawer-container style="height: 100vh;">
+   <mat-drawer
+    #drawer
+    mode="over"
+    [opened]="drawerOpened"
+    (backdropClick)="preventClose()"
+    disableClose
+    style="width: 400px; padding: 1rem;">
+    <form [formGroup]="grnForm" (ngSubmit)="onContinue()" style="flex: 1; min-width: 300px;">
+     <br>
+          <h1 style="margin-bottom: 1rem;">Enter Vendor For GRN:</h1>
+        <br />
+        <fieldset>
+            
+          <div class="form-section">
+            <div class="form-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            
+              <mat-form-field appearance="outline" class="form-field" style="flex: 1; min-width: 200px;">
+                <mat-label>Vendor*</mat-label>
+                <mat-icon matPrefix>person</mat-icon>
+                <input matInput required formControlName="supplierName" [matAutocomplete]="autov" />
+                <mat-autocomplete #autov="matAutocomplete" (optionSelected)="onItemSelectedvendor($event.option.value)">
+                  <mat-option *ngFor="let vendor of searchResultsvendor" [value]="vendor">
+                    {{ vendor.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              
+            </div>
+
+            <div class="form-row" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+              <mat-form-field appearance="outline" class="form-field" style="flex: 1; min-width: 100px;">
+                <mat-label>Supplier Invoice No:</mat-label>
+                <input matInput formControlName="supplierInvoiceCode" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+              <!-- GRN DATE -->
+<mat-form-field appearance="outline" class="form-field" style="flex: 1; min-width: 200px;">
+  <mat-label>GRN DATE*</mat-label>
+   
+  <input matInput [matDatepicker]="grnDatePicker" formControlName="grnDate"   [max]="today" />
+  <mat-datepicker-toggle matSuffix [for]="grnDatePicker"></mat-datepicker-toggle>
+  <mat-datepicker #grnDatePicker></mat-datepicker>
+</mat-form-field>
+
+<!-- Supplier Invoice Date -->
+<mat-form-field appearance="outline" class="form-field" style="flex: 1; min-width: 200px;">
+  <mat-label>Supplier Invoice Date</mat-label>
+  
+  <input matInput [matDatepicker]="supplierInvoiceDatePicker" formControlName="supplierInvoiceDate" />
+  <mat-datepicker-toggle matSuffix [for]="supplierInvoiceDatePicker"></mat-datepicker-toggle>
+  <mat-datepicker #supplierInvoiceDatePicker></mat-datepicker>
+</mat-form-field>
+
+            </div>
+          </div>
+        </fieldset>
+
+        <div style="margin-top: 1rem; text-align: right;">
+          <button mat-raised-button color="primary" type="submit" [disabled]="grnForm.invalid">
+            Continue
+          </button>
+        </div>
+     
+    </form>
+      
+  </mat-drawer>
+<ng-template #confirmResetDialog>
+  <h2 mat-dialog-title class="dialog-title">Confirm Reset</h2>
+  <mat-dialog-content class="dialog-content">
+    <p class="dialog-message">
+      Entered data will be lost. Are you sure you want to continue?
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="cancelReset()">No</button>
+    <button mat-raised-button color="warn" (click)="confirmReset()">Yes</button>
+  </mat-dialog-actions>
+</ng-template>
+
+
+
+  
+  <div [style.marginLeft.px]="drawer.opened ? 400 : 0" style="padding: 1rem; transition: margin-left 0.3s ease;"></div>
+    <!-- Step 2: Bank Information -->
+    <div [formControl]="grnitemForm">
+     
+
+     
+         
+       <div class="min-w-0 flex-1" style="padding-left: 30px;">
+
+  <!-- Flex container to hold title and buttons in the same row -->
+  <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 1rem;">
+
+    <!-- Title -->
+    <h2
+      class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl"
+      style="margin: 0;"  
+    >
+      {{ suid ? 'GRN Add more items' : 'Good Received Note Create' }}
+    </h2>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 1rem;">
+   <div style="display: flex; gap: 1rem;  padding-right: 10px;">
+  <button
+   *ngIf="!suid"
+    mat-raised-button
+    color="warn"  
+    style="height: 3.5rem; width: 10rem; font-size: 1.1rem;"
+    (click)="resetFormAndOpenDrawer()"
+  >
+    Reset
+  </button>
+
+  <button
+    mat-raised-button
+    color="accent"  
+    style="height: 3.5rem; width: 10rem; font-size: 1.1rem;"
+    (click)="openDialog(grnItemDialog)"
+  >
+    Add Line
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary" 
+    style="height: 3.5rem; width: 10rem; font-size: 1.1rem;"
+    (click)="save()"
+  >
+    Save
+  </button>
+</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+     
+  <!-- Left card - GRN Information Form -->
+          <div class="card-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <!-- Left card - GRN Information Form -->
+           
+
+            <!-- Right card - GRN Item Information Form -->
+            <ng-template #grnItemDialog>
+ 
+  
+  <mat-dialog-content style="overflow: hidden;">
+
+    <form [formGroup]="grnitemForm" style="min-width: 300px;">
+      <mat-card class="right-card" style="padding: 1rem;">
+        <mat-card-content>
+          <div class="form-grid" style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+            
+            <!-- SEARCH FIELD -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; align-items: center; min-width: 0; grid-column: span 2;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Search item</mat-label>
+                <mat-icon matPrefix>search</mat-icon>
+                <input matInput formControlName="searchitem" placeholder="Enter search term" [matAutocomplete]="auto" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onItemSelected($event.option.value)" [displayWith]="displayFn">
+                  <mat-option *ngFor="let item of searchResults" [value]="item">
+                    {{ item.name }} ({{ item.code }})
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+    <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: -21px;">
+  <button
+    mat-icon-button
+    type="button"
+    (click)="setSearchBy('code')"
+    matTooltip="Search by Code (QR)"
+    matTooltipPosition="above"
+    [ngStyle]="{
+      width: '40px',
+      height: '40px',
+      minWidth: '40px',
+      backgroundColor: 'white',
+      border: searchByCode ? '2px solid black' : 'none',
+      borderRadius: '6px'
+    }"
+  >
+    <mat-icon style="font-size: 28px;" [svgIcon]="'mat_outline:qr_code_scanner'"></mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    type="button"
+    (click)="setSearchBy('name')"
+    matTooltip="Search by Name"
+    matTooltipPosition="above"
+    [ngStyle]="{
+      width: '40px',
+      height: '40px',
+      minWidth: '40px',
+      backgroundColor: 'white',
+      border: !searchByCode ? '2px solid black' : 'none',
+      borderRadius: '6px'
+    }"
+  >
+    <mat-icon style="font-size: 22px;" [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+  </button>
+</div>
+
+
+
+ 
+ 
+
+            </div>
+<mat-form-field appearance="outline">
+ 
+  <mat-label>Manufacture Date</mat-label>
+  <input matInput [matDatepicker]="manufacturePicker" formControlName="manufactureDate" />
+  <mat-datepicker-toggle matSuffix [for]="manufacturePicker"></mat-datepicker-toggle>
+  <mat-datepicker #manufacturePicker></mat-datepicker>
+</mat-form-field>
+
+            <!-- INPUT FIELDS -->
+            <mat-form-field appearance="outline">
+              <mat-label>Item Code</mat-label>
+              <input matInput formControlName="itemCode" />
+            </mat-form-field>
+
+            
+  <mat-form-field appearance="outline">
+              <mat-label>Item Name</mat-label>
+              <input matInput formControlName="itemName" />
+            </mat-form-field>
+          <mat-form-field appearance="outline">
+ 
+  <mat-label>Expired Date</mat-label>
+  <input matInput [matDatepicker]="expiredPicker" formControlName="expiredDate" />
+  <mat-datepicker-toggle matSuffix [for]="expiredPicker"></mat-datepicker-toggle>
+  <mat-datepicker #expiredPicker></mat-datepicker>
+</mat-form-field>
+
+
+          
+
+           <mat-form-field appearance="outline">
+              <mat-label>Qty</mat-label>
+              <input matInput formControlName="quantity" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+            
+              <mat-label>Purchased Price</mat-label>
+              
+              <input matInput formControlName="purcost" />
+               
+            </mat-form-field>
+  <mat-form-field appearance="outline">
+             
+              <mat-label>Selling Price</mat-label>
+              <input matInput formControlName="sellprice" />
+            </mat-form-field>
+           
+          </div>
+
+        <div
+  class="button-row"
+  style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;"
+>
+<button
+  mat-stroked-button
+  
+  (click)="closeDialog()"
+  style="
+    height: 36px;
+    color: red;
+    border-color: red;
+  "
+>
+  Close
+</button>
+  <!-- Add Item on the left -->
+  <button mat-raised-button color="accent" type="button" (click)="addItem()">
+    Add Item
+  </button>
+
+  <!-- Close on the right -->
+ 
+
+</div>
+
+          
+        </mat-card-content>
+        
+      </mat-card>
+    </form>
+
+  </mat-dialog-content>
+
+
+</ng-template>
+          </div>
+      
+      <div
+    class="example-table-container bg-card mt-6 rounded-t-2xl shadow overflow-auto flex-1  bg-white"
+    style="min-height: 20cm;"
+  >
+          <!-- Items Table -->
+         <div class="flex flex-col flex-auto sm:mb-18 overflow-auto bg-white">
+
+        
+            <table mat-table [dataSource]="pagedItems"  class="w-full table-fixed border-separate border-spacing-y-1"  >
+              <ng-container matColumnDef="itemName">
+                <th mat-header-cell *matHeaderCellDef   class="px-4 py-3 text-left font-semibold">Item Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.itemName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="manufactureDate">
+                <th mat-header-cell *matHeaderCellDef  class="px-4 py-3 text-left font-semibold" >Manufacture Date</th>
+                <td mat-cell *matCellDef="let element">{{ element.manufactureDate | date: 'yyyy-MM-dd' }}</td>
+              </ng-container>
+ <ng-container matColumnDef="purcost"  class="px-4 py-3 text-left font-semibold">
+                <th mat-header-cell *matHeaderCellDef >Total Purchase Price</th>
+                <td mat-cell *matCellDef="let element">{{ element.purcost| number:'1.2-2'  }}</td>
+              </ng-container>
+              <ng-container matColumnDef="sellprice">
+                <th mat-header-cell *matHeaderCellDef  class="px-4 py-3 text-left font-semibold" >Unit Sell Price</th>
+                <td mat-cell *matCellDef="let element">{{ element.sellprice | number:'1.2-2' }}</td>
+              </ng-container>
+
+             
+
+              <ng-container matColumnDef="quantity"  class="px-4 py-3 text-left font-semibold">
+                <th mat-header-cell *matHeaderCellDef >Qty</th>
+                <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="lineTotal"  class="px-4 py-3 text-left font-semibold">
+                <th mat-header-cell *matHeaderCellDef >Total</th>
+                <td mat-cell *matCellDef="let element">{{ element.lineTotal }}</td>
+              </ng-container>
+          <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef class="px-4 py-3 text-left font-semibold"> </th>
+   <td mat-cell *matCellDef="let element">
+  <button
+    *ngIf="element.itemName"
+    mat-icon-button
+    (click)="deleteItem(element)"
+    style="background-color: white;"
+  >
+    <mat-icon style="color: red;">delete_outline</mat-icon>
+  </button>
+</td>
+
+  </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="['itemName', 'manufactureDate',  'purcost', 'sellprice','quantity', 'lineTotal','actions']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['itemName', 'manufactureDate',  'purcost','sellprice', 'quantity', 'lineTotal','actions'];"></tr>
+
+<tr *ngIf="pagedItems.length === 10">
+  <td colspan="7" class="text-center py-4 text-gray-500 font-medium">
+    No data available.
+  </td>
+</tr>
+
+            </table>
+    <mat-paginator
+  [length]="items.length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 20]"
+  [pageIndex]="currentPage - 1"
+  (page)="onPaginateChange($event)"
+  style="
+    position: fixed;
+    bottom: 0;
+    left: 278px;
+    right: 0;
+    background: white;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
+  ">
+</mat-paginator>
+ 
+  
+<div 
+  style="
+    position: fixed;
+    bottom: 18px;
+    right: 10px;
+    background: white;
+    padding: 0.5rem 9rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    z-index: 101;
+    min-width: 500px;
+    max-width: 90vw;
+    box-sizing: border-box;
+  "
+>
+  <!-- GRN Name -->
+  <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <label style="font-size: 1.1rem; font-weight: 600;">GRN Name:</label>
+    <input
+      matInput
+      [value]="grnForm.get('supplierName')?.value || 'N/A'"
+      readonly
+      style="padding-left: 12px; width: 180px;"
+    />
+  </div>
+
+  <!-- Invoice No -->
+  <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <label style="font-size: 1.1rem; font-weight: 600;">Invoice No:</label>
+    <input
+      matInput
+      [value]="grnForm.get('supplierInvoiceCode')?.value || 'N/A'"
+      readonly
+      style="padding-left: 3px; width: 165px;"
+    />
+  </div>
+</div>
+
+
+
+            
+          </div>
+      </div>
+        </div>
+     
+  
+ 
+

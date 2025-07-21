@@ -1,0 +1,259 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <div class="min-w-0 flex-1">
+      <!-- Title -->
+      <div class="mt-2">
+        <h2
+          class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl"
+        >
+          Treatment Registry
+        </h2>
+      </div>
+    </div>
+    <!-- Actions -->
+    <div>
+      <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+        <mat-form-field
+          class="fuse-mat-dense fuse-mat-rounded min-w-64"
+          [subscriptSizing]="'dynamic'"
+        >
+          <mat-icon
+            class="icon-size-5"
+            matPrefix
+            [svgIcon]="'heroicons_solid:magnifying-glass'"
+          ></mat-icon>
+          <input
+            matInput
+            [formControl]="searchInputControl"
+            [autocomplete]="'off'"
+            [placeholder]="'Search Treatments'"
+          />
+        </mat-form-field>
+        <button
+          class="ml-3"
+          mat-flat-button
+          [color]="'primary'"
+          (click)="openTreatmentCreateDialog()"
+        >
+          <mat-icon
+            class="icon-size-4"
+            [svgIcon]="'heroicons_mini:plus'"
+          ></mat-icon>
+          <span class="ml-2">Register New Treatment</span>
+        </button>
+
+        <div class="relative ml-2">
+          <!-- <button (click)="filterByCreatedDate()">Get</button> -->
+          <input
+            type="file"
+            (change)="onFileUpload($event, fileInput)"
+            accept=".xls, .xlsx"
+            class="hidden"
+            #fileInput
+          />
+
+          <button
+            mat-flat-button
+            color="accent"
+            (click)="fileInput.click()"
+            class="flex items-center space-x-2"
+            [disabled]="isImporting"
+          >
+            <mat-icon
+              *ngIf="!isImporting"
+              [svgIcon]="'heroicons_outline:plus'"
+            ></mat-icon>
+            <mat-spinner *ngIf="isImporting" diameter="20"></mat-spinner>
+            <span>{{ isImporting ? "Importing..." : "Import Excel" }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div
+    class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"
+  >
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="w-full border-separate border-spacing-y-2 px-6"
+      >
+        <!-- Part Name Column -->
+        <ng-container *ngIf="isPart"
+          ><ng-container matColumnDef="partName" class="w-10/12">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="px-12 py-3 font-semibold text-center"
+              style="width: 50%"
+            >
+              Spare Part
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let treatment"
+              class="px-4 py-2 text-center"
+            >
+              {{ treatment.partName }}
+            </td>
+          </ng-container></ng-container
+        >
+
+        <ng-container matColumnDef="fittingChargeName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-center font-semibold"
+            style="width: 50%"
+          >
+            Fitting Charge Name
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let treatment"
+            class="px-4 py-2 text-center"
+          >
+            {{ treatment.fittingChargeName }}
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="isPaint"
+          ><ng-container matColumnDef="paintName">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="px-4 py-3 text-center font-semibold"
+              style="width: 50%"
+            >
+              Paint Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let treatment"
+              class="px-4 py-2 text-center"
+            >
+              {{ treatment.paintName }}
+            </td>
+          </ng-container></ng-container
+        >
+
+        <ng-container *ngIf="isRepair"
+          ><ng-container matColumnDef="repairName">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="px-4 py-3 text-center font-semibold"
+              style="width: 50%"
+            >
+              Repair Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let treatment"
+              class="px-4 py-2 text-center"
+            >
+              {{ treatment.repairName }}
+            </td>
+          </ng-container></ng-container
+        >
+
+        <!-- Treatment Type Column -->
+        <ng-container matColumnDef="treatmentType">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-center font-semibold"
+          >
+            Treatment Type
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let treatment"
+            class="px-4 py-2 text-center"
+          >
+            {{ treatment.treatmentType }}
+          </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="px-4 py-3 font-semibold text-center"
+            style="width: 50%"
+          >
+            Action
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let treatment"
+            class="px-4 py-2 text-center"
+            style="width: 50%"
+          >
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large mr-2"
+              color="primary"
+              (click)="openTreatmentEditDialog(treatment)"
+            >
+              Update
+            </button>
+
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large"
+              color="warn"
+              (click)="deleteTreatment(treatment)"
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <div class="flex justify-between bg-white">
+    <mat-paginator
+      #paginator
+      [length]="totalItems"
+      [pageSize]="itemsPerPage"
+      class="bottom-0 justify-self-end"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+    >
+    </mat-paginator>
+
+    <div class="items-center justify-center flex mr-4">
+      <mat-button-toggle-group
+        class="flex flex-wrap gap-2 text-sm font-semibold"
+        [(ngModel)]="selectedType"
+        (ngModelChange)="filterWorks()"
+      >
+        <mat-button-toggle
+          *ngFor="let type of treatmentTypes"
+          [value]="type.value"
+        >
+          {{ type.label }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+</div>

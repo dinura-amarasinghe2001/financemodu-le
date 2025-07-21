@@ -1,0 +1,50 @@
+import dayjs from 'dayjs/esm';
+
+export interface IInventory {
+  id: number;
+  code?: string | null;
+  partNumber?: string | null;
+  name?: string | null;
+  description?: string | null;
+  type?: number | null;
+  classification1?: string | null;
+  classification2?: string | null;
+  classification3?: string | null;
+  classification4?: string | null;
+  classification5?: string | null;
+  unitOfMeasurement?: string | null;
+  decimalPlaces?: number | null;
+  isAssemblyUnit?: boolean | null;
+  assemblyUnitOf?: number | null;
+  reOrderLevel?: number | null;
+  lastCost?: number | null;
+  lastSellingPrice?: number | null;
+  lmu?: number | null;
+  lmd?: dayjs.Dayjs | null;
+  availableQuantity?: number | null;
+  hasBatches?: boolean | null;
+  itemSpecFilePath?: string | null;
+  itemImagePath?: string | null;
+  returnPrice?: number | null;
+  activeItem?: boolean | null;
+  minStock?: number | null;
+  maxStock?: number | null;
+  dailyAverage?: number | null;
+  bufferLevel?: number | null;
+  leadTime?: number | null;
+  bufferTime?: number | null;
+  saftyDays?: number | null;
+  accountCode?: string | null;
+  accountId?: number | null;
+  casePackQty?: number | null;
+  isRegistered?: boolean | null;
+  defaultStockLocationId?: number | null;
+  rackNo?: string | null;
+  commissionEmpId?: number | null;
+  checkTypeId?: number | null;
+  checkType?: string | null;
+  reOrderQty?: number | null;
+  notInInvoice?: boolean | null;
+}
+
+export type NewInventory = Omit<IInventory, 'id'> & { id: null };

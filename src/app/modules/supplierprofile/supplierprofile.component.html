@@ -1,0 +1,196 @@
+<mat-tab-group [(selectedIndex)]="activeTabIndex">
+  <!-- General Information Tab -->
+ <mat-tab label="General Information">
+  <form class="tab-content">
+    <fieldset>
+      <legend>General Information</legend>
+
+      <!-- Supplier Name and Supplier Code side by side -->
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>Supplier Name*</mat-label>
+          <input matInput required [(ngModel)]="supplierprofile.name" name="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>Supplier Code*</mat-label>
+          <input matInput required [(ngModel)]="supplierprofile.code" name="code" />
+        </mat-form-field>
+      </div>
+
+      <!-- Addresses -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <div style="flex: 1 1 45%; display: flex; flex-direction: column; gap: 6px;">
+          <mat-label>Address (Head Office)*</mat-label>
+          <mat-form-field appearance="outline" style="margin-bottom: 4px;">
+            <input matInput placeholder="Address" [(ngModel)]="supplierprofile.addressOffice" name="addressOffice" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="City" [(ngModel)]="supplierprofile.cityOffice" name="cityOffice" />
+          </mat-form-field>
+        </div>
+
+        <div style="flex: 1 1 45%; display: flex; flex-direction: column; gap: 6px;">
+          <mat-label>Address (Factory)</mat-label>
+          <mat-form-field appearance="outline" style="margin-bottom: 4px;">
+            <input matInput placeholder="Address" [(ngModel)]="supplierprofile.addressFactory" name="addressFactory" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="City" [(ngModel)]="supplierprofile.cityFactory" name="cityFactory" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Tel, Fax, Email, Web -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <mat-form-field appearance="outline" style="flex: 1 1 22%;">
+          <mat-label>Tel No*</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.phone1" name="phone1" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="flex: 1 1 22%;">
+          <mat-label>Fax</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.fax" name="fax" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="flex: 1 1 22%;">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" [(ngModel)]="supplierprofile.email" name="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="flex: 1 1 22%;">
+          <mat-label>Web</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.website" name="website" />
+        </mat-form-field>
+      </div>
+
+      <!-- Contact Person -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>Contact Person</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.contactPersonName" name="contactPersonName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>Mobile Tel</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.contactPersonMobile" name="contactPersonMobile" />
+        </mat-form-field>
+      </div>
+
+      <!-- BR Number and Checkboxes -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center;">
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>B.R Number</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.brNumber" name="brNumber" />
+        </mat-form-field>
+
+        <mat-checkbox [(ngModel)]="supplierprofile.isVATEnable" name="isVATEnable">
+          VAT registered suppliers
+        </mat-checkbox>
+
+        <mat-checkbox [(ngModel)]="supplierprofile.isNBTEnable" name="isNBTEnable">
+          NBT registered suppliers
+        </mat-checkbox>
+      </div>
+
+      <!-- VAT Reg Number and TIN -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>VAT Reg. Number</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.vatRegNumber" name="vatRegNumber" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="flex: 1 1 45%;">
+          <mat-label>Tin Number</mat-label>
+          <input matInput [(ngModel)]="supplierprofile.tinNumber" name="tinNumber" />
+        </mat-form-field>
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-top: 16px; padding: 8px 24px; font-size: 14px;"
+        (click)="continue()"
+      >
+        Continue
+      </button>
+    </fieldset>
+  </form>
+</mat-tab>
+
+
+  <!-- Bank Information Tab -->
+ <mat-tab label="Bank Information">
+  <form class="tab-content" style="padding: 0 16px;">
+    <fieldset>
+      <legend>Bank Information</legend>
+
+      <div class="form-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+        align-items: start;
+      ">
+        <!-- Credit Period -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Credit Period</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <!-- Account Name -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Account Name</mat-label>
+          <input matInput />
+        </mat-form-field>
+
+        <!-- Account No -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Account No</mat-label>
+          <input matInput />
+        </mat-form-field>
+
+        <!-- Bank Select -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Bank</mat-label>
+          <mat-select>
+            <mat-option value="">--select--</mat-option>
+            <mat-option value="A">Bank A</mat-option>
+            <mat-option value="B">Bank B</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Branch Select -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Branch</mat-label>
+          <mat-select>
+            <mat-option value="">--select--</mat-option>
+            <mat-option value="A">Branch A</mat-option>
+            <mat-option value="B">Branch B</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Maximum Credit Limit -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Maximum Credit Limit</mat-label>
+          <input matInput />
+        </mat-form-field>
+
+        <!-- Cheque Should be Drawn -->
+        <mat-form-field appearance="outline" style="width: 100%; grid-column: span 2;">
+          <mat-label>Cheque Should be Drawn</mat-label>
+          <textarea matInput rows="4"></textarea>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" style="margin-top: 16px;">
+        Save
+      </button>
+    </fieldset>
+  </form>
+</mat-tab>
+
+<!-- ... inside Bank Information tab, after the Save button -->
+<div style="margin-top: 16px; display: flex; justify-content: space-between;">
+  <button mat-button (click)="switchToTab(0)">Back</button>
+  <button mat-raised-button color="primary">Save</button>
+  
+</div>
+
+</mat-tab-group>

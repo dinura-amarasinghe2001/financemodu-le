@@ -1,0 +1,1 @@
+var e={user:{},selectedCard:{vehicle:{},client:{}},preEstimateID:"",sso:"https://sso.nimeshmotors.lk/realms/jhipster/protocol/openid-connect/token",apiBaseUrl:"https://api.nimeshmotors.lk",imgUrl:"/services/operationsmodule/api/fileDetails/"};export{e as a};

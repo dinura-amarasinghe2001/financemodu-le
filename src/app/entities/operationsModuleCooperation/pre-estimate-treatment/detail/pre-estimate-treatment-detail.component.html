@@ -1,0 +1,140 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (preEstimateTreatment(); as preEstimateTreatmentRef) {
+      <div>
+        <h2 data-cy="preEstimateTreatmentDetailsHeading"><span>Pre Estimate Treatment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle Treatment ID</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.vehicleTreatmentID }}</span>
+          </dd>
+          <dt><span>Fitting Charge Name</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.fittingChargeName }}</span>
+          </dd>
+          <dt><span>Paint Name</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.paintName }}</span>
+          </dd>
+          <dt><span>Part Name</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.partName }}</span>
+          </dd>
+          <dt><span>Part Number</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.partNumber }}</span>
+          </dd>
+          <dt><span>Repair Name</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.repairName }}</span>
+          </dd>
+          <dt><span>Other</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.other }}</span>
+          </dd>
+          <dt><span>Sh</span></dt>
+          <dd>
+            <span>{{ { null: '', SH: 'SH', MR: 'MR' }[preEstimateTreatmentRef.sh ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Market Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.marketPrice }}</span>
+          </dd>
+          <dt><span>Price Type</span></dt>
+          <dd>
+            <span>{{ { null: '', SYSTEM: 'SYSTEM', ESTIMATE: 'ESTIMATE' }[preEstimateTreatmentRef.priceType ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Type</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.type }}</span>
+          </dd>
+          <dt><span>Custom Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.customPrice }}</span>
+          </dd>
+          <dt><span>Unit Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.unitPrice }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.price }}</span>
+          </dd>
+          <dt><span>Total Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.totalPrice }}</span>
+          </dd>
+          <dt><span>Is System Price</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.isSystemPrice }}</span>
+          </dd>
+          <dt><span>Available Quantity</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.availableQuantity }}</span>
+          </dd>
+          <dt><span>Treatment Type</span></dt>
+          <dd>
+            <span>{{
+              { null: '', PART: 'PART', PAINT: 'PAINT', FITTING_CHARGE: 'FITTING_CHARGE', REPAIR: 'REPAIR', OTHER: 'OTHER' }[
+                preEstimateTreatmentRef.treatmentType ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Quantity</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.quantity }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ preEstimateTreatmentRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Pre Estimate</span></dt>
+          <dd>
+            @if (preEstimateTreatment()!.preEstimate) {
+              <div>
+                <a [routerLink]="['/pre-estimate', preEstimateTreatment()!.preEstimate?.id, 'view']">{{
+                  preEstimateTreatmentRef.preEstimate?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/pre-estimate-treatment', preEstimateTreatmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

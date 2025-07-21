@@ -1,0 +1,111 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jobEstimate(); as jobEstimateRef) {
+      <div>
+        <h2 data-cy="jobEstimateDetailsHeading"><span>Job Estimate</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.id }}</span>
+          </dd>
+          <dt><span>Job ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.jobID }}</span>
+          </dd>
+          <dt><span>Department ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.departmentID }}</span>
+          </dd>
+          <dt><span>Start Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.startDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>End Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.endDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Current State</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                OPEN: 'OPEN',
+                CANCELED: 'CANCELED',
+                COMPLETE: 'COMPLETE',
+                CLOSED: 'CLOSED',
+                QC_PENDING: 'QC_PENDING',
+                QC_APPROVED: 'QC_APPROVED',
+                QCPD: 'QCPD',
+                QCPD_PENDING: 'QCPD_PENDING',
+                QCPD_TO_PENDING: 'QCPD_TO_PENDING',
+              }[jobEstimateRef.currentState ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Remarks</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.remarks }}</span>
+          </dd>
+          <dt><span>Est Start Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.estStartDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Est End Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.estEndDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Estimate ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.estimateID }}</span>
+          </dd>
+          <dt><span>Vehicle License Number</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.vehicleLicenseNumber }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ jobEstimateRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Job Card</span></dt>
+          <dd>
+            @if (jobEstimate()!.jobCard) {
+              <div>
+                <a [routerLink]="['/job-card', jobEstimate()!.jobCard?.id, 'view']">{{ jobEstimateRef.jobCard?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/job-estimate', jobEstimateRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

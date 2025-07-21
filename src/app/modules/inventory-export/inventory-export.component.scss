@@ -1,0 +1,13 @@
+::ng-deep .mat-header-row,
+::ng-deep .mat-row {
+  min-height: 32px !important; // Reduce row height
+}
+
+::ng-deep .mat-cell,
+::ng-deep .mat-header-cell {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  font-size: 13px;
+}

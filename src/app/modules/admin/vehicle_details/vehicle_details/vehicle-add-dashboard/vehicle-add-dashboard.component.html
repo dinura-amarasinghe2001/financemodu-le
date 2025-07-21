@@ -1,0 +1,138 @@
+<div
+  class="bg-card w-full h-full mx-auto rounded-lg shadow-2xl dark:bg-gray-800 px-4 sm:px-6 md:px-8 lg:px-10"
+>
+  <!-- Dialog Title -->
+  <h2
+    class="flex flex-col items-center p-3 text-center text-xl font-semibold text-gray-800 dark:text-white"
+  >
+    Create Vehicle
+  </h2>
+
+  <div>
+    <form
+      [formGroup]="vehicleForm"
+      class="grid grid-cols-1 xl:grid-cols-2 gap-x-4 gap-y-6 p-10 sm:p-6"
+    >
+      <!-- License Number -->
+      <mat-form-field appearance="outline" class="w-full min-w-0">
+        <mat-label>License Number</mat-label>
+        <input matInput formControlName="licenseNo" /> 
+      </mat-form-field>
+
+      <!-- Brand -->
+      <mat-form-field appearance="outline" class="w-full min-w-0">
+        <mat-label>Brand</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="brandControl"
+          [matAutocomplete]="autoBrand"
+          placeholder="Type to find Brand"
+        />
+        <mat-autocomplete
+          #autoBrand="matAutocomplete"
+          [displayWith]="displayBrand"
+          (optionSelected)="onSelectBrand($event)"
+        >
+          <ng-container
+            *ngIf="(filteredBrands$ | async)?.length > 0; else noResults"
+          >
+            <mat-option
+              *ngFor="let brand of filteredBrands$ | async"
+              [value]="brand"
+            >
+              {{ brand.brandName }}
+            </mat-option>
+          </ng-container>
+
+          <ng-template #noResults>
+            <mat-option disabled>No results found.</mat-option>
+            <mat-option (click)="openBrandCreateDialog()">
+              <mat-icon class="mr-2">add</mat-icon>
+              Add "{{ brandControl.value }}"
+            </mat-option>
+          </ng-template>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Model -->
+      <mat-form-field appearance="outline" class="w-full min-w-0">
+        <mat-label>Model</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="modelControl"
+          [matAutocomplete]="autoModel"
+          placeholder="Type to find Model"
+        />
+        <mat-autocomplete
+          #autoModel="matAutocomplete"
+          [displayWith]="displayModel"
+          (optionSelected)="onSelecModel($event)"
+        >
+          <ng-container *ngIf="filterdModels$ | async as models">
+            <ng-container *ngIf="allModels.length > 0; else showAddButton">
+              <mat-option *ngFor="let model of models" [value]="model">
+                {{ model.modelName }}
+              </mat-option>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #showAddButton>
+            <mat-option disabled>No models found for this brand</mat-option>
+            <mat-option (click)="openModelCreateDialog()">
+              <mat-icon class="mr-2">add</mat-icon>
+              Add new model
+            </mat-option>
+          </ng-template>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Client -->
+      <mat-form-field appearance="outline" class="w-full min-w-0">
+        <mat-label>Client</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="clientControl"
+          [matAutocomplete]="autoClient"
+          placeholder="Type to find Client"
+        />
+        <mat-autocomplete
+          #autoClient="matAutocomplete"
+          [displayWith]="displayClient"
+          (optionSelected)="onSelectClient($event)"
+        >
+          <ng-container *ngIf="filterdClients$ | async as clients">
+            <ng-container *ngIf="clients.length > 0; else noClientsFound">
+              <mat-option *ngFor="let client of clients" [value]="client">
+                {{ client.name }}
+              </mat-option>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noClientsFound>
+            <mat-option disabled>No results found.</mat-option>
+            <mat-option (click)="openClientreateDialog()">
+              <mat-icon class="mr-2">add</mat-icon>
+              Add "{{ clientControl.value }}"
+            </mat-option>
+          </ng-template>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <!-- Dialog Actions -->
+  <div class="p-4">
+    <div class="flex flex-col sm:flex-row justify-center gap-3 w-full">
+      <button
+        mat-button
+        class="w-full sm:w-auto rounded-lg bg-red-500 px-4 py-2 text-xl text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+        (click)="submitVehicle()"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (tenant(); as tenantRef) {
+      <div>
+        <h2 data-cy="tenantDetailsHeading"><span>Tenant</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ tenantRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ tenantRef.code }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ tenantRef.name }}</span>
+          </dd>
+          <dt><span>Display Name</span></dt>
+          <dd>
+            <span>{{ tenantRef.displayName }}</span>
+          </dd>
+          <dt><span>Tenant Type</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                CORPORATE: 'CORPORATE',
+                SME: 'SME',
+                NON_PROFIT: 'NON_PROFIT',
+                GOVERNMENT: 'GOVERNMENT',
+                EDUCATIONAL: 'EDUCATIONAL',
+                AUTOMOBILE_REPAIR: 'AUTOMOBILE_REPAIR',
+              }[tenantRef.tenantType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Level Type</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                HEADQUARTERS: 'HEADQUARTERS',
+                HEAD_BRANCH: 'HEAD_BRANCH',
+                BRANCH: 'BRANCH',
+                SUBBRANCH: 'SUBBRANCH',
+                DEPARTMENT: 'DEPARTMENT',
+                UNIT: 'UNIT',
+                TEAM: 'TEAM',
+              }[tenantRef.levelType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Level Status</span></dt>
+          <dd>
+            <span>{{
+              { null: '', ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE', UNDER_MAINTENANCE: 'UNDER_MAINTENANCE', MERGED: 'MERGED' }[
+                tenantRef.levelStatus ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Registration Number</span></dt>
+          <dd>
+            <span>{{ tenantRef.registrationNumber }}</span>
+          </dd>
+          <dt><span>Tax Id</span></dt>
+          <dd>
+            <span>{{ tenantRef.taxId }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ tenantRef.description }}</span>
+          </dd>
+          <dt><span>Active</span></dt>
+          <dd>
+            <span>{{ tenantRef.active }}</span>
+          </dd>
+          <dt><span>Established Date</span></dt>
+          <dd>
+            <span>{{ tenantRef.establishedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Website</span></dt>
+          <dd>
+            <span>{{ tenantRef.website }}</span>
+          </dd>
+          <dt><span>Logo</span></dt>
+          <dd>
+            <span>{{ tenantRef.logo }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ tenantRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ tenantRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ tenantRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ tenantRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/tenant', tenantRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

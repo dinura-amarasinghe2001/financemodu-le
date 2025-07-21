@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jobEstimateWorkProducts(); as jobEstimateWorkProductsRef) {
+      <div>
+        <h2 data-cy="jobEstimateWorkProductsDetailsHeading"><span>Job Estimate Work Products</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ jobEstimateWorkProductsRef.id }}</span>
+          </dd>
+          <dt><span>Work Product Name</span></dt>
+          <dd>
+            <span>{{ jobEstimateWorkProductsRef.workProductName }}</span>
+          </dd>
+          <dt><span>Quantity</span></dt>
+          <dd>
+            <span>{{ jobEstimateWorkProductsRef.quantity }}</span>
+          </dd>
+          <dt><span>Unit</span></dt>
+          <dd>
+            <span>{{ jobEstimateWorkProductsRef.unit }}</span>
+          </dd>
+          <dt><span>Notes</span></dt>
+          <dd>
+            <span>{{ jobEstimateWorkProductsRef.notes }}</span>
+          </dd>
+          <dt><span>Job Estimate Work Log</span></dt>
+          <dd>
+            @if (jobEstimateWorkProducts()!.jobEstimateWorkLog) {
+              <div>
+                <a [routerLink]="['/job-estimate-work-log', jobEstimateWorkProducts()!.jobEstimateWorkLog?.id, 'view']">{{
+                  jobEstimateWorkProductsRef.jobEstimateWorkLog?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/job-estimate-work-products', jobEstimateWorkProductsRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

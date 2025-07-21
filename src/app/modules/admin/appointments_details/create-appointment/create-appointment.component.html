@@ -1,0 +1,169 @@
+<!-- Dialog Title -->
+<h2
+  class="flex flex-col items-center p-3 text-center text-xl font-semibold text-gray-800 dark:text-white"
+>
+  {{ data?.appointment?.id ? "Update Appointment" : "Create Appointment" }}
+</h2>
+
+<!-- AutoFill ( License Number ) & Editable Vehicle & Client Details -->
+<div class="p-6 rounded shadow bg-gray-50 border mt-3">
+  <h2 class="text-lg font-semibold text-gray-700 mb-3">
+    Vehicle & Client Details
+  </h2>
+  <div class="grid grid-cols-3 md:grid-cols-3 gap-3">
+    <!-- Vehicle Details -->
+    <div>
+      <label class="text-sm text-gray-500">Vehicle License No</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="vehicleDetails?.licenseNo || ''"
+        readonly
+      />
+    </div>
+    <div>
+      <label class="text-sm text-gray-500">Vehicle Brand</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="vehicleDetails?.brand || ''"
+        readonly
+      />
+    </div>
+    <div>
+      <label class="text-sm text-gray-500">Vehicle Model</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="vehicleDetails?.model || ''"
+        readonly
+      />
+    </div>
+
+    <!-- Client Details -->
+    <div>
+      <label class="text-sm text-gray-500">Client Name</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="clientDetails?.name || ''"
+        readonly
+      />
+    </div>
+    <div>
+      <label class="text-sm text-gray-500">Client Contact</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="clientDetails?.contactNumber1 || ''"
+        readonly
+      />
+    </div>
+    <div>
+      <label class="text-sm text-gray-500">Client Address</label>
+      <input
+        type="text"
+        class="w-full mt-1 px-2 py-1 text-gray-800 bg-white"
+        [value]="clientDetails?.address || ''"
+        readonly
+      />
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content class="flex flex-col space-y-4">
+  <form [formGroup]="appointmentForm">
+    <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+      <mat-form-field class="w-full">
+        <mat-label>Appointment date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="datepicker"
+          [formControl]="appDate"
+          [matDatepickerFilter]="dateFilter"
+        />
+        <mat-datepicker #datepicker></mat-datepicker>
+        <mat-datepicker-toggle
+          [for]="datepicker"
+          matSuffix
+        ></mat-datepicker-toggle>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Appointment time</mat-label>
+        <input matInput [matTimepicker]="timepicker" [formControl]="appTime" />
+        <mat-timepicker #timepicker></mat-timepicker>
+        <mat-timepicker-toggle
+          [for]="timepicker"
+          matSuffix
+        ></mat-timepicker-toggle>
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-3 md:grid-cols-3 gap-4">
+      <!-- Remarks -->
+      <mat-form-field class="w-full">
+        <mat-label>Remarks</mat-label>
+        <input matInput formControlName="remarks" />
+      </mat-form-field>
+
+      <!-- Appointment Type -->
+      <mat-form-field class="w-full">
+        <mat-label>Appointment Type</mat-label>
+        <mat-select
+          formControlName="appointmentType"
+          placeholder="Select Appointment Type"
+        >
+          <mat-option value="URGENT">URGENT</mat-option>
+          <mat-option value="MORNING">MORNING</mat-option>
+          <mat-option value="AFTERNOON">AFTERNOON</mat-option>
+          <mat-option value="EVENING">EVENING</mat-option>
+          <mat-option value="TO_BE_COLLECTED_FROM_CLIENT"
+            >TO BE COLLECTED FROM CLIENT</mat-option
+          >
+          <mat-option value="GOV">GOV</mat-option>
+          <mat-option value="COOPERATE">COOPERATE</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- License Number Searching Field -->
+      <mat-form-field class="w-full">
+        <mat-label>License Number</mat-label>
+        <input matInput formControlName="licenseNo" />
+        <!-- <input
+          matInput
+          [formControl]="searchInputControl"
+          placeholder="Enter License Number"
+        /> -->
+      </mat-form-field>
+
+      <!-- Selection -->
+      <section class="section flex space-x-12">
+        <mat-checkbox formControlName="isPaint">Paint</mat-checkbox>
+        <mat-checkbox formControlName="isTinker">Tinker</mat-checkbox>
+        <mat-checkbox formControlName="isSpare">Spare</mat-checkbox>
+        <mat-checkbox formControlName="isService">Service</mat-checkbox>
+      </section>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!-- Dialog Actions -->
+<mat-dialog-actions class="flex flex-col items-center p-1 text-center">
+  <div class="flex space-x-3">
+    <button
+      mat-button
+      class="rounded-lg bg-gray-200 px-4 py-2 text-2xl text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-button
+      class="rounded-lg bg-red-500 px-4 py-2 text-2xl text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+      (click)="submitAppointment()"
+    >
+      {{ data?.appointment?.id ? "Update" : "Create" }}
+    </button>
+  </div>
+</mat-dialog-actions>

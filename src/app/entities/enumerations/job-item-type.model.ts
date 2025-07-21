@@ -1,0 +1,15 @@
+export enum JobItemType {
+  SPARE_PARTS = 'SPARE_PARTS',
+
+  TINKERING = 'TINKERING',
+
+  PAINT = 'PAINT',
+
+  QC = 'QC',
+
+  SALES = 'SALES',
+
+  FITTING_CHARGES = 'FITTING_CHARGES',
+
+  REPAIRING = 'REPAIRING',
+}

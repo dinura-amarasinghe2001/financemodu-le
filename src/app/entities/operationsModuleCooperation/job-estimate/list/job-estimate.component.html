@@ -1,0 +1,280 @@
+<div>
+  <h2 id="page-heading" data-cy="JobEstimateHeading">
+    <span>Job Estimates</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-job-estimate"
+        [routerLink]="['/job-estimate/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Job Estimate</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Job Estimate</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Job Estimate"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (jobEstimates().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Job Estimates found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobID">
+              <div class="d-flex">
+                <span>Job ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="departmentID">
+              <div class="d-flex">
+                <span>Department ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="startDate">
+              <div class="d-flex">
+                <span>Start Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="endDate">
+              <div class="d-flex">
+                <span>End Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentState">
+              <div class="d-flex">
+                <span>Current State</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="remarks">
+              <div class="d-flex">
+                <span>Remarks</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estStartDate">
+              <div class="d-flex">
+                <span>Est Start Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estEndDate">
+              <div class="d-flex">
+                <span>Est End Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="opsUnitID">
+              <div class="d-flex">
+                <span>Ops Unit ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estimateID">
+              <div class="d-flex">
+                <span>Estimate ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleLicenseNumber">
+              <div class="d-flex">
+                <span>Vehicle License Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdBy">
+              <div class="d-flex">
+                <span>Created By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdDate">
+              <div class="d-flex">
+                <span>Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedBy">
+              <div class="d-flex">
+                <span>Last Modified By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedDate">
+              <div class="d-flex">
+                <span>Last Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobCard.id">
+              <div class="d-flex">
+                <span>Job Card</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (jobEstimate of jobEstimates(); track trackId(jobEstimate)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/job-estimate', jobEstimate.id, 'view']">{{ jobEstimate.id }}</a>
+              </td>
+              <td>{{ jobEstimate.jobID }}</td>
+              <td>{{ jobEstimate.departmentID }}</td>
+              <td>{{ jobEstimate.startDate | formatMediumDatetime }}</td>
+              <td>{{ jobEstimate.endDate | formatMediumDatetime }}</td>
+              <td>
+                {{
+                  {
+                    null: '',
+                    OPEN: 'OPEN',
+                    CANCELED: 'CANCELED',
+                    COMPLETE: 'COMPLETE',
+                    CLOSED: 'CLOSED',
+                    QC_PENDING: 'QC_PENDING',
+                    QC_APPROVED: 'QC_APPROVED',
+                    QCPD: 'QCPD',
+                    QCPD_PENDING: 'QCPD_PENDING',
+                    QCPD_TO_PENDING: 'QCPD_TO_PENDING',
+                  }[jobEstimate.currentState ?? 'null']
+                }}
+              </td>
+              <td>{{ jobEstimate.remarks }}</td>
+              <td>{{ jobEstimate.estStartDate | formatMediumDatetime }}</td>
+              <td>{{ jobEstimate.estEndDate | formatMediumDatetime }}</td>
+              <td>{{ jobEstimate.opsUnitID }}</td>
+              <td>{{ jobEstimate.estimateID }}</td>
+              <td>{{ jobEstimate.vehicleLicenseNumber }}</td>
+              <td>{{ jobEstimate.createdBy }}</td>
+              <td>{{ jobEstimate.createdDate | formatMediumDatetime }}</td>
+              <td>{{ jobEstimate.lastModifiedBy }}</td>
+              <td>{{ jobEstimate.lastModifiedDate | formatMediumDatetime }}</td>
+              <td>
+                @if (jobEstimate.jobCard) {
+                  <div>
+                    <a [routerLink]="['/job-card', jobEstimate.jobCard.id, 'view']">{{ jobEstimate.jobCard.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/job-estimate', jobEstimate.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/job-estimate', jobEstimate.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(jobEstimate)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (jobEstimates().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

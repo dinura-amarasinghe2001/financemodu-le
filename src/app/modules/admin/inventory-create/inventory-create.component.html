@@ -1,0 +1,55 @@
+<h2 class="form-heading">Add Item</h2>
+
+<form [formGroup]="inventoryForm" (ngSubmit)="onSave()">
+  <div class="form-grid">
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Item Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+    </div>
+
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Item Code</mat-label>
+        <input matInput formControlName="code" readonly />
+      </mat-form-field>
+    </div>
+
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Re-Order Qty</mat-label>
+        <input matInput type="number" formControlName="reOrderQty" />
+      </mat-form-field>
+    </div>
+
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Category Type</mat-label>
+        <mat-select formControlName="checkType">
+          <mat-option *ngFor="let category of categories" [value]="category.name">
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Last Cost</mat-label>
+        <input matInput type="number" formControlName="lastCost" />
+      </mat-form-field>
+    </div>
+
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Last Selling Price</mat-label>
+        <input matInput type="number" formControlName="lastSellingPrice" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit" class="save-button" [disabled]="inventoryForm.invalid">Save</button>
+  </div>
+</form>

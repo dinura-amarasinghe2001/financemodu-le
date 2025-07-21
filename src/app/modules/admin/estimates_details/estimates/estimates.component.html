@@ -1,0 +1,213 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <div class="min-w-0 flex-1">
+      <!-- Title -->
+      <div class="mt-2">
+        <h2
+          class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl"
+        >
+          Estimates
+        </h2>
+      </div>
+    </div>
+    <!-- Actions -->
+    <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+      <mat-form-field
+        class="fuse-mat-dense fuse-mat-rounded min-w-64"
+        [subscriptSizing]="'dynamic'"
+      >
+        <mat-icon
+          class="icon-size-5"
+          matPrefix
+          [svgIcon]="'heroicons_solid:magnifying-glass'"
+        ></mat-icon>
+        <input
+          matInput
+          [formControl]="searchInputControl"
+          [autocomplete]="'off'"
+          placeholder="Search Estimates"
+        />
+      </mat-form-field>
+      <button
+        class="ml-3"
+        mat-flat-button
+        [color]="'primary'"
+        [routerLink]="['/create-estimates']"
+      >
+        <mat-icon
+          class="icon-size-4"
+          [svgIcon]="'heroicons_mini:plus'"
+        ></mat-icon>
+        <span class="ml-2">Create New Estimate</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"
+  >
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="w-full table-fixed border-separate border-spacing-y-2 px-6"
+      >
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            ID
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.id }}
+          </td>
+        </ng-container>
+
+        <!-- Estimate ID Column -->
+        <ng-container matColumnDef="estimateID">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Estimate Number
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.estimateID }}
+          </td>
+        </ng-container>
+
+        <!-- Vehicle License Number Column -->
+        <ng-container matColumnDef="vehicleID">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Vehicle
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.licenseNo }}
+          </td>
+        </ng-container>
+
+        <!-- Vehicle Owner Name Column -->
+        <ng-container matColumnDef="vehicleOwnerName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Owner Name
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.vehicleOwnerName }}
+          </td>
+        </ng-container>
+
+        <!-- Vehicle Brand Column -->
+        <ng-container matColumnDef="ServiceAdvisorName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Service Advisor
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.serviceAdvisor }}
+          </td>
+        </ng-container>
+
+        <!-- Vehicle Model Column -->
+        <ng-container matColumnDef="vehicleModel">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Vehicle Model
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.vehicleModel }}
+          </td>
+        </ng-container>
+
+        <!-- Total Price Column -->
+        <!-- <ng-container matColumnDef="totalPrice">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Total Price
+          </th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            {{ estimate.totalPrice }}
+          </td>
+        </ng-container> -->
+
+        <!-- Actions Column -->
+
+        <ng-container matColumnDef="action">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="px-4 py-3 text-left font-semibold"
+          ></th>
+          <td mat-cell *matCellDef="let estimate" class="px-4 py-2">
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large mr-2"
+              color="primary"
+              (click)="openEstimateEdit(estimate.id)"
+            >
+              View
+            </button>
+
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large"
+              color="warn"
+              (click)="deleteEstimate(estimate)"
+            >
+              Delete
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <mat-paginator
+    #paginator
+    [length]="totalItems"
+    [pageSize]="itemsPerPage"
+    class="bottom-0 justify-self-end"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
+
+<!-- <div *ngIf="createEstimate"><app-create-estimate></app-create-estimate></div> -->
+
+<!-- <app-create-estimate></app-create-estimate> -->

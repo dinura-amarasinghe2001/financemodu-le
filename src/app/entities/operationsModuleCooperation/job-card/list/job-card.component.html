@@ -1,0 +1,417 @@
+<div>
+  <h2 id="page-heading" data-cy="JobCardHeading">
+    <span>Job Cards</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-job-card"
+        [routerLink]="['/job-card/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Job Card</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Job Card</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Job Card"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (jobCards().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Job Cards found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleID">
+              <div class="d-flex">
+                <span>Vehicle ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleBrand">
+              <div class="d-flex">
+                <span>Vehicle Brand</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleModel">
+              <div class="d-flex">
+                <span>Vehicle Model</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleLicenseNumber">
+              <div class="d-flex">
+                <span>Vehicle License Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerID">
+              <div class="d-flex">
+                <span>Vehicle Owner ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerName">
+              <div class="d-flex">
+                <span>Vehicle Owner Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerContactNumber1">
+              <div class="d-flex">
+                <span>Vehicle Owner Contact Number 1</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerContactNumber2">
+              <div class="d-flex">
+                <span>Vehicle Owner Contact Number 2</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estimateID">
+              <div class="d-flex">
+                <span>Estimate ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="insuranceCompany">
+              <div class="d-flex">
+                <span>Insurance Company</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="serviceAdvisor">
+              <div class="d-flex">
+                <span>Service Advisor</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="serviceAdvisorID">
+              <div class="d-flex">
+                <span>Service Advisor ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numberOfPanels">
+              <div class="d-flex">
+                <span>Number Of Panels</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fuelLevel">
+              <div class="d-flex">
+                <span>Fuel Level</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="meterReading">
+              <div class="d-flex">
+                <span>Meter Reading</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="startDate">
+              <div class="d-flex">
+                <span>Start Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobCardNumber">
+              <div class="d-flex">
+                <span>Job Card Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobCompleteDate">
+              <div class="d-flex">
+                <span>Job Complete Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="boothDate">
+              <div class="d-flex">
+                <span>Booth Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="opsUnitID">
+              <div class="d-flex">
+                <span>Ops Unit ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tinkeringStartDateTime">
+              <div class="d-flex">
+                <span>Tinkering Start Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tinkeringEndDateTime">
+              <div class="d-flex">
+                <span>Tinkering End Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paintStartDateTime">
+              <div class="d-flex">
+                <span>Paint Start Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paintEndDateTime">
+              <div class="d-flex">
+                <span>Paint End Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qcStartDateTime">
+              <div class="d-flex">
+                <span>Qc Start Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qcEndDateTime">
+              <div class="d-flex">
+                <span>Qc End Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sparePartStartDateTime">
+              <div class="d-flex">
+                <span>Spare Part Start Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sparePartEndDateTime">
+              <div class="d-flex">
+                <span>Spare Part End Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdBy">
+              <div class="d-flex">
+                <span>Created By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdDate">
+              <div class="d-flex">
+                <span>Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedBy">
+              <div class="d-flex">
+                <span>Last Modified By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedDate">
+              <div class="d-flex">
+                <span>Last Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (jobCard of jobCards(); track trackId(jobCard)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/job-card', jobCard.id, 'view']">{{ jobCard.id }}</a>
+              </td>
+              <td>{{ jobCard.vehicleID }}</td>
+              <td>{{ jobCard.vehicleBrand }}</td>
+              <td>{{ jobCard.vehicleModel }}</td>
+              <td>{{ jobCard.vehicleLicenseNumber }}</td>
+              <td>{{ jobCard.vehicleOwnerID }}</td>
+              <td>{{ jobCard.vehicleOwnerName }}</td>
+              <td>{{ jobCard.vehicleOwnerContactNumber1 }}</td>
+              <td>{{ jobCard.vehicleOwnerContactNumber2 }}</td>
+              <td>{{ jobCard.estimateID }}</td>
+              <td>{{ jobCard.insuranceCompany }}</td>
+              <td>{{ jobCard.serviceAdvisor }}</td>
+              <td>{{ jobCard.serviceAdvisorID }}</td>
+              <td>{{ jobCard.numberOfPanels }}</td>
+              <td>{{ jobCard.fuelLevel }}</td>
+              <td>{{ jobCard.meterReading }}</td>
+              <td>{{ jobCard.startDate | formatMediumDatetime }}</td>
+              <td>{{ jobCard.jobCardNumber }}</td>
+              <td>{{ jobCard.jobCompleteDate | formatMediumDatetime }}</td>
+              <td>{{ jobCard.boothDate | formatMediumDatetime }}</td>
+              <td>{{ jobCard.opsUnitID }}</td>
+              <td>{{ jobCard.tinkeringStartDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.tinkeringEndDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.paintStartDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.paintEndDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.qcStartDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.qcEndDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.sparePartStartDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.sparePartEndDateTime | formatMediumDatetime }}</td>
+              <td>{{ jobCard.createdBy }}</td>
+              <td>{{ jobCard.createdDate | formatMediumDatetime }}</td>
+              <td>{{ jobCard.lastModifiedBy }}</td>
+              <td>{{ jobCard.lastModifiedDate | formatMediumDatetime }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/job-estimate']"
+                    [queryParams]="{ 'filter[jobCardId.in]': jobCard.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Show Job Estimate</span>
+                  </button>
+                  <button
+                    type="submit"
+                    [routerLink]="['/job-item-time-estimation']"
+                    [queryParams]="{ 'filter[jobCardId.in]': jobCard.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Show Job Item Time Estimation</span>
+                  </button>
+                  <a [routerLink]="['/job-card', jobCard.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/job-card', jobCard.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(jobCard)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (jobCards().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,348 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-gate-pass-heading" data-cy="GatePassCreateUpdateHeading">Create or edit a Gate Pass</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleID">Vehicle ID</label>
+          <input type="text" class="form-control" name="vehicleID" id="field_vehicleID" data-cy="vehicleID" formControlName="vehicleID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleBrand">Vehicle Brand</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleBrand"
+            id="field_vehicleBrand"
+            data-cy="vehicleBrand"
+            formControlName="vehicleBrand"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleModel">Vehicle Model</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleModel"
+            id="field_vehicleModel"
+            data-cy="vehicleModel"
+            formControlName="vehicleModel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleLicenseNumber">Vehicle License Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleLicenseNumber"
+            id="field_vehicleLicenseNumber"
+            data-cy="vehicleLicenseNumber"
+            formControlName="vehicleLicenseNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerID">Vehicle Owner ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerID"
+            id="field_vehicleOwnerID"
+            data-cy="vehicleOwnerID"
+            formControlName="vehicleOwnerID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerName">Vehicle Owner Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerName"
+            id="field_vehicleOwnerName"
+            data-cy="vehicleOwnerName"
+            formControlName="vehicleOwnerName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerContactNumber1">Vehicle Owner Contact Number 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerContactNumber1"
+            id="field_vehicleOwnerContactNumber1"
+            data-cy="vehicleOwnerContactNumber1"
+            formControlName="vehicleOwnerContactNumber1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerContactNumber2">Vehicle Owner Contact Number 2</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerContactNumber2"
+            id="field_vehicleOwnerContactNumber2"
+            data-cy="vehicleOwnerContactNumber2"
+            formControlName="vehicleOwnerContactNumber2"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fuelLevel">Fuel Level</label>
+          <input type="text" class="form-control" name="fuelLevel" id="field_fuelLevel" data-cy="fuelLevel" formControlName="fuelLevel" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_meterReading">Meter Reading</label>
+          <input
+            type="text"
+            class="form-control"
+            name="meterReading"
+            id="field_meterReading"
+            data-cy="meterReading"
+            formControlName="meterReading"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null"></option>
+            @for (gatePassState of gatePassStateValues; track $index) {
+              <option [value]="gatePassState">
+                {{
+                  { null: '', OPEN: 'OPEN', CANCELED: 'CANCELED', COMPLETE: 'COMPLETE', CLOSED: 'CLOSED', ONGOING: 'ONGOING' }[
+                    gatePassState
+                  ]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_frontView1">Front View 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="frontView1"
+            id="field_frontView1"
+            data-cy="frontView1"
+            formControlName="frontView1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_sideRView1">Side R View 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sideRView1"
+            id="field_sideRView1"
+            data-cy="sideRView1"
+            formControlName="sideRView1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_sideLView1">Side L View 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sideLView1"
+            id="field_sideLView1"
+            data-cy="sideLView1"
+            formControlName="sideLView1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_rearView1">Rear View 1</label>
+          <input type="text" class="form-control" name="rearView1" id="field_rearView1" data-cy="rearView1" formControlName="rearView1" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobCardNumber">Job Card Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="jobCardNumber"
+            id="field_jobCardNumber"
+            data-cy="jobCardNumber"
+            formControlName="jobCardNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_receiptValue">Receipt Value</label>
+          <input
+            type="number"
+            class="form-control"
+            name="receiptValue"
+            id="field_receiptValue"
+            data-cy="receiptValue"
+            formControlName="receiptValue"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_entryDateTime">Entry Date Time</label>
+          <div class="d-flex">
+            <input
+              id="field_entryDateTime"
+              data-cy="entryDateTime"
+              type="datetime-local"
+              class="form-control"
+              name="entryDateTime"
+              formControlName="entryDateTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opsUnitID">Ops Unit ID</label>
+          <input type="text" class="form-control" name="opsUnitID" id="field_opsUnitID" data-cy="opsUnitID" formControlName="opsUnitID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_invoiceNumber">Invoice Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="invoiceNumber"
+            id="field_invoiceNumber"
+            data-cy="invoiceNumber"
+            formControlName="invoiceNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ownerBelongings">Owner Belongings</label>
+          <input
+            type="text"
+            class="form-control"
+            name="ownerBelongings"
+            id="field_ownerBelongings"
+            data-cy="ownerBelongings"
+            formControlName="ownerBelongings"
+          />
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobCard">Job Card</label>
+          <select
+            class="form-control"
+            id="field_jobCard"
+            data-cy="jobCard"
+            name="jobCard"
+            formControlName="jobCard"
+            [compareWith]="compareJobCard"
+          >
+            <option [ngValue]="null"></option>
+            @for (jobCardOption of jobCardsCollection; track $index) {
+              <option [ngValue]="jobCardOption">{{ jobCardOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

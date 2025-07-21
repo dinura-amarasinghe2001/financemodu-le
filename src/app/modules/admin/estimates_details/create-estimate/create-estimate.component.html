@@ -1,0 +1,403 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    *ngIf="!esitamteID"
+    class="bg-default flex flex-0 flex-col p-6 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-3"
+  >
+    <div class="min-w-0 flex-1">
+      <div class="mt-2">
+        <!-- Make this a flex container to align buttons + search field -->
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <!-- Toggle Buttons -->
+          <div class="flex items-center gap-2">
+            <button
+              class="px-1 py-1 text-white rounded-xl transition-all bg-amber-400"
+            >
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+            </button>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="flex w-full md:w-auto flex-1 items-center gap-2">
+            <div class="relative w-full">
+              <input
+                [formControl]="searchInputControl"
+                (keydown.enter)="loadPreEstimates()"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                [placeholder]="'Enter Pre Estimate ID'"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <ng-container>
+                  <mat-icon
+                    class="text-current text-2xl"
+                    [svgIcon]="'mat_outline:directions_car_filled'"
+                  ></mat-icon>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <button
+            (click)="createEstimate()"
+            class="px-4 py-3 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+          >
+            <!-- <mat-icon
+              class="icon-size-4 text-white"
+              [svgIcon]="'heroicons_mini:plus'"
+            ></mat-icon> -->
+            <span class="font-semibold">Save</span>
+          </button>
+
+          <button
+            (click)="estimatePassPrint()"
+            class="px-4 py-3 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+          >
+            <!-- <mat-icon
+              class="icon-size-4 text-white"
+              [svgIcon]="'heroicons_mini:plus'"
+            ></mat-icon> -->
+            <span class="font-semibold">Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div
+    class="text-lg font-semibold flex flex-col gap-2 px-6 cursor-pointer"
+    *ngIf="!esitamte"
+  >
+    <h2 class="text-2xl font-bold capitalize text-indigo-600 px-4">
+      Recent Pre-Estimates....
+    </h2>
+    <div class="text-lg font-semibold flex flex-row flex-wrap gap-2 px-4">
+      <div
+        *ngFor="let esitamte of resentEsitamte"
+        class="bg-amber-400 text-white px-3 py-1 text-xl rounded-lg transition-all duration-200 hover:bg-amber-500 hover:scale-125 hover:shadow-lg cursor-pointer group"
+        (click)="selectEsitamte(esitamte.id)"
+      >
+        {{ esitamte.id }} - {{ esitamte.licenseNo }} -
+        {{ esitamte.vehicleOwnerName }}
+      </div>
+    </div>
+  </div> -->
+
+  <div class="px-4 mb-3" *ngIf="!esitamte">
+    <div class="flex flex-wrap gap-3 px-2">
+      <div
+        *ngFor="let estimate of resentEsitamte"
+        (click)="selectEsitamte(estimate.id)"
+        class="bg-amber-500 text-white text-sm md:text-base font-medium px-4 py-2 rounded-2xl shadow hover:bg-amber-600 hover:scale-[1.03] transition-all duration-200 ease-in-out cursor-pointer"
+        matTooltip="Click to load estimate details"
+      >
+        <div class="flex flex-col gap-1 leading-tight">
+          <span class="font-semibold"
+            >#{{ estimate.id }} — {{ estimate.licenseNo }}</span
+          >
+          <span>{{ estimate.vehicleOwnerName }}</span>
+          <span class="text-sm opacity-90 italic">
+            {{
+              estimate.createdDate
+                ? (estimate.createdDate | date: "medium")
+                : "N/A"
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-4 px-6 mt-3" *ngIf="esitamte">
+    <div class="rounded-2xl w-full">
+      <div class="bg-white flex flex-col rounded-lg p-6 h-full space-y-4">
+        <!-- <div class="w-full flex justify-end items-end" *ngIf="esitamteID">
+          <button
+            class="px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+            mat-button
+            (click)="updateEstimate()"
+          >
+            <span class="mr-2">Update</span>
+          </button>
+        </div> -->
+
+        <div
+          class="w-full mb-6 flex justify-between items-center"
+          *ngIf="estimateNumber"
+        >
+          <!-- Left: Job ID badge -->
+
+          <div>
+            <div
+              class="text-xl text-white bg-indigo-600 rounded-lg px-3 py-1 group-hover:bg-indigo-700 transition"
+            >
+              #{{ estimateNumber }}
+            </div>
+          </div>
+
+          <!-- Right: Details toggle button -->
+          <div class="flex flex-row gap-2">
+            <button
+              class="px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+              mat-button
+              (click)="updateEstimate()"
+            >
+              <span class="mr-2">Update</span>
+            </button>
+
+            
+
+            <button
+              class="px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+              mat-button
+              (click)="estimatePassPrint()"
+            >
+              <span class="">Print</span>
+            </button>
+          </div>
+        </div>
+        <!-- Vehicle & Client Side-by-Side -->
+        <div class="flex flex-col md:flex-row gap-6">
+          <!-- Vehicle Info -->
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'mat_outline:directions_car_filled'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">
+                Vehicle licenseNo
+              </div>
+              <div class="text-lg font-semibold">
+                {{ esitamte.licenseNo }}
+                <div
+                  class="bg-amber-500 text-white px-3 py-1 mt-2 text-sm rounded-lg"
+                >
+                  Panels: {{ esitamte.numberOfPanels ?? 0 }}
+                </div>
+              </div>
+              <div class="text-sm text-gray-500">
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <div class="bg-amber-500 text-white px-3 py-1 rounded-lg">
+                    {{ esitamte.vehicleBrand }}
+                  </div>
+                  <div class="bg-red-500 text-white px-3 py-1 rounded-lg">
+                    {{ esitamte.vehicleModel }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Owner Info -->
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:user-circle'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">Owner</div>
+              <div class="text-lg font-semibold">
+                {{ esitamte.vehicleOwnerName }}
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <div class="bg-teal-500 text-white px-3 py-1 rounded-lg">
+                  {{ esitamte.vehicleOwnerContactNumber1 }}
+                </div>
+
+                <div class="bg-teal-500 text-white px-3 mt-1 py-1 rounded-lg">
+                  {{ esitamte.vehicleOwnerContactNumber2 }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-1 items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:clipboard-document-list'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 leading-tight">
+              <div class="text-secondary text-sm font-medium">Insurance</div>
+              <div class="text-lg font-semibold">
+                {{ esitamte.insuranceName }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Insurance & Panel Info -->
+        <!-- <div class="flex flex-wrap gap-2 text-sm mt-2">
+          <div class="bg-blue-500 text-white px-3 py-1 rounded-lg">
+            Insurance: {{ esitamte.insuranceName }}
+          </div>
+          <div class="bg-amber-500 text-white px-3 py-1 rounded-lg">
+            Panels: {{ esitamte.numberOfPanels ?? 0 }}
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="px-6 mt-2 overflow-x-auto w-full" *ngIf="esitamte">
+    <ng-container
+      *ngFor="
+        let section of ['part', 'fitting_charge', 'repair', 'paint', 'other']
+      "
+    >
+      <div
+        *ngIf="formLines[section]?.length > 0"
+        class="mb-2 w-full p-3 bg-white rounded-lg"
+      >
+        <h2 class="text-2xl font-bold capitalize mb-4 text-indigo-600">
+          {{ sectionLabels[section] }}
+        </h2>
+
+        <!-- Header -->
+        <div class="flex gap-4 font-semibold text-sm text-gray-700 w-full">
+          <div class="flex-1 min-w-[200px]">Work</div>
+          <div *ngIf="section === 'part'" class="flex-1 min-w-[150px]">S/H</div>
+          <div class="flex-1 min-w-[150px]">Price</div>
+          <div class="flex-1 min-w-[150px]">Approved Amount</div>
+          <!-- <div class="flex-1 min-w-[180px]">Approved Date</div> -->
+          <!-- <div class="flex-1 min-w-[180px]">Reason</div> -->
+        </div>
+
+        <!-- Rows -->
+        <div
+          *ngFor="let line of formLines[section]"
+          class="flex gap-4 w-full mt-2"
+        >
+          <!-- Work Autocomplete -->
+          <div class="relative flex-1 min-w-[200px]">
+            <input
+              type="text"
+              matInput
+              [matAutocomplete]="auto"
+              placeholder="Select Work"
+              [(ngModel)]="line.works"
+              (focus)="filterWorks('', section)"
+              (input)="filterWorks($event.target.value, section)"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="line.works = $event.option.value"
+            >
+              <mat-option
+                *ngFor="let option of filteredWorks[section]"
+                [value]="getWorkName(option, section)"
+              >
+                {{ getWorkName(option, section) }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
+
+          <!-- Price Type -->
+          <div *ngIf="section === 'part'" class="flex-1 min-w-[150px]">
+            <input
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+              type="text"
+              [(ngModel)]="line.sh"
+              (ngModelChange)="onLineInputChange('sh', $event, line, section)"
+            />
+          </div>
+
+          <!-- Price -->
+          <div class="relative flex-1 min-w-[150px]">
+            <input
+              class="w-full text-right p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+              type="text"
+              [value]="line.price | number: '1.0-0'"
+              (input)="onEstimatePriceInput($event, line, section)"
+              placeholder="Price"
+            />
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 text-lg font-semibold"
+            >
+              Rs
+            </div>
+          </div>
+
+          <!-- Approved Price -->
+          <div class="relative flex-1 min-w-[150px]">
+            <input
+              class="w-full text-right p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+              type="text"
+              [value]="line.approvedPrice | number: '1.0-0'"
+              (input)="onApprovedPriceInput($event, line, section)"
+              placeholder="Price"
+            />
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 text-lg font-semibold"
+            >
+              Rs
+            </div>
+          </div>
+
+          <!-- Approved Date -->
+          <!-- <div class="relative flex-1 min-w-[180px]">
+            <input
+              class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+              [matDatepicker]="picker"
+              [(ngModel)]="line.approvedDate"
+              (ngModelChange)="
+                onLineInputChange('approvedDate', $event, line, section)
+              "
+              matInput
+              placeholder="Select date"
+            />
+            <mat-datepicker-toggle
+              [for]="picker"
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+              matSuffix
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </div> -->
+
+          <!-- Reason -->
+          <!-- <div class="flex-1 min-w-[180px]">
+            <select
+              [(ngModel)]="line.estimateTreatmentReason"
+              (ngModelChange)="
+                onLineInputChange(
+                  'estimateTreatmentReason',
+                  $event,
+                  line,
+                  section
+                )
+              "
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+            >
+              <option value="" disabled selected hidden>Select Reason</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="NOT_COMPLETED">NOT_COMPLETED</option>
+              <option value="INSURANCE_DECLINED">INSURANCE_DECLINED</option>
+              <option value="NOT_INFORMED">NOT_INFORMED</option>
+            </select>
+          </div> -->
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

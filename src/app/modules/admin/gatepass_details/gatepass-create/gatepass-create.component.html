@@ -1,0 +1,316 @@
+<div class="absolute inset-0 flex flex-col overflow-auto min-w-0">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-col sm:flex-row sm:items-start sm:justify-between sm:px-3 sm:pt-3 gap-2 dark:bg-transparent"
+  >
+    <!-- Left: Header -->
+    <div class="px-2 rounded-lg flex items-center justify-center">
+      <span class="font-semibold mt-3 text-3xl text-black">Gate Pass</span>
+    </div>
+
+    <!-- Right: Buttons + Alert -->
+    <div class="flex flex-row sm:items-center gap-2">
+      <!-- Buttons -->
+      <div class="flex gap-2">
+        <button
+          *ngIf="!isUpdating"
+          (click)="createGatePass()"
+          class="px-4 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+          mat-button
+        >
+          <span class="mr-2">Add</span>
+        </button>
+        <button
+          *ngIf="isUpdating"
+          (click)="updateGatePass()"
+          class="px-4 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+          mat-button
+        >
+          <span class="">Update</span>
+        </button>
+        <button
+          *ngIf="gatePassIdForPrint"
+          (click)="gatePassPrint()"
+          class="px-4 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+          mat-button
+        >
+          <span class="">Print</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2 h-16">
+        <fuse-alert
+          [appearance]="'soft'"
+          [dismissible]="true"
+          [dismissed]="true"
+          [name]="'alertBox4'"
+          [type]="'warn'"
+        >
+          Please fill all required fields before submitting the form.
+        </fuse-alert>
+
+        <fuse-alert
+          *ngIf="
+            imageSlots[0].file === null ||
+            imageSlots[1].file === null ||
+            imageSlots[2].file === null ||
+            imageSlots[3].file === null
+          "
+          [appearance]="'soft'"
+          [dismissible]="true"
+          [dismissed]="true"
+          [name]="'alertBox5'"
+          [type]="'warn'"
+        >
+          Please add images before submitting the form.
+        </fuse-alert>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex p-3 justify-center items-center">
+    <form
+      [formGroup]="editForm"
+      class="flex flex-col gap-6 w-full bg-card p-3 rounded-lg"
+    >
+      <!-- Row 1: Vehicle Info -->
+      <div class="flex flex-1 items-start md:items-center">
+        <!-- Icon Section -->
+        <div
+          class="flex h-20 w-20 items-center justify-center rounded-2xl bg-red-400 text-white dark:bg-teal-600 dark:text-teal-50"
+        >
+          <mat-icon
+            class="text-current text-6xl h-10 w-10"
+            [svgIcon]="'mat_outline:directions_car_filled'"
+          ></mat-icon>
+        </div>
+
+        <!-- Input Section -->
+        <div class="ml-4 w-full">
+          <div class="text-secondary text-xl font-medium mb-1">
+            Vehicle Details
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="relative w-full">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Vehicle
+              </label>
+              <input
+                formControlName="vehicleLicenseNumber"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Vehicle ID"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+            </div>
+
+            <!-- Input 2: Fuel Level with % suffix -->
+            <div class="relative w-full">
+              <input
+                formControlName="fuelLevel"
+                class="w-full p-3 pl-12 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Fuel Level"
+              />
+
+              <!-- Floating Label -->
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Fuel Level
+              </label>
+
+              <!-- Left Icon -->
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+
+              <!-- Right Suffix: % -->
+              <div
+                class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500 text-lg font-semibold"
+              >
+                %
+              </div>
+            </div>
+
+            <div class="relative w-full">
+              <input
+                formControlName="ownerBelongings"
+                class="w-full p-3 pl-12 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Owner Belongings"
+              />
+
+              <!-- Floating Label -->
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Owner Belongings
+              </label>
+
+              <!-- Left Icon -->
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+
+              <!-- Right Suffix: % -->
+            </div>
+
+            <!-- Input 3 -->
+            <div class="relative w-full">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Meter Reading
+              </label>
+              <input
+                formControlName="meterReading"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Meter Reading"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+              <div
+                class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500 text-lg font-semibold"
+              >
+                KM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Image Uploaders with Preview -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          *ngFor="let img of imageSlots; let i = index"
+          class="flex flex-col items-center gap-3 border rounded-lg p-4"
+        >
+          <label class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >Image {{ img.label }}</label
+          >
+
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onImageSelected($event, i)"
+            class="w-full text-sm border p-2 rounded file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200"
+          />
+
+          <div *ngIf="img.preview" class="w-full flex flex-col items-center">
+            <img
+              [src]="img.preview"
+              alt="Preview"
+              class="h-32 w-auto object-cover rounded shadow"
+            />
+            <span
+              class="mt-2 text-xs text-gray-600 truncate w-full text-center"
+              >{{ img.name }}</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-1 items-start md:items-center">
+        <!-- Icon Section -->
+        <div
+          class="flex h-20 w-20 items-center justify-center rounded-2xl bg-red-400 text-white dark:bg-teal-600 dark:text-teal-50"
+        >
+          <mat-icon
+            class="text-current text-6xl h-10 w-10"
+            [svgIcon]="'sim_card_alert'"
+          ></mat-icon>
+        </div>
+
+        <!-- Input Section -->
+        <div class="ml-4 w-full">
+          <div class="text-secondary text-xl font-medium mb-1">
+            Job Card Details
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Input 1 -->
+            <div class="relative w-full">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Job Card Number
+              </label>
+              <input
+                formControlName="jobCardNumber"
+                class="w-full h-13 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Job Card Number"
+              />
+            </div>
+
+            <div class="relative w-full">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Invoice Number
+              </label>
+              <input
+                formControlName="invoiceNumber"
+                class="w-full h-13 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Invoice Number"
+              />
+            </div>
+
+            <!-- Input 2 -->
+            <div class="relative w-full">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Receipt Value
+              </label>
+              <input
+                formControlName="receiptValue"
+                class="w-full h-13 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Receipt Value"
+              />
+            </div>
+
+            <!-- Input 3 -->
+            <div class="relative w-full">
+              <label
+                for="entryDateTime"
+                class="absolute -top-2 left-3 text-xs px-1 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Entry Date & Time
+              </label>
+              <input
+                type="datetime-local"
+                id="entryDateTime"
+                formControlName="entryDateTime"
+                class="w-full h-13 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 dark:bg-gray-800 dark:text-white dark:border-gray-600"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (gRN(); as gRNRef) {
+      <div>
+        <h2 data-cy="gRNDetailsHeading"><span>GRN</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ gRNRef.id }}</span>
+          </dd>
+          <dt><span>Grn Code</span></dt>
+          <dd>
+            <span>{{ gRNRef.grnCode }}</span>
+          </dd>
+          <dt><span>Grn Date</span></dt>
+          <dd>
+            <span>{{ gRNRef.grnDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Po Num</span></dt>
+          <dd>
+            <span>{{ gRNRef.poNum }}</span>
+          </dd>
+          <dt><span>Supplier Id</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierId }}</span>
+          </dd>
+          <dt><span>Supplier Name</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierName }}</span>
+          </dd>
+          <dt><span>Supplier Address</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierAddress }}</span>
+          </dd>
+          <dt><span>Invoice Id</span></dt>
+          <dd>
+            <span>{{ gRNRef.invoiceId }}</span>
+          </dd>
+          <dt><span>Invoice Code</span></dt>
+          <dd>
+            <span>{{ gRNRef.invoiceCode }}</span>
+          </dd>
+          <dt><span>Sub Total</span></dt>
+          <dd>
+            <span>{{ gRNRef.subTotal }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ gRNRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ gRNRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Amount Owing</span></dt>
+          <dd>
+            <span>{{ gRNRef.amountOwing }}</span>
+          </dd>
+          <dt><span>Is Active</span></dt>
+          <dd>
+            <span>{{ gRNRef.isActive }}</span>
+          </dd>
+          <dt><span>Inspected</span></dt>
+          <dd>
+            <span>{{ gRNRef.inspected }}</span>
+          </dd>
+          <dt><span>Order Id</span></dt>
+          <dd>
+            <span>{{ gRNRef.orderId }}</span>
+          </dd>
+          <dt><span>Supplier Invoice Code</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierInvoiceCode }}</span>
+          </dd>
+          <dt><span>Is Account Section Checked</span></dt>
+          <dd>
+            <span>{{ gRNRef.isAccountSectionChecked }}</span>
+          </dd>
+          <dt><span>Total</span></dt>
+          <dd>
+            <span>{{ gRNRef.total }}</span>
+          </dd>
+          <dt><span>Is Inventory Updated</span></dt>
+          <dd>
+            <span>{{ gRNRef.isInventoryUpdated }}</span>
+          </dd>
+          <dt><span>Comments</span></dt>
+          <dd>
+            <span>{{ gRNRef.comments }}</span>
+          </dd>
+          <dt><span>Supplier Invoice Date</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierInvoiceDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Supplier Discount</span></dt>
+          <dd>
+            <span>{{ gRNRef.supplierDiscount }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/grn', gRNRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

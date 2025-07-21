@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (flag(); as flagRef) {
+      <div>
+        <h2 data-cy="flagDetailsHeading"><span>Flag</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ flagRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ flagRef.code }}</span>
+          </dd>
+          <dt><span>Flag Id</span></dt>
+          <dd>
+            <span>{{ flagRef.flagId }}</span>
+          </dd>
+          <dt><span>Flag Name</span></dt>
+          <dd>
+            <span>{{ flagRef.flagName }}</span>
+          </dd>
+          <dt><span>Flag Value</span></dt>
+          <dd>
+            <span>{{ flagRef.flagValue }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ flagRef.description }}</span>
+          </dd>
+          <dt><span>Is Deleted</span></dt>
+          <dd>
+            <span>{{ flagRef.isDeleted }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ flagRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ flagRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ flagRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ flagRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Tenant</span></dt>
+          <dd>
+            @if (flag()!.tenant) {
+              <div>
+                <a [routerLink]="['/tenant', flag()!.tenant?.id, 'view']">{{ flagRef.tenant?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/flag', flagRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

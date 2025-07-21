@@ -1,0 +1,9 @@
+export enum LevelStatus {
+  ACTIVE = 'ACTIVE',
+
+  INACTIVE = 'INACTIVE',
+
+  UNDER_MAINTENANCE = 'UNDER_MAINTENANCE',
+
+  MERGED = 'MERGED',
+}

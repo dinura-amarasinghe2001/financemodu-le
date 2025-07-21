@@ -1,0 +1,243 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-operational-unit-heading" data-cy="OperationalUnitCreateUpdateHeading">Create or edit a Operational Unit</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_code">Code</label>
+          <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_displayName">Display Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="displayName"
+            id="field_displayName"
+            data-cy="displayName"
+            formControlName="displayName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_levelBusinessType">Level Business Type</label>
+          <select
+            class="form-control"
+            name="levelBusinessType"
+            formControlName="levelBusinessType"
+            id="field_levelBusinessType"
+            data-cy="levelBusinessType"
+          >
+            <option [ngValue]="null"></option>
+            @for (levelBusinessType of levelBusinessTypeValues; track $index) {
+              <option [value]="levelBusinessType">
+                {{
+                  {
+                    null: '',
+                    CORPORATE: 'CORPORATE',
+                    SME: 'SME',
+                    NON_PROFIT: 'NON_PROFIT',
+                    GOVERNMENT: 'GOVERNMENT',
+                    EDUCATIONAL: 'EDUCATIONAL',
+                    AUTOMOBILE_REPAIR: 'AUTOMOBILE_REPAIR',
+                  }[levelBusinessType]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_remark">Remark</label>
+          <input type="text" class="form-control" name="remark" id="field_remark" data-cy="remark" formControlName="remark" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_contactEmail">Contact Email</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contactEmail"
+            id="field_contactEmail"
+            data-cy="contactEmail"
+            formControlName="contactEmail"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_contactPhone">Contact Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contactPhone"
+            id="field_contactPhone"
+            data-cy="contactPhone"
+            formControlName="contactPhone"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_immediateParentCode">Immediate Parent Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="immediateParentCode"
+            id="field_immediateParentCode"
+            data-cy="immediateParentCode"
+            formControlName="immediateParentCode"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_levelType">Level Type</label>
+          <select class="form-control" name="levelType" formControlName="levelType" id="field_levelType" data-cy="levelType">
+            <option [ngValue]="null"></option>
+            @for (levelType of levelTypeValues; track $index) {
+              <option [value]="levelType">
+                {{
+                  {
+                    null: '',
+                    HEADQUARTERS: 'HEADQUARTERS',
+                    HEAD_BRANCH: 'HEAD_BRANCH',
+                    BRANCH: 'BRANCH',
+                    SUBBRANCH: 'SUBBRANCH',
+                    DEPARTMENT: 'DEPARTMENT',
+                    UNIT: 'UNIT',
+                    TEAM: 'TEAM',
+                  }[levelType]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_tenant">Tenant</label>
+          <select
+            class="form-control"
+            id="field_tenant"
+            data-cy="tenant"
+            name="tenant"
+            formControlName="tenant"
+            [compareWith]="compareTenant"
+          >
+            <option [ngValue]="null"></option>
+            @for (tenantOption of tenantsSharedCollection; track $index) {
+              <option [ngValue]="tenantOption">{{ tenantOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

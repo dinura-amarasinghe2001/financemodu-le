@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (clientRegistry(); as clientRegistryRef) {
+      <div>
+        <h2 data-cy="clientRegistryDetailsHeading"><span>Client Registry</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.id }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.name }}</span>
+          </dd>
+          <dt><span>Last Vehicle ID</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.lastVehicleID }}</span>
+          </dd>
+          <dt><span>Last Receipt ID</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.lastReceiptID }}</span>
+          </dd>
+          <dt><span>Address</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.address }}</span>
+          </dd>
+          <dt><span>City</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.city }}</span>
+          </dd>
+          <dt><span>Contact Number 1</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.contactNumber1 }}</span>
+          </dd>
+          <dt><span>Contact Number 2</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.contactNumber2 }}</span>
+          </dd>
+          <dt><span>Email</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.email }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ clientRegistryRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/client-registry', clientRegistryRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

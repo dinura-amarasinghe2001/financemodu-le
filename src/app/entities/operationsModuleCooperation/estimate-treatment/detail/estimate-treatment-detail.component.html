@@ -1,0 +1,162 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (estimateTreatment(); as estimateTreatmentRef) {
+      <div>
+        <h2 data-cy="estimateTreatmentDetailsHeading"><span>Estimate Treatment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle Treatment ID</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.vehicleTreatmentID }}</span>
+          </dd>
+          <dt><span>Fitting Charge Name</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.fittingChargeName }}</span>
+          </dd>
+          <dt><span>Paint Name</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.paintName }}</span>
+          </dd>
+          <dt><span>Part Name</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.partName }}</span>
+          </dd>
+          <dt><span>Repair Name</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.repairName }}</span>
+          </dd>
+          <dt><span>Other</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.other }}</span>
+          </dd>
+          <dt><span>Price Type</span></dt>
+          <dd>
+            <span>{{ { null: '', SYSTEM: 'SYSTEM', ESTIMATE: 'ESTIMATE' }[estimateTreatmentRef.priceType ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Custom Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.customPrice }}</span>
+          </dd>
+          <dt><span>Sh</span></dt>
+          <dd>
+            <span>{{ { null: '', SH: 'SH', MR: 'MR' }[estimateTreatmentRef.sh ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Market Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.marketPrice }}</span>
+          </dd>
+          <dt><span>Type</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.type }}</span>
+          </dd>
+          <dt><span>Part Number</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.partNumber }}</span>
+          </dd>
+          <dt><span>Available Quantity</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.availableQuantity }}</span>
+          </dd>
+          <dt><span>Unit Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.unitPrice }}</span>
+          </dd>
+          <dt><span>Treatment Type</span></dt>
+          <dd>
+            <span>{{
+              { null: '', PART: 'PART', PAINT: 'PAINT', FITTING_CHARGE: 'FITTING_CHARGE', REPAIR: 'REPAIR', OTHER: 'OTHER' }[
+                estimateTreatmentRef.treatmentType ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Quantity</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.quantity }}</span>
+          </dd>
+          <dt><span>Is System Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.isSystemPrice }}</span>
+          </dd>
+          <dt><span>Is Price Confirmed</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.isPriceConfirmed }}</span>
+          </dd>
+          <dt><span>Approved Date</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.approvedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.price }}</span>
+          </dd>
+          <dt><span>Approved Price</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.approvedPrice }}</span>
+          </dd>
+          <dt><span>Approved Price State</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.approvedPriceState }}</span>
+          </dd>
+          <dt><span>Estimate Treatment Reason</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                COMPLETED: 'COMPLETED',
+                NOT_COMPLETED: 'NOT_COMPLETED',
+                INSURANCE_DECLINED: 'INSURANCE_DECLINED',
+                NOT_INFORMED: 'NOT_INFORMED',
+              }[estimateTreatmentRef.estimateTreatmentReason ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ estimateTreatmentRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Estimate</span></dt>
+          <dd>
+            @if (estimateTreatment()!.estimate) {
+              <div>
+                <a [routerLink]="['/estimate', estimateTreatment()!.estimate?.id, 'view']">{{ estimateTreatmentRef.estimate?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/estimate-treatment', estimateTreatmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

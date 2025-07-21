@@ -1,0 +1,150 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (theGRNLineBatches(); as theGRNLineBatchesRef) {
+      <div>
+        <h2 data-cy="theGRNLineBatchesDetailsHeading"><span>The GRN Line Batches</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.id }}</span>
+          </dd>
+          <dt><span>Grn Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.grnId }}</span>
+          </dd>
+          <dt><span>Line Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.lineId }}</span>
+          </dd>
+          <dt><span>Batch Line Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.batchLineId }}</span>
+          </dd>
+          <dt><span>Item Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.itemId }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.code }}</span>
+          </dd>
+          <dt><span>Tx Date</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.txDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Manufacture Date</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.manufactureDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Expired Date</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.expiredDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.qty }}</span>
+          </dd>
+          <dt><span>Cost</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.cost }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.price }}</span>
+          </dd>
+          <dt><span>Cost Without Vat</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.costWithoutVat }}</span>
+          </dd>
+          <dt><span>Price Without Vat</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.priceWithoutVat }}</span>
+          </dd>
+          <dt><span>Has Vat</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.hasVat }}</span>
+          </dd>
+          <dt><span>Supplier Discount</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.supplierDiscount }}</span>
+          </dd>
+          <dt><span>Notes</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.notes }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Batch Id</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.batchId }}</span>
+          </dd>
+          <dt><span>Qty In</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.qtyIn }}</span>
+          </dd>
+          <dt><span>Qty Out</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.qtyOut }}</span>
+          </dd>
+          <dt><span>Batch Line Total</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.batchLineTotal }}</span>
+          </dd>
+          <dt><span>Inspected</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.inspected }}</span>
+          </dd>
+          <dt><span>Pass Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.passQty }}</span>
+          </dd>
+          <dt><span>Current Received Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.currentReceivedQty }}</span>
+          </dd>
+          <dt><span>Total Passed Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.totalPassedQty }}</span>
+          </dd>
+          <dt><span>Is Inventory Update</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.isInventoryUpdate }}</span>
+          </dd>
+          <dt><span>Inventory Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.inventoryQty }}</span>
+          </dd>
+          <dt><span>Total Inventory Qty</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.totalInventoryQty }}</span>
+          </dd>
+          <dt><span>Return Price</span></dt>
+          <dd>
+            <span>{{ theGRNLineBatchesRef.returnPrice }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/the-grn-line-batches', theGRNLineBatchesRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

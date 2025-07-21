@@ -1,0 +1,158 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jobCard(); as jobCardRef) {
+      <div>
+        <h2 data-cy="jobCardDetailsHeading"><span>Job Card</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>Vehicle License Number</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleLicenseNumber }}</span>
+          </dd>
+          <dt><span>Vehicle Owner ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleOwnerID }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Name</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleOwnerName }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 1</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleOwnerContactNumber1 }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 2</span></dt>
+          <dd>
+            <span>{{ jobCardRef.vehicleOwnerContactNumber2 }}</span>
+          </dd>
+          <dt><span>Estimate ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.estimateID }}</span>
+          </dd>
+          <dt><span>Insurance Company</span></dt>
+          <dd>
+            <span>{{ jobCardRef.insuranceCompany }}</span>
+          </dd>
+          <dt><span>Service Advisor</span></dt>
+          <dd>
+            <span>{{ jobCardRef.serviceAdvisor }}</span>
+          </dd>
+          <dt><span>Service Advisor ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.serviceAdvisorID }}</span>
+          </dd>
+          <dt><span>Number Of Panels</span></dt>
+          <dd>
+            <span>{{ jobCardRef.numberOfPanels }}</span>
+          </dd>
+          <dt><span>Fuel Level</span></dt>
+          <dd>
+            <span>{{ jobCardRef.fuelLevel }}</span>
+          </dd>
+          <dt><span>Meter Reading</span></dt>
+          <dd>
+            <span>{{ jobCardRef.meterReading }}</span>
+          </dd>
+          <dt><span>Start Date</span></dt>
+          <dd>
+            <span>{{ jobCardRef.startDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Job Card Number</span></dt>
+          <dd>
+            <span>{{ jobCardRef.jobCardNumber }}</span>
+          </dd>
+          <dt><span>Job Complete Date</span></dt>
+          <dd>
+            <span>{{ jobCardRef.jobCompleteDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Booth Date</span></dt>
+          <dd>
+            <span>{{ jobCardRef.boothDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ jobCardRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Tinkering Start Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.tinkeringStartDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Tinkering End Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.tinkeringEndDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Paint Start Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.paintStartDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Paint End Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.paintEndDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Qc Start Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.qcStartDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Qc End Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.qcEndDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Spare Part Start Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.sparePartStartDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Spare Part End Date Time</span></dt>
+          <dd>
+            <span>{{ jobCardRef.sparePartEndDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ jobCardRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ jobCardRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ jobCardRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ jobCardRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/job-card', jobCardRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

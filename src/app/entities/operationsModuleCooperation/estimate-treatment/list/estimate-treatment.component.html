@@ -1,0 +1,401 @@
+<div>
+  <h2 id="page-heading" data-cy="EstimateTreatmentHeading">
+    <span>Estimate Treatments</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-estimate-treatment"
+        [routerLink]="['/estimate-treatment/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Estimate Treatment</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Estimate Treatment</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Estimate Treatment"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (estimateTreatments().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Estimate Treatments found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleTreatmentID">
+              <div class="d-flex">
+                <span>Vehicle Treatment ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fittingChargeName">
+              <div class="d-flex">
+                <span>Fitting Charge Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paintName">
+              <div class="d-flex">
+                <span>Paint Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="partName">
+              <div class="d-flex">
+                <span>Part Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="repairName">
+              <div class="d-flex">
+                <span>Repair Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="other">
+              <div class="d-flex">
+                <span>Other</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="priceType">
+              <div class="d-flex">
+                <span>Price Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="customPrice">
+              <div class="d-flex">
+                <span>Custom Price</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sh">
+              <div class="d-flex">
+                <span>Sh</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="marketPrice">
+              <div class="d-flex">
+                <span>Market Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span>Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="partNumber">
+              <div class="d-flex">
+                <span>Part Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="availableQuantity">
+              <div class="d-flex">
+                <span>Available Quantity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="unitPrice">
+              <div class="d-flex">
+                <span>Unit Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="treatmentType">
+              <div class="d-flex">
+                <span>Treatment Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="quantity">
+              <div class="d-flex">
+                <span>Quantity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isSystemPrice">
+              <div class="d-flex">
+                <span>Is System Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isPriceConfirmed">
+              <div class="d-flex">
+                <span>Is Price Confirmed</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="approvedDate">
+              <div class="d-flex">
+                <span>Approved Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="price">
+              <div class="d-flex">
+                <span>Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="approvedPrice">
+              <div class="d-flex">
+                <span>Approved Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="approvedPriceState">
+              <div class="d-flex">
+                <span>Approved Price State</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estimateTreatmentReason">
+              <div class="d-flex">
+                <span>Estimate Treatment Reason</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="opsUnitID">
+              <div class="d-flex">
+                <span>Ops Unit ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdBy">
+              <div class="d-flex">
+                <span>Created By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdDate">
+              <div class="d-flex">
+                <span>Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedBy">
+              <div class="d-flex">
+                <span>Last Modified By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedDate">
+              <div class="d-flex">
+                <span>Last Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estimate.id">
+              <div class="d-flex">
+                <span>Estimate</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (estimateTreatment of estimateTreatments(); track trackId(estimateTreatment)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/estimate-treatment', estimateTreatment.id, 'view']">{{ estimateTreatment.id }}</a>
+              </td>
+              <td>{{ estimateTreatment.vehicleTreatmentID }}</td>
+              <td>{{ estimateTreatment.fittingChargeName }}</td>
+              <td>{{ estimateTreatment.paintName }}</td>
+              <td>{{ estimateTreatment.partName }}</td>
+              <td>{{ estimateTreatment.repairName }}</td>
+              <td>{{ estimateTreatment.other }}</td>
+              <td>{{ { null: '', SYSTEM: 'SYSTEM', ESTIMATE: 'ESTIMATE' }[estimateTreatment.priceType ?? 'null'] }}</td>
+              <td>{{ estimateTreatment.customPrice }}</td>
+              <td>{{ { null: '', SH: 'SH', MR: 'MR' }[estimateTreatment.sh ?? 'null'] }}</td>
+              <td>{{ estimateTreatment.marketPrice }}</td>
+              <td>{{ estimateTreatment.type }}</td>
+              <td>{{ estimateTreatment.partNumber }}</td>
+              <td>{{ estimateTreatment.availableQuantity }}</td>
+              <td>{{ estimateTreatment.unitPrice }}</td>
+              <td>
+                {{
+                  { null: '', PART: 'PART', PAINT: 'PAINT', FITTING_CHARGE: 'FITTING_CHARGE', REPAIR: 'REPAIR', OTHER: 'OTHER' }[
+                    estimateTreatment.treatmentType ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ estimateTreatment.quantity }}</td>
+              <td>{{ estimateTreatment.isSystemPrice }}</td>
+              <td>{{ estimateTreatment.isPriceConfirmed }}</td>
+              <td>{{ estimateTreatment.approvedDate | formatMediumDate }}</td>
+              <td>{{ estimateTreatment.price }}</td>
+              <td>{{ estimateTreatment.approvedPrice }}</td>
+              <td>{{ estimateTreatment.approvedPriceState }}</td>
+              <td>
+                {{
+                  {
+                    null: '',
+                    COMPLETED: 'COMPLETED',
+                    NOT_COMPLETED: 'NOT_COMPLETED',
+                    INSURANCE_DECLINED: 'INSURANCE_DECLINED',
+                    NOT_INFORMED: 'NOT_INFORMED',
+                  }[estimateTreatment.estimateTreatmentReason ?? 'null']
+                }}
+              </td>
+              <td>{{ estimateTreatment.opsUnitID }}</td>
+              <td>{{ estimateTreatment.createdBy }}</td>
+              <td>{{ estimateTreatment.createdDate | formatMediumDatetime }}</td>
+              <td>{{ estimateTreatment.lastModifiedBy }}</td>
+              <td>{{ estimateTreatment.lastModifiedDate | formatMediumDatetime }}</td>
+              <td>
+                @if (estimateTreatment.estimate) {
+                  <div>
+                    <a [routerLink]="['/estimate', estimateTreatment.estimate.id, 'view']">{{ estimateTreatment.estimate.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/estimate-treatment', estimateTreatment.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/estimate-treatment', estimateTreatment.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(estimateTreatment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (estimateTreatments().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

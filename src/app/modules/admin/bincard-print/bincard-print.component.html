@@ -1,0 +1,69 @@
+<style>
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0; padding: 0;
+      color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      font-size: 12px;
+    }
+    table, tr, td, th {
+      page-break-inside: auto !important;
+      break-inside: auto !important;
+    }
+    /* Force page break after each table except last */
+    .page-break {
+      page-break-after: always;
+    }
+    table.min-w-\[1000px\] {
+      min-width: auto !important;
+      width: 70% !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>
+
+<div class="p-4" *ngIf="chunkedSupplierRecords.length > 0">
+    <br>
+  <h2 class="text-center text-lg font-semibold mb-4">Bin Card Report</h2>
+
+  <ng-container *ngFor="let chunk of chunkedSupplierRecords; let last = last">
+    <table
+      class="min-w-[1000px] w-[70%] mx-auto text-sm border border-black border-collapse table-fixed mb-6"
+      cellspacing="0"
+      cellpadding="6"
+    >
+      <thead class="bg-gray-100 border border-black">
+        <tr class="text-center font-semibold border border-black">
+          <th class="border border-black p-1">Item Code</th>
+          <th class="border border-black p-1">Reference</th>
+          <th class="border border-black p-1">Record Date</th>
+          <th class="border border-black p-1">Qty In</th>
+          <th class="border border-black p-1">Qty Out</th>
+          <th class="border border-black p-1">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of chunk" class="text-center border border-black">
+          <td class="border border-black p-1">{{ record.itemCode }}</td>
+          <td class="border border-black text-left p-1">{{ record.reference }}</td>
+          <td class="border border-black p-1">{{ record.recordDate?.toDate() | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+          <td class="border border-black p-1">{{ record.qtyIn ?? '-' }}</td>
+          <td class="border border-black p-1">{{ record.qtyOut ?? '-' }}</td>
+          <td class="border border-black p-1 text-right">{{ record.price | number: '1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!last" class="page-break"></div>
+  </ng-container>
+</div>

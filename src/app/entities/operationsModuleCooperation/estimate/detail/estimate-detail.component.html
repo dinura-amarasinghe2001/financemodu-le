@@ -1,0 +1,122 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (estimate(); as estimateRef) {
+      <div>
+        <h2 data-cy="estimateDetailsHeading"><span>Estimate</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>License No</span></dt>
+          <dd>
+            <span>{{ estimateRef.licenseNo }}</span>
+          </dd>
+          <dt><span>Vehicle Owner ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleOwnerID }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Name</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleOwnerName }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 1</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleOwnerContactNumber1 }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 2</span></dt>
+          <dd>
+            <span>{{ estimateRef.vehicleOwnerContactNumber2 }}</span>
+          </dd>
+          <dt><span>Is Insurance</span></dt>
+          <dd>
+            <span>{{ estimateRef.isInsurance }}</span>
+          </dd>
+          <dt><span>Insurance Name</span></dt>
+          <dd>
+            <span>{{ estimateRef.insuranceName }}</span>
+          </dd>
+          <dt><span>Insurance ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.insuranceID }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Total Price</span></dt>
+          <dd>
+            <span>{{ estimateRef.totalPrice }}</span>
+          </dd>
+          <dt><span>Estimate ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.estimateID }}</span>
+          </dd>
+          <dt><span>Pre Estimate Number</span></dt>
+          <dd>
+            <span>{{ estimateRef.preEstimateNumber }}</span>
+          </dd>
+          <dt><span>Estimate Number</span></dt>
+          <dd>
+            <span>{{ estimateRef.estimateNumber }}</span>
+          </dd>
+          <dt><span>Number Of Panels</span></dt>
+          <dd>
+            <span>{{ estimateRef.numberOfPanels }}</span>
+          </dd>
+          <dt><span>Service Advisor</span></dt>
+          <dd>
+            <span>{{ estimateRef.serviceAdvisor }}</span>
+          </dd>
+          <dt><span>Service Advisor ID</span></dt>
+          <dd>
+            <span>{{ estimateRef.serviceAdvisorID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ estimateRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ estimateRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ estimateRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ estimateRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/estimate', estimateRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

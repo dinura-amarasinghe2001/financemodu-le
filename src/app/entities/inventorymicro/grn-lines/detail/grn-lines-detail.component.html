@@ -1,0 +1,114 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (gRNLines(); as gRNLinesRef) {
+      <div>
+        <h2 data-cy="gRNLinesDetailsHeading"><span>GRN Lines</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.id }}</span>
+          </dd>
+          <dt><span>Grn Id</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.grnId }}</span>
+          </dd>
+          <dt><span>Line Id</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.lineId }}</span>
+          </dd>
+          <dt><span>Item Id</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.itemId }}</span>
+          </dd>
+          <dt><span>Item Code</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.itemCode }}</span>
+          </dd>
+          <dt><span>Item Name</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.itemName }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.description }}</span>
+          </dd>
+          <dt><span>Unit Of Measurement</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.unitOfMeasurement }}</span>
+          </dd>
+          <dt><span>Quantity</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.quantity }}</span>
+          </dd>
+          <dt><span>Received Quantity</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.receivedQuantity }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.price }}</span>
+          </dd>
+          <dt><span>Total Amount</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.totalAmount }}</span>
+          </dd>
+          <dt><span>Line Total</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.lineTotal }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Inspected</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.inspected }}</span>
+          </dd>
+          <dt><span>Pass Qty</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.passQty }}</span>
+          </dd>
+          <dt><span>Current Received Qty</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.currentReceivedQty }}</span>
+          </dd>
+          <dt><span>Total Passed Qty</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.totalPassedQty }}</span>
+          </dd>
+          <dt><span>Is Inventory Update</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.isInventoryUpdate }}</span>
+          </dd>
+          <dt><span>Inventory Qty</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.inventoryQty }}</span>
+          </dd>
+          <dt><span>Total Inventory Qty</span></dt>
+          <dd>
+            <span>{{ gRNLinesRef.totalInventoryQty }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/grn-lines', gRNLinesRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

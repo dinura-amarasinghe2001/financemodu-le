@@ -1,0 +1,184 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-bin-card-heading" data-cy="BinCardCreateUpdateHeading">Create or edit a Bin Card</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_itemId">Item Id</label>
+          <input type="number" class="form-control" name="itemId" id="field_itemId" data-cy="itemId" formControlName="itemId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_itemCode">Item Code</label>
+          <input type="text" class="form-control" name="itemCode" id="field_itemCode" data-cy="itemCode" formControlName="itemCode" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_reference">Reference</label>
+          <input type="text" class="form-control" name="reference" id="field_reference" data-cy="reference" formControlName="reference" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_txDate">Tx Date</label>
+          <div class="d-flex">
+            <input
+              id="field_txDate"
+              data-cy="txDate"
+              type="datetime-local"
+              class="form-control"
+              name="txDate"
+              formControlName="txDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_qtyIn">Qty In</label>
+          <input type="number" class="form-control" name="qtyIn" id="field_qtyIn" data-cy="qtyIn" formControlName="qtyIn" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_qtyOut">Qty Out</label>
+          <input type="number" class="form-control" name="qtyOut" id="field_qtyOut" data-cy="qtyOut" formControlName="qtyOut" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_price">Price</label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lmu">Lmu</label>
+          <input type="text" class="form-control" name="lmu" id="field_lmu" data-cy="lmu" formControlName="lmu" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lmd">Lmd</label>
+          <div class="d-flex">
+            <input
+              id="field_lmd"
+              data-cy="lmd"
+              type="datetime-local"
+              class="form-control"
+              name="lmd"
+              formControlName="lmd"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_referenceCode">Reference Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="referenceCode"
+            id="field_referenceCode"
+            data-cy="referenceCode"
+            formControlName="referenceCode"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_recordDate">Record Date</label>
+          <div class="d-flex">
+            <input
+              id="field_recordDate"
+              data-cy="recordDate"
+              type="datetime-local"
+              class="form-control"
+              name="recordDate"
+              formControlName="recordDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_batchId">Batch Id</label>
+          <input type="text" class="form-control" name="batchId" id="field_batchId" data-cy="batchId" formControlName="batchId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_locationId">Location Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="locationId"
+            id="field_locationId"
+            data-cy="locationId"
+            formControlName="locationId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_locationCode">Location Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="locationCode"
+            id="field_locationCode"
+            data-cy="locationCode"
+            formControlName="locationCode"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opening">Opening</label>
+          <input type="number" class="form-control" name="opening" id="field_opening" data-cy="opening" formControlName="opening" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_referenceDoc">Reference Doc</label>
+          <input
+            type="text"
+            class="form-control"
+            name="referenceDoc"
+            id="field_referenceDoc"
+            data-cy="referenceDoc"
+            formControlName="referenceDoc"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

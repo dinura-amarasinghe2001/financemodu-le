@@ -1,0 +1,156 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-job-estimate-work-log-heading" data-cy="JobEstimateWorkLogCreateUpdateHeading">Create or edit a Job Estimate Work Log</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_workedEmployeeName">Worked Employee Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="workedEmployeeName"
+            id="field_workedEmployeeName"
+            data-cy="workedEmployeeName"
+            formControlName="workedEmployeeName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_workedHours">Worked Hours</label>
+          <input
+            type="number"
+            class="form-control"
+            name="workedHours"
+            id="field_workedHours"
+            data-cy="workedHours"
+            formControlName="workedHours"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_workDate">Work Date</label>
+          <div class="d-flex">
+            <input
+              id="field_workDate"
+              data-cy="workDate"
+              type="datetime-local"
+              class="form-control"
+              name="workDate"
+              formControlName="workDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobEstimate">Job Estimate</label>
+          <select
+            class="form-control"
+            id="field_jobEstimate"
+            data-cy="jobEstimate"
+            name="jobEstimate"
+            formControlName="jobEstimate"
+            [compareWith]="compareJobEstimate"
+          >
+            <option [ngValue]="null"></option>
+            @for (jobEstimateOption of jobEstimatesSharedCollection; track $index) {
+              <option [ngValue]="jobEstimateOption">{{ jobEstimateOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

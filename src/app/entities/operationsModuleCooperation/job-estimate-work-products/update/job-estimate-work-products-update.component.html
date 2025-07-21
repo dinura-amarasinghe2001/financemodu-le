@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-job-estimate-work-products-heading" data-cy="JobEstimateWorkProductsCreateUpdateHeading">
+        Create or edit a Job Estimate Work Products
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_workProductName">Work Product Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="workProductName"
+            id="field_workProductName"
+            data-cy="workProductName"
+            formControlName="workProductName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_quantity">Quantity</label>
+          <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_unit">Unit</label>
+          <input type="text" class="form-control" name="unit" id="field_unit" data-cy="unit" formControlName="unit" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobEstimateWorkLog">Job Estimate Work Log</label>
+          <select
+            class="form-control"
+            id="field_jobEstimateWorkLog"
+            data-cy="jobEstimateWorkLog"
+            name="jobEstimateWorkLog"
+            formControlName="jobEstimateWorkLog"
+            [compareWith]="compareJobEstimateWorkLog"
+          >
+            <option [ngValue]="null"></option>
+            @for (jobEstimateWorkLogOption of jobEstimateWorkLogsSharedCollection; track $index) {
+              <option [ngValue]="jobEstimateWorkLogOption">{{ jobEstimateWorkLogOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

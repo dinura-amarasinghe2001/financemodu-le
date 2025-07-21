@@ -1,0 +1,7 @@
+# version: '2'
+services:
+  nginx-nimesh:
+    image: ozisolutions/nimesh-rp:v0.0.0001a 
+    ports:
+      - 80:80
+      - 443:443

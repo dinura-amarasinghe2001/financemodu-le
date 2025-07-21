@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (vat(); as vatRef) {
+      <div>
+        <h2 data-cy="vatDetailsHeading"><span>Vat</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ vatRef.id }}</span>
+          </dd>
+          <dt><span>Vat Rate</span></dt>
+          <dd>
+            <span>{{ vatRef.vatRate }}</span>
+          </dd>
+          <dt><span>Vat Amount</span></dt>
+          <dd>
+            <span>{{ vatRef.vatAmount }}</span>
+          </dd>
+          <dt><span>Vat Name</span></dt>
+          <dd>
+            <span>{{ vatRef.vatName }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/vat', vatRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

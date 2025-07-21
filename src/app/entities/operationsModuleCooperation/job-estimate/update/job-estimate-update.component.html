@@ -1,0 +1,253 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-job-estimate-heading" data-cy="JobEstimateCreateUpdateHeading">Create or edit a Job Estimate</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobID">Job ID</label>
+          <input type="text" class="form-control" name="jobID" id="field_jobID" data-cy="jobID" formControlName="jobID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_departmentID">Department ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="departmentID"
+            id="field_departmentID"
+            data-cy="departmentID"
+            formControlName="departmentID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_startDate">Start Date</label>
+          <div class="d-flex">
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="datetime-local"
+              class="form-control"
+              name="startDate"
+              formControlName="startDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_endDate">End Date</label>
+          <div class="d-flex">
+            <input
+              id="field_endDate"
+              data-cy="endDate"
+              type="datetime-local"
+              class="form-control"
+              name="endDate"
+              formControlName="endDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_currentState">Current State</label>
+          <select class="form-control" name="currentState" formControlName="currentState" id="field_currentState" data-cy="currentState">
+            <option [ngValue]="null"></option>
+            @for (jobCurrentState of jobCurrentStateValues; track $index) {
+              <option [value]="jobCurrentState">
+                {{
+                  {
+                    null: '',
+                    OPEN: 'OPEN',
+                    CANCELED: 'CANCELED',
+                    COMPLETE: 'COMPLETE',
+                    CLOSED: 'CLOSED',
+                    QC_PENDING: 'QC_PENDING',
+                    QC_APPROVED: 'QC_APPROVED',
+                    QCPD: 'QCPD',
+                    QCPD_PENDING: 'QCPD_PENDING',
+                    QCPD_TO_PENDING: 'QCPD_TO_PENDING',
+                  }[jobCurrentState]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
+          <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estStartDate">Est Start Date</label>
+          <div class="d-flex">
+            <input
+              id="field_estStartDate"
+              data-cy="estStartDate"
+              type="datetime-local"
+              class="form-control"
+              name="estStartDate"
+              formControlName="estStartDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estEndDate">Est End Date</label>
+          <div class="d-flex">
+            <input
+              id="field_estEndDate"
+              data-cy="estEndDate"
+              type="datetime-local"
+              class="form-control"
+              name="estEndDate"
+              formControlName="estEndDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opsUnitID">Ops Unit ID</label>
+          <input type="text" class="form-control" name="opsUnitID" id="field_opsUnitID" data-cy="opsUnitID" formControlName="opsUnitID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estimateID">Estimate ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="estimateID"
+            id="field_estimateID"
+            data-cy="estimateID"
+            formControlName="estimateID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleLicenseNumber">Vehicle License Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleLicenseNumber"
+            id="field_vehicleLicenseNumber"
+            data-cy="vehicleLicenseNumber"
+            formControlName="vehicleLicenseNumber"
+          />
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_jobCard">Job Card</label>
+          <select
+            class="form-control"
+            id="field_jobCard"
+            data-cy="jobCard"
+            name="jobCard"
+            formControlName="jobCard"
+            [compareWith]="compareJobCard"
+          >
+            <option [ngValue]="null"></option>
+            @for (jobCardOption of jobCardsSharedCollection; track $index) {
+              <option [ngValue]="jobCardOption">{{ jobCardOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

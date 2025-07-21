@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (operationalUnit(); as operationalUnitRef) {
+      <div>
+        <h2 data-cy="operationalUnitDetailsHeading"><span>Operational Unit</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.code }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.name }}</span>
+          </dd>
+          <dt><span>Display Name</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.displayName }}</span>
+          </dd>
+          <dt><span>Level Business Type</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                CORPORATE: 'CORPORATE',
+                SME: 'SME',
+                NON_PROFIT: 'NON_PROFIT',
+                GOVERNMENT: 'GOVERNMENT',
+                EDUCATIONAL: 'EDUCATIONAL',
+                AUTOMOBILE_REPAIR: 'AUTOMOBILE_REPAIR',
+              }[operationalUnitRef.levelBusinessType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Remark</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.remark }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.description }}</span>
+          </dd>
+          <dt><span>Contact Email</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.contactEmail }}</span>
+          </dd>
+          <dt><span>Contact Phone</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.contactPhone }}</span>
+          </dd>
+          <dt><span>Immediate Parent Code</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.immediateParentCode }}</span>
+          </dd>
+          <dt><span>Level Type</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                HEADQUARTERS: 'HEADQUARTERS',
+                HEAD_BRANCH: 'HEAD_BRANCH',
+                BRANCH: 'BRANCH',
+                SUBBRANCH: 'SUBBRANCH',
+                DEPARTMENT: 'DEPARTMENT',
+                UNIT: 'UNIT',
+                TEAM: 'TEAM',
+              }[operationalUnitRef.levelType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ operationalUnitRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Tenant</span></dt>
+          <dd>
+            @if (operationalUnit()!.tenant) {
+              <div>
+                <a [routerLink]="['/tenant', operationalUnit()!.tenant?.id, 'view']">{{ operationalUnitRef.tenant?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/operational-unit', operationalUnitRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

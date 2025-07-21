@@ -1,0 +1,202 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (inventory(); as inventoryRef) {
+      <div>
+        <h2 data-cy="inventoryDetailsHeading"><span>Inventory</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ inventoryRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ inventoryRef.code }}</span>
+          </dd>
+          <dt><span>Part Number</span></dt>
+          <dd>
+            <span>{{ inventoryRef.partNumber }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ inventoryRef.name }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ inventoryRef.description }}</span>
+          </dd>
+          <dt><span>Type</span></dt>
+          <dd>
+            <span>{{ inventoryRef.type }}</span>
+          </dd>
+          <dt><span>Classification 1</span></dt>
+          <dd>
+            <span>{{ inventoryRef.classification1 }}</span>
+          </dd>
+          <dt><span>Classification 2</span></dt>
+          <dd>
+            <span>{{ inventoryRef.classification2 }}</span>
+          </dd>
+          <dt><span>Classification 3</span></dt>
+          <dd>
+            <span>{{ inventoryRef.classification3 }}</span>
+          </dd>
+          <dt><span>Classification 4</span></dt>
+          <dd>
+            <span>{{ inventoryRef.classification4 }}</span>
+          </dd>
+          <dt><span>Classification 5</span></dt>
+          <dd>
+            <span>{{ inventoryRef.classification5 }}</span>
+          </dd>
+          <dt><span>Unit Of Measurement</span></dt>
+          <dd>
+            <span>{{ inventoryRef.unitOfMeasurement }}</span>
+          </dd>
+          <dt><span>Decimal Places</span></dt>
+          <dd>
+            <span>{{ inventoryRef.decimalPlaces }}</span>
+          </dd>
+          <dt><span>Is Assembly Unit</span></dt>
+          <dd>
+            <span>{{ inventoryRef.isAssemblyUnit }}</span>
+          </dd>
+          <dt><span>Assembly Unit Of</span></dt>
+          <dd>
+            <span>{{ inventoryRef.assemblyUnitOf }}</span>
+          </dd>
+          <dt><span>Re Order Level</span></dt>
+          <dd>
+            <span>{{ inventoryRef.reOrderLevel }}</span>
+          </dd>
+          <dt><span>Last Cost</span></dt>
+          <dd>
+            <span>{{ inventoryRef.lastCost }}</span>
+          </dd>
+          <dt><span>Last Selling Price</span></dt>
+          <dd>
+            <span>{{ inventoryRef.lastSellingPrice }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ inventoryRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ inventoryRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Available Quantity</span></dt>
+          <dd>
+            <span>{{ inventoryRef.availableQuantity }}</span>
+          </dd>
+          <dt><span>Has Batches</span></dt>
+          <dd>
+            <span>{{ inventoryRef.hasBatches }}</span>
+          </dd>
+          <dt><span>Item Spec File Path</span></dt>
+          <dd>
+            <span>{{ inventoryRef.itemSpecFilePath }}</span>
+          </dd>
+          <dt><span>Item Image Path</span></dt>
+          <dd>
+            <span>{{ inventoryRef.itemImagePath }}</span>
+          </dd>
+          <dt><span>Return Price</span></dt>
+          <dd>
+            <span>{{ inventoryRef.returnPrice }}</span>
+          </dd>
+          <dt><span>Active Item</span></dt>
+          <dd>
+            <span>{{ inventoryRef.activeItem }}</span>
+          </dd>
+          <dt><span>Min Stock</span></dt>
+          <dd>
+            <span>{{ inventoryRef.minStock }}</span>
+          </dd>
+          <dt><span>Max Stock</span></dt>
+          <dd>
+            <span>{{ inventoryRef.maxStock }}</span>
+          </dd>
+          <dt><span>Daily Average</span></dt>
+          <dd>
+            <span>{{ inventoryRef.dailyAverage }}</span>
+          </dd>
+          <dt><span>Buffer Level</span></dt>
+          <dd>
+            <span>{{ inventoryRef.bufferLevel }}</span>
+          </dd>
+          <dt><span>Lead Time</span></dt>
+          <dd>
+            <span>{{ inventoryRef.leadTime }}</span>
+          </dd>
+          <dt><span>Buffer Time</span></dt>
+          <dd>
+            <span>{{ inventoryRef.bufferTime }}</span>
+          </dd>
+          <dt><span>Safty Days</span></dt>
+          <dd>
+            <span>{{ inventoryRef.saftyDays }}</span>
+          </dd>
+          <dt><span>Account Code</span></dt>
+          <dd>
+            <span>{{ inventoryRef.accountCode }}</span>
+          </dd>
+          <dt><span>Account Id</span></dt>
+          <dd>
+            <span>{{ inventoryRef.accountId }}</span>
+          </dd>
+          <dt><span>Case Pack Qty</span></dt>
+          <dd>
+            <span>{{ inventoryRef.casePackQty }}</span>
+          </dd>
+          <dt><span>Is Registered</span></dt>
+          <dd>
+            <span>{{ inventoryRef.isRegistered }}</span>
+          </dd>
+          <dt><span>Default Stock Location Id</span></dt>
+          <dd>
+            <span>{{ inventoryRef.defaultStockLocationId }}</span>
+          </dd>
+          <dt><span>Rack No</span></dt>
+          <dd>
+            <span>{{ inventoryRef.rackNo }}</span>
+          </dd>
+          <dt><span>Commission Emp Id</span></dt>
+          <dd>
+            <span>{{ inventoryRef.commissionEmpId }}</span>
+          </dd>
+          <dt><span>Check Type Id</span></dt>
+          <dd>
+            <span>{{ inventoryRef.checkTypeId }}</span>
+          </dd>
+          <dt><span>Check Type</span></dt>
+          <dd>
+            <span>{{ inventoryRef.checkType }}</span>
+          </dd>
+          <dt><span>Re Order Qty</span></dt>
+          <dd>
+            <span>{{ inventoryRef.reOrderQty }}</span>
+          </dd>
+          <dt><span>Not In Invoice</span></dt>
+          <dd>
+            <span>{{ inventoryRef.notInInvoice }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/inventory', inventoryRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

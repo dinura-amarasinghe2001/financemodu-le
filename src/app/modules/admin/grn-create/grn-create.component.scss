@@ -1,0 +1,120 @@
+/* Make the current active step yellow */
+ 
+
+/* Optional: make completed steps a different color */
+ 
+
+/* Adjust text color for contrast */
+.mat-step-label {
+  color: #333;
+}
+ 
+/* Make the current active step yellow */
+ ::ng-deep .custom-radio-button .mat-radio-container {
+  display: none !important; /* hides the radio circle */
+}
+
+.mat-step-label {
+  color: #333;
+}
+
+/* Align everything inside the header */
+.custom-header {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 0 1rem;
+}
+
+.custom-header:hover {
+  background-color: #f5f5f5;
+}
+
+/* Use flex to layout title + icon */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Icon styles */
+.rotate-icon {
+  font-size: 32px;
+  transition: transform 0.3s ease;
+  color: #555;
+}
+
+.rotate-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Optional: center everything vertically */
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  display: flex;
+  align-items: center;
+}
+::ng-deep button.mat-icon-button.custom-size {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border-radius: 6px !important;
+  background-color: white !important;
+}
+
+::ng-deep button.mat-icon-button.custom-size mat-icon {
+  font-size: 22px !important;
+}
+/* Dialog title style */
+.dialog-title {
+  font-size: 1.5rem; /* bigger title */
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+
+/* Dialog content paragraph */
+.dialog-message {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: #333;
+  margin: 0;
+}
+
+/* Dialog content wrapper padding */
+.dialog-content {
+  padding: 1rem 0 1.5rem 0;
+}
+
+/* Dialog actions container */
+.dialog-actions {
+  
+   display: flex;
+  justify-content: flex-end;  /* align buttons right */
+  gap: 16px;                  /* space between buttons */
+  padding-top: 0.5rem;
+}
+
+/* No button style */
+.btn-no {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Yes button style */
+.btn-yes {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 80px;
+}
+ 
+
+.dialog-actions button {
+  flex: 0 0 100px;           /* fixed width for all buttons */
+  height: 36px;              /* consistent height */
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

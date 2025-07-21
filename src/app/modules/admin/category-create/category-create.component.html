@@ -1,0 +1,39 @@
+<form [formGroup]="categoryForm">
+  <!-- Parent Category Dropdown -->
+  <div class="text-lg text-gray-600 mt-2">
+  <strong>Full Path:</strong> {{ fullPathPreview || 'N/A' }}
+</div>
+
+<br>
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>Parent Category (optional)</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="categoryForm.controls.parentCategory"
+    [matAutocomplete]="auto"
+    placeholder="Category"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCategory">
+    <mat-option *ngFor="let cat of filteredCategories | async" [value]="cat">
+      {{ cat.fullPath }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+
+
+  <!-- Category Name Input -->
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Category Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter name" />
+  </mat-form-field>
+
+  <!-- Save Button -->
+  <div class="flex justify-end mt-4">
+    <button mat-raised-button color="primary" (click)="onSave()">
+      <mat-icon>save</mat-icon>
+      Save Category
+    </button>
+  </div>
+</form>

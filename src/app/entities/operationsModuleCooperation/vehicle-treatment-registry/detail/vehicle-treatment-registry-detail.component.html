@@ -1,0 +1,108 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (vehicleTreatmentRegistry(); as vehicleTreatmentRegistryRef) {
+      <div>
+        <h2 data-cy="vehicleTreatmentRegistryDetailsHeading"><span>Vehicle Treatment Registry</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.id }}</span>
+          </dd>
+          <dt><span>Fitting Charge Name</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.fittingChargeName }}</span>
+          </dd>
+          <dt><span>Paint Name</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.paintName }}</span>
+          </dd>
+          <dt><span>Part Name</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.partName }}</span>
+          </dd>
+          <dt><span>Repair Name</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.repairName }}</span>
+          </dd>
+          <dt><span>Other Name</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.otherName }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.description }}</span>
+          </dd>
+          <dt><span>Part Number</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.partNumber }}</span>
+          </dd>
+          <dt><span>Available Quantity</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.availableQuantity }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.price }}</span>
+          </dd>
+          <dt><span>Treatment Type</span></dt>
+          <dd>
+            <span>{{
+              { null: '', PART: 'PART', PAINT: 'PAINT', FITTING_CHARGE: 'FITTING_CHARGE', REPAIR: 'REPAIR', OTHER: 'OTHER' }[
+                vehicleTreatmentRegistryRef.treatmentType ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ vehicleTreatmentRegistryRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            @if (vehicleTreatmentRegistry()!.vehicleModel) {
+              <div>
+                <a [routerLink]="['/vehicle-model', vehicleTreatmentRegistry()!.vehicleModel?.id, 'view']">{{
+                  vehicleTreatmentRegistryRef.vehicleModel?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button
+          type="button"
+          [routerLink]="['/vehicle-treatment-registry', vehicleTreatmentRegistryRef.id, 'edit']"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

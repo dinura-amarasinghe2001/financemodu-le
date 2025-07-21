@@ -1,0 +1,194 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (supplier(); as supplierRef) {
+      <div>
+        <h2 data-cy="supplierDetailsHeading"><span>Supplier</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ supplierRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ supplierRef.code }}</span>
+          </dd>
+          <dt><span>Short Code</span></dt>
+          <dd>
+            <span>{{ supplierRef.shortCode }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ supplierRef.name }}</span>
+          </dd>
+          <dt><span>Address Office</span></dt>
+          <dd>
+            <span>{{ supplierRef.addressOffice }}</span>
+          </dd>
+          <dt><span>Street Office</span></dt>
+          <dd>
+            <span>{{ supplierRef.streetOffice }}</span>
+          </dd>
+          <dt><span>City Office</span></dt>
+          <dd>
+            <span>{{ supplierRef.cityOffice }}</span>
+          </dd>
+          <dt><span>Province Office</span></dt>
+          <dd>
+            <span>{{ supplierRef.provinceOffice }}</span>
+          </dd>
+          <dt><span>Address Factory</span></dt>
+          <dd>
+            <span>{{ supplierRef.addressFactory }}</span>
+          </dd>
+          <dt><span>Street Factory</span></dt>
+          <dd>
+            <span>{{ supplierRef.streetFactory }}</span>
+          </dd>
+          <dt><span>City Factory</span></dt>
+          <dd>
+            <span>{{ supplierRef.cityFactory }}</span>
+          </dd>
+          <dt><span>Province Factory</span></dt>
+          <dd>
+            <span>{{ supplierRef.provinceFactory }}</span>
+          </dd>
+          <dt><span>Phone 1</span></dt>
+          <dd>
+            <span>{{ supplierRef.phone1 }}</span>
+          </dd>
+          <dt><span>Phone 2</span></dt>
+          <dd>
+            <span>{{ supplierRef.phone2 }}</span>
+          </dd>
+          <dt><span>Fax</span></dt>
+          <dd>
+            <span>{{ supplierRef.fax }}</span>
+          </dd>
+          <dt><span>Email</span></dt>
+          <dd>
+            <span>{{ supplierRef.email }}</span>
+          </dd>
+          <dt><span>Website</span></dt>
+          <dd>
+            <span>{{ supplierRef.website }}</span>
+          </dd>
+          <dt><span>Contact Person Name</span></dt>
+          <dd>
+            <span>{{ supplierRef.contactPersonName }}</span>
+          </dd>
+          <dt><span>Contact Person Phone</span></dt>
+          <dd>
+            <span>{{ supplierRef.contactPersonPhone }}</span>
+          </dd>
+          <dt><span>Contact Person Mobile</span></dt>
+          <dd>
+            <span>{{ supplierRef.contactPersonMobile }}</span>
+          </dd>
+          <dt><span>Contact Person Email</span></dt>
+          <dd>
+            <span>{{ supplierRef.contactPersonEmail }}</span>
+          </dd>
+          <dt><span>Registered Date</span></dt>
+          <dd>
+            <span>{{ supplierRef.registeredDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ supplierRef.description }}</span>
+          </dd>
+          <dt><span>Br Number</span></dt>
+          <dd>
+            <span>{{ supplierRef.brNumber }}</span>
+          </dd>
+          <dt><span>Vat Reg Number</span></dt>
+          <dd>
+            <span>{{ supplierRef.vatRegNumber }}</span>
+          </dd>
+          <dt><span>Tin Number</span></dt>
+          <dd>
+            <span>{{ supplierRef.tinNumber }}</span>
+          </dd>
+          <dt><span>Br Number File Path</span></dt>
+          <dd>
+            <span>{{ supplierRef.brNumberFilePath }}</span>
+          </dd>
+          <dt><span>Vat Reg Number File Path</span></dt>
+          <dd>
+            <span>{{ supplierRef.vatRegNumberFilePath }}</span>
+          </dd>
+          <dt><span>Tin Number File Path</span></dt>
+          <dd>
+            <span>{{ supplierRef.tinNumberFilePath }}</span>
+          </dd>
+          <dt><span>Agreement File Path</span></dt>
+          <dd>
+            <span>{{ supplierRef.agreementFilePath }}</span>
+          </dd>
+          <dt><span>Road Map File Path</span></dt>
+          <dd>
+            <span>{{ supplierRef.roadMapFilePath }}</span>
+          </dd>
+          <dt><span>Is Active</span></dt>
+          <dd>
+            <span>{{ supplierRef.isActive }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ supplierRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ supplierRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Account Id</span></dt>
+          <dd>
+            <span>{{ supplierRef.accountId }}</span>
+          </dd>
+          <dt><span>Account Code</span></dt>
+          <dd>
+            <span>{{ supplierRef.accountCode }}</span>
+          </dd>
+          <dt><span>Is VAT Enable</span></dt>
+          <dd>
+            <span>{{ supplierRef.isVATEnable }}</span>
+          </dd>
+          <dt><span>Is NBT Enable</span></dt>
+          <dd>
+            <span>{{ supplierRef.isNBTEnable }}</span>
+          </dd>
+          <dt><span>Lead Time</span></dt>
+          <dd>
+            <span>{{ supplierRef.leadTime }}</span>
+          </dd>
+          <dt><span>Is Registered</span></dt>
+          <dd>
+            <span>{{ supplierRef.isRegistered }}</span>
+          </dd>
+          <dt><span>Credit Period</span></dt>
+          <dd>
+            <span>{{ supplierRef.creditPeriod }}</span>
+          </dd>
+          <dt><span>Credit Limit</span></dt>
+          <dd>
+            <span>{{ supplierRef.creditLimit }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/supplier', supplierRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

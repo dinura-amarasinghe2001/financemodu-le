@@ -1,0 +1,98 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (binCard(); as binCardRef) {
+      <div>
+        <h2 data-cy="binCardDetailsHeading"><span>Bin Card</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ binCardRef.id }}</span>
+          </dd>
+          <dt><span>Item Id</span></dt>
+          <dd>
+            <span>{{ binCardRef.itemId }}</span>
+          </dd>
+          <dt><span>Item Code</span></dt>
+          <dd>
+            <span>{{ binCardRef.itemCode }}</span>
+          </dd>
+          <dt><span>Reference</span></dt>
+          <dd>
+            <span>{{ binCardRef.reference }}</span>
+          </dd>
+          <dt><span>Tx Date</span></dt>
+          <dd>
+            <span>{{ binCardRef.txDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Qty In</span></dt>
+          <dd>
+            <span>{{ binCardRef.qtyIn }}</span>
+          </dd>
+          <dt><span>Qty Out</span></dt>
+          <dd>
+            <span>{{ binCardRef.qtyOut }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ binCardRef.price }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ binCardRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ binCardRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Reference Code</span></dt>
+          <dd>
+            <span>{{ binCardRef.referenceCode }}</span>
+          </dd>
+          <dt><span>Record Date</span></dt>
+          <dd>
+            <span>{{ binCardRef.recordDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Batch Id</span></dt>
+          <dd>
+            <span>{{ binCardRef.batchId }}</span>
+          </dd>
+          <dt><span>Location Id</span></dt>
+          <dd>
+            <span>{{ binCardRef.locationId }}</span>
+          </dd>
+          <dt><span>Location Code</span></dt>
+          <dd>
+            <span>{{ binCardRef.locationCode }}</span>
+          </dd>
+          <dt><span>Opening</span></dt>
+          <dd>
+            <span>{{ binCardRef.opening }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ binCardRef.description }}</span>
+          </dd>
+          <dt><span>Reference Doc</span></dt>
+          <dd>
+            <span>{{ binCardRef.referenceDoc }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/bin-card', binCardRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

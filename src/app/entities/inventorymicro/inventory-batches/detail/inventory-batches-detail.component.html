@@ -1,0 +1,98 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (inventoryBatches(); as inventoryBatchesRef) {
+      <div>
+        <h2 data-cy="inventoryBatchesDetailsHeading"><span>Inventory Batches</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.id }}</span>
+          </dd>
+          <dt><span>Item Id</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.itemId }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.code }}</span>
+          </dd>
+          <dt><span>Tx Date</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.txDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Cost</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.cost }}</span>
+          </dd>
+          <dt><span>Price</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.price }}</span>
+          </dd>
+          <dt><span>Cost Without Vat</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.costWithoutVat }}</span>
+          </dd>
+          <dt><span>Price Without Vat</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.priceWithoutVat }}</span>
+          </dd>
+          <dt><span>Notes</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.notes }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Line Id</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.lineId }}</span>
+          </dd>
+          <dt><span>Manufacture Date</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.manufactureDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Expire Date</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.expireDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Quantity</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.quantity }}</span>
+          </dd>
+          <dt><span>Added Date</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.addedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Cost Total</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.costTotal }}</span>
+          </dd>
+          <dt><span>Return Price</span></dt>
+          <dd>
+            <span>{{ inventoryBatchesRef.returnPrice }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/inventory-batches', inventoryBatchesRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

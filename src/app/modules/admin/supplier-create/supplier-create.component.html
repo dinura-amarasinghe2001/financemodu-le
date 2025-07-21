@@ -1,0 +1,263 @@
+
+<style>
+  .stepper-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  mat-horizontal-stepper {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* no outer scroll */
+  }
+
+  /* Scrollable area inside each step's form */
+  .step-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1 1 auto;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .form-field {
+    flex: 1 1 45%;
+  }
+
+  .address-block {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .align-items-center {
+    align-items: center;
+  }
+
+  .button-row,
+  .fixed-button-row {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 16px 0;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 100;
+    border-top: 1px solid #ddd;
+    gap: 8px;
+  }
+
+  .button-row.space-between {
+    justify-content: space-between;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+
+  .full-width {
+    grid-column: span 2;
+  }
+
+</style>
+<div class="stepper-container">
+  <mat-horizontal-stepper [(selectedIndex)]="activeTabIndex" linear  (selectionChange)="onStepChange($event)">
+    <!-- Step 1: General Information -->
+    <mat-step [stepControl]="generalForm">
+      <form [formGroup]="generalForm">
+        <ng-template matStepLabel>General Information</ng-template>
+
+        <fieldset>
+          <div class="form-section">
+            <br>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Supplier Name*</mat-label>
+                <input matInput required formControlName="name" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Supplier Code*</mat-label>
+                <input matInput required formControlName="code" readonly  />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <div class="address-block">
+                <mat-label>Address (Head Office)*</mat-label>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Address" formControlName="addressOffice" />
+                </mat-form-field>
+              
+              </div>
+
+              <div class="address-block">
+                <mat-label>Address (Factory)</mat-label>
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="Address" formControlName="addressFactory" />
+                </mat-form-field>
+               
+              </div>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Tel No*</mat-label>
+                <input matInput formControlName="phone1" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Fax</mat-label>
+                <input matInput formControlName="fax" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Web</mat-label>
+                <input matInput formControlName="website" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Contact Person</mat-label>
+                <input matInput formControlName="contactPersonName" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Mobile Tel</mat-label>
+                <input matInput formControlName="contactPersonMobile" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-row align-items-center">
+                <mat-form-field appearance="outline" class="form-field">
+                <mat-label>VAT Reg. Number</mat-label>
+                <input matInput formControlName="vatRegNumber" />
+              </mat-form-field>
+            
+              <mat-checkbox formControlName="isVATEnable">VAT registered suppliers</mat-checkbox>
+              
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>B.R Number</mat-label>
+                <input matInput formControlName="brNumber" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Tin Number</mat-label>
+                <input matInput formControlName="tinNumber" />
+              </mat-form-field>
+              
+            </div>
+
+     <div class="button-right">
+  <button
+    mat-raised-button
+    color="primary"
+    matStepperNext
+    [disabled]="generalForm.invalid">
+    Continue
+  </button>
+</div>
+
+
+          </div>
+        </fieldset>
+      </form>
+    </mat-step>
+
+    <!-- Step 2: Bank Information -->
+    <mat-step [stepControl]="bankForm">
+      <form [formGroup]="bankForm">
+        <ng-template matStepLabel>Bank Information</ng-template>
+<br>
+        <fieldset>
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Credit Period (days)</mat-label>
+              <input matInput formControlName="creditPeriod" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Account Name</mat-label>
+              <input matInput formControlName="bankAccountName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Account No</mat-label>
+              <input matInput formControlName="bankAccountNumber" />
+            </mat-form-field>
+
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>Bank</mat-label>
+  <input
+    type="text"
+    matInput
+    formControlName="bankName"
+    [matAutocomplete]="autoBank"
+    placeholder="Type or select a bank"
+  />
+  <mat-autocomplete #autoBank="matAutocomplete" [displayWith]="displayBankName">
+    <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank.name">
+      {{ bank.name }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+
+
+<mat-form-field appearance="outline">
+  <mat-label>Branch</mat-label>
+  <input matInput formControlName="bankBranch" placeholder="Enter branch" />
+</mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+              <mat-label>Maximum Credit Limit</mat-label>
+              <input matInput formControlName="maximumCreditLimit" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cheque Should be Drawn</mat-label>
+              <textarea matInput rows="4" formControlName="chequeDrawn"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="button-row space-between">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-raised-button color="primary" (click)="save()">Save</button>
+          </div>
+        </fieldset>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

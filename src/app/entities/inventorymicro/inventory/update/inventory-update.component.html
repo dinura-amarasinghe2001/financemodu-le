@@ -1,0 +1,469 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-inventory-heading" data-cy="InventoryCreateUpdateHeading">Create or edit a Inventory</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_code">Code</label>
+          <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_partNumber">Part Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="partNumber"
+            id="field_partNumber"
+            data-cy="partNumber"
+            formControlName="partNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_type">Type</label>
+          <input type="number" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_classification1">Classification 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="classification1"
+            id="field_classification1"
+            data-cy="classification1"
+            formControlName="classification1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_classification2">Classification 2</label>
+          <input
+            type="text"
+            class="form-control"
+            name="classification2"
+            id="field_classification2"
+            data-cy="classification2"
+            formControlName="classification2"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_classification3">Classification 3</label>
+          <input
+            type="text"
+            class="form-control"
+            name="classification3"
+            id="field_classification3"
+            data-cy="classification3"
+            formControlName="classification3"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_classification4">Classification 4</label>
+          <input
+            type="text"
+            class="form-control"
+            name="classification4"
+            id="field_classification4"
+            data-cy="classification4"
+            formControlName="classification4"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_classification5">Classification 5</label>
+          <input
+            type="text"
+            class="form-control"
+            name="classification5"
+            id="field_classification5"
+            data-cy="classification5"
+            formControlName="classification5"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_unitOfMeasurement">Unit Of Measurement</label>
+          <input
+            type="text"
+            class="form-control"
+            name="unitOfMeasurement"
+            id="field_unitOfMeasurement"
+            data-cy="unitOfMeasurement"
+            formControlName="unitOfMeasurement"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_decimalPlaces">Decimal Places</label>
+          <input
+            type="number"
+            class="form-control"
+            name="decimalPlaces"
+            id="field_decimalPlaces"
+            data-cy="decimalPlaces"
+            formControlName="decimalPlaces"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isAssemblyUnit">Is Assembly Unit</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isAssemblyUnit"
+            id="field_isAssemblyUnit"
+            data-cy="isAssemblyUnit"
+            formControlName="isAssemblyUnit"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_assemblyUnitOf">Assembly Unit Of</label>
+          <input
+            type="number"
+            class="form-control"
+            name="assemblyUnitOf"
+            id="field_assemblyUnitOf"
+            data-cy="assemblyUnitOf"
+            formControlName="assemblyUnitOf"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_reOrderLevel">Re Order Level</label>
+          <input
+            type="number"
+            class="form-control"
+            name="reOrderLevel"
+            id="field_reOrderLevel"
+            data-cy="reOrderLevel"
+            formControlName="reOrderLevel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lastCost">Last Cost</label>
+          <input type="number" class="form-control" name="lastCost" id="field_lastCost" data-cy="lastCost" formControlName="lastCost" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lastSellingPrice">Last Selling Price</label>
+          <input
+            type="number"
+            class="form-control"
+            name="lastSellingPrice"
+            id="field_lastSellingPrice"
+            data-cy="lastSellingPrice"
+            formControlName="lastSellingPrice"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lmu">Lmu</label>
+          <input type="number" class="form-control" name="lmu" id="field_lmu" data-cy="lmu" formControlName="lmu" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lmd">Lmd</label>
+          <div class="d-flex">
+            <input
+              id="field_lmd"
+              data-cy="lmd"
+              type="datetime-local"
+              class="form-control"
+              name="lmd"
+              formControlName="lmd"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_availableQuantity">Available Quantity</label>
+          <input
+            type="number"
+            class="form-control"
+            name="availableQuantity"
+            id="field_availableQuantity"
+            data-cy="availableQuantity"
+            formControlName="availableQuantity"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_hasBatches">Has Batches</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBatches"
+            id="field_hasBatches"
+            data-cy="hasBatches"
+            formControlName="hasBatches"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_itemSpecFilePath">Item Spec File Path</label>
+          <input
+            type="text"
+            class="form-control"
+            name="itemSpecFilePath"
+            id="field_itemSpecFilePath"
+            data-cy="itemSpecFilePath"
+            formControlName="itemSpecFilePath"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_itemImagePath">Item Image Path</label>
+          <input
+            type="text"
+            class="form-control"
+            name="itemImagePath"
+            id="field_itemImagePath"
+            data-cy="itemImagePath"
+            formControlName="itemImagePath"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_returnPrice">Return Price</label>
+          <input
+            type="number"
+            class="form-control"
+            name="returnPrice"
+            id="field_returnPrice"
+            data-cy="returnPrice"
+            formControlName="returnPrice"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_activeItem">Active Item</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="activeItem"
+            id="field_activeItem"
+            data-cy="activeItem"
+            formControlName="activeItem"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_minStock">Min Stock</label>
+          <input type="number" class="form-control" name="minStock" id="field_minStock" data-cy="minStock" formControlName="minStock" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_maxStock">Max Stock</label>
+          <input type="number" class="form-control" name="maxStock" id="field_maxStock" data-cy="maxStock" formControlName="maxStock" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dailyAverage">Daily Average</label>
+          <input
+            type="number"
+            class="form-control"
+            name="dailyAverage"
+            id="field_dailyAverage"
+            data-cy="dailyAverage"
+            formControlName="dailyAverage"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bufferLevel">Buffer Level</label>
+          <input
+            type="number"
+            class="form-control"
+            name="bufferLevel"
+            id="field_bufferLevel"
+            data-cy="bufferLevel"
+            formControlName="bufferLevel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_leadTime">Lead Time</label>
+          <input type="number" class="form-control" name="leadTime" id="field_leadTime" data-cy="leadTime" formControlName="leadTime" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bufferTime">Buffer Time</label>
+          <input
+            type="number"
+            class="form-control"
+            name="bufferTime"
+            id="field_bufferTime"
+            data-cy="bufferTime"
+            formControlName="bufferTime"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_saftyDays">Safty Days</label>
+          <input type="number" class="form-control" name="saftyDays" id="field_saftyDays" data-cy="saftyDays" formControlName="saftyDays" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_accountCode">Account Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountCode"
+            id="field_accountCode"
+            data-cy="accountCode"
+            formControlName="accountCode"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_accountId">Account Id</label>
+          <input type="number" class="form-control" name="accountId" id="field_accountId" data-cy="accountId" formControlName="accountId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_casePackQty">Case Pack Qty</label>
+          <input
+            type="number"
+            class="form-control"
+            name="casePackQty"
+            id="field_casePackQty"
+            data-cy="casePackQty"
+            formControlName="casePackQty"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isRegistered">Is Registered</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isRegistered"
+            id="field_isRegistered"
+            data-cy="isRegistered"
+            formControlName="isRegistered"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_defaultStockLocationId">Default Stock Location Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="defaultStockLocationId"
+            id="field_defaultStockLocationId"
+            data-cy="defaultStockLocationId"
+            formControlName="defaultStockLocationId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_rackNo">Rack No</label>
+          <input type="text" class="form-control" name="rackNo" id="field_rackNo" data-cy="rackNo" formControlName="rackNo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_commissionEmpId">Commission Emp Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="commissionEmpId"
+            id="field_commissionEmpId"
+            data-cy="commissionEmpId"
+            formControlName="commissionEmpId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_checkTypeId">Check Type Id</label>
+          <input
+            type="number"
+            class="form-control"
+            name="checkTypeId"
+            id="field_checkTypeId"
+            data-cy="checkTypeId"
+            formControlName="checkTypeId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_checkType">Check Type</label>
+          <input type="text" class="form-control" name="checkType" id="field_checkType" data-cy="checkType" formControlName="checkType" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_reOrderQty">Re Order Qty</label>
+          <input
+            type="number"
+            class="form-control"
+            name="reOrderQty"
+            id="field_reOrderQty"
+            data-cy="reOrderQty"
+            formControlName="reOrderQty"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_notInInvoice">Not In Invoice</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="notInInvoice"
+            id="field_notInInvoice"
+            data-cy="notInInvoice"
+            formControlName="notInInvoice"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

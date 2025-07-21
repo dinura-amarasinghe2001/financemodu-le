@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (invoiceItem(); as invoiceItemRef) {
+      <div>
+        <h2 data-cy="invoiceItemDetailsHeading"><span>Invoice Item</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ invoiceItemRef.id }}</span>
+          </dd>
+          <dt><span>Invoice Date</span></dt>
+          <dd>
+            <span>{{ invoiceItemRef.invoiceDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Descriptions</span></dt>
+          <dd>
+            <span>{{ invoiceItemRef.descriptions }}</span>
+          </dd>
+          <dt><span>Amount</span></dt>
+          <dd>
+            <span>{{ invoiceItemRef.amount }}</span>
+          </dd>
+          <dt><span>Types</span></dt>
+          <dd>
+            <span>{{ invoiceItemRef.types }}</span>
+          </dd>
+          <dt><span>Invoice</span></dt>
+          <dd>
+            @if (invoiceItem()!.invoice) {
+              <div>
+                <a [routerLink]="['/invoice', invoiceItem()!.invoice?.id, 'view']">{{ invoiceItemRef.invoice?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/invoice-item', invoiceItemRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

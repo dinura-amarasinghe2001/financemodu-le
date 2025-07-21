@@ -1,0 +1,251 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <div class="min-w-0 flex-1">
+      <!-- Title -->
+      <div class="mt-2">
+        <h2
+          class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl"
+        >
+          Invoice
+        </h2>
+      </div>
+    </div>
+    <!-- Actions -->
+
+    <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+      <mat-form-field
+        class="fuse-mat-dense fuse-mat-rounded min-w-64"
+        [subscriptSizing]="'dynamic'"
+      >
+        <mat-icon
+          class="icon-size-5"
+          matPrefix
+          [svgIcon]="'heroicons_solid:magnifying-glass'"
+        ></mat-icon>
+        <input
+          matInput
+          [formControl]="searchInputControl"
+          [autocomplete]="'off'"
+          [placeholder]="'Search Invoices'"
+        />
+      </mat-form-field>
+      <mat-form-field
+        class="fuse-mat-dense fuse-mat-rounded min-w-64 ml-3"
+        [subscriptSizing]="'dynamic'"
+      >
+        <mat-icon
+          class="icon-size-5"
+          matPrefix
+          [svgIcon]="'heroicons_solid:calendar-days'"
+        ></mat-icon>
+        <input
+          matInput
+          [matDatepicker]="dp"
+          [formControl]="date"
+          [placeholder]="'Select Month'"
+          readonly
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker
+          #dp
+          startView="multi-year"
+          (monthSelected)="setMonthAndYear($event, dp)"
+          panelClass="example-month-picker"
+        ></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        *ngIf="showClear"
+        class="ml-3"
+        mat-flat-button
+        [color]="'warn'"
+        (click)="resetFilter()"
+      >
+        <span class="">Clear</span>
+      </button>
+      <button
+        class="ml-3"
+        mat-flat-button
+        [color]="'primary'"
+        [routerLink]="['/invoices-create']"
+      >
+        <mat-icon
+          class="icon-size-4"
+          [svgIcon]="'heroicons_mini:plus'"
+        ></mat-icon>
+        <span class="ml-2">Create New Invoice</span>
+      </button>
+      <button
+        class="ml-3"
+        mat-flat-button
+        [color]="'primary'"
+        [routerLink]="['/quick-invoices-create']"
+      >
+        <mat-icon
+          class="icon-size-4"
+          [svgIcon]="'heroicons_mini:plus'"
+        ></mat-icon>
+        <span class="ml-2">Quick Invoice</span>
+      </button>
+
+      <!-- <button
+        class="ml-3"
+        mat-flat-button
+        [color]="'primary'"
+        (click)="filterByStsAndDate()"
+      >
+        <mat-icon
+          class="icon-size-4"
+          [svgIcon]="'heroicons_mini:plus'"
+        ></mat-icon>
+        <span class="ml-2">Filter</span>
+      </button> -->
+    </div>
+  </div>
+
+  <div
+    class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"
+  >
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-auto">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="w-full table-fixed border-separate border-spacing-y-2 px-6"
+      >
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            ID
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.id }}
+          </td>
+        </ng-container>
+
+        <!-- vehicleID Column -->
+        <ng-container matColumnDef="invoiceNumber">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Invoice Number
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.invoiceNumber }}
+          </td>
+        </ng-container>
+
+        <!-- vehicleLicenseNumber Column -->
+        <ng-container matColumnDef="vehicleLicenseNumber">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Vehicle License Number
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.vehicleLicenseNumber }}
+          </td>
+        </ng-container>
+
+        <!-- totalNetAmount Column -->
+        <ng-container matColumnDef="totalNetAmount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Total Net Amount
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.totalNetAmount | currency: " " }}
+          </td>
+        </ng-container>
+  <ng-container matColumnDef="totalNetAmount1">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Total Net Amount
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.invoiceStatus  }}
+          </td>
+        </ng-container>
+        <!-- invoiceDate Column -->
+        <ng-container matColumnDef="invoiceDate">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Invoice Date
+          </th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            {{ invoice.invoiceDate | date: "medium" }}
+          </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="px-4 py-3 text-left font-semibold"
+          ></th>
+          <td mat-cell *matCellDef="let invoice" class="px-4 py-2">
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large mr-2"
+              color="primary"
+              (click)="openInvoiceEditDialog(invoice.id)"
+            >
+              View
+            </button>
+
+            <button
+              mat-flat-button
+              class="fuse-mat-button-large"
+              color="warn"
+              (click)="deleteInvoice(invoice)"
+            >
+              Delete
+            </button>
+             
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <mat-paginator
+    #paginator
+    [length]="totalItems"
+    [pageSize]="itemsPerPage"
+    class="bottom-0 justify-self-end"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>

@@ -1,0 +1,365 @@
+<div>
+  <h2 id="page-heading" data-cy="GRNLineBatchesHeading">
+    <span>GRN Line Batches</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-grn-line-batches"
+        [routerLink]="['/grn-line-batches/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new GRN Line Batches</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for GRN Line Batches</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for GRN Line Batches"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (gRNLineBatches().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No GRN Line Batches found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lineId">
+              <div class="d-flex">
+                <span>Line Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="batchLineId">
+              <div class="d-flex">
+                <span>Batch Line Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="itemId">
+              <div class="d-flex">
+                <span>Item Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="code">
+              <div class="d-flex">
+                <span>Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="txDate">
+              <div class="d-flex">
+                <span>Tx Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="manufactureDate">
+              <div class="d-flex">
+                <span>Manufacture Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="expiredDate">
+              <div class="d-flex">
+                <span>Expired Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qty">
+              <div class="d-flex">
+                <span>Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cost">
+              <div class="d-flex">
+                <span>Cost</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="price">
+              <div class="d-flex">
+                <span>Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="costWithoutVat">
+              <div class="d-flex">
+                <span>Cost Without Vat</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="priceWithoutVat">
+              <div class="d-flex">
+                <span>Price Without Vat</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="hasVat">
+              <div class="d-flex">
+                <span>Has Vat</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="supplierDiscount">
+              <div class="d-flex">
+                <span>Supplier Discount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="notes">
+              <div class="d-flex">
+                <span>Notes</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmu">
+              <div class="d-flex">
+                <span>Lmu</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmd">
+              <div class="d-flex">
+                <span>Lmd</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="batchId">
+              <div class="d-flex">
+                <span>Batch Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qtyIn">
+              <div class="d-flex">
+                <span>Qty In</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qtyOut">
+              <div class="d-flex">
+                <span>Qty Out</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="batchLineTotal">
+              <div class="d-flex">
+                <span>Batch Line Total</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="inspected">
+              <div class="d-flex">
+                <span>Inspected</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="passQty">
+              <div class="d-flex">
+                <span>Pass Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="currentReceivedQty">
+              <div class="d-flex">
+                <span>Current Received Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalPassedQty">
+              <div class="d-flex">
+                <span>Total Passed Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isInventoryUpdate">
+              <div class="d-flex">
+                <span>Is Inventory Update</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="inventoryQty">
+              <div class="d-flex">
+                <span>Inventory Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalInventoryQty">
+              <div class="d-flex">
+                <span>Total Inventory Qty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="returnPrice">
+              <div class="d-flex">
+                <span>Return Price</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (gRNLineBatches of gRNLineBatches(); track trackId(gRNLineBatches)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/grn-line-batches', gRNLineBatches.id, 'view']">{{ gRNLineBatches.id }}</a>
+              </td>
+              <td>{{ gRNLineBatches.lineId }}</td>
+              <td>{{ gRNLineBatches.batchLineId }}</td>
+              <td>{{ gRNLineBatches.itemId }}</td>
+              <td>{{ gRNLineBatches.code }}</td>
+              <td>{{ gRNLineBatches.txDate | formatMediumDatetime }}</td>
+              <td>{{ gRNLineBatches.manufactureDate | formatMediumDatetime }}</td>
+              <td>{{ gRNLineBatches.expiredDate | formatMediumDatetime }}</td>
+              <td>{{ gRNLineBatches.qty }}</td>
+              <td>{{ gRNLineBatches.cost }}</td>
+              <td>{{ gRNLineBatches.price }}</td>
+              <td>{{ gRNLineBatches.costWithoutVat }}</td>
+              <td>{{ gRNLineBatches.priceWithoutVat }}</td>
+              <td>{{ gRNLineBatches.hasVat }}</td>
+              <td>{{ gRNLineBatches.supplierDiscount }}</td>
+              <td>{{ gRNLineBatches.notes }}</td>
+              <td>{{ gRNLineBatches.lmu }}</td>
+              <td>{{ gRNLineBatches.lmd | formatMediumDatetime }}</td>
+              <td>{{ gRNLineBatches.batchId }}</td>
+              <td>{{ gRNLineBatches.qtyIn }}</td>
+              <td>{{ gRNLineBatches.qtyOut }}</td>
+              <td>{{ gRNLineBatches.batchLineTotal }}</td>
+              <td>{{ gRNLineBatches.inspected }}</td>
+              <td>{{ gRNLineBatches.passQty }}</td>
+              <td>{{ gRNLineBatches.currentReceivedQty }}</td>
+              <td>{{ gRNLineBatches.totalPassedQty }}</td>
+              <td>{{ gRNLineBatches.isInventoryUpdate }}</td>
+              <td>{{ gRNLineBatches.inventoryQty }}</td>
+              <td>{{ gRNLineBatches.totalInventoryQty }}</td>
+              <td>{{ gRNLineBatches.returnPrice }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/grn-line-batches', gRNLineBatches.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/grn-line-batches', gRNLineBatches.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(gRNLineBatches)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (gRNLineBatches().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,200 @@
+<div
+  class="absolute inset-0 min-w-0 overflow-auto text-center print:overflow-visible"
+  cdkScrollable
+>
+  <div class="flex space-x-4 mb-3 print:hidden justify-end items-end p-6">
+    <!-- Back Button -->
+    <button
+      (click)="goBack()"
+      class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:arrow_back'"
+      ></mat-icon>
+      <span class="ml-2">Back</span>
+    </button>
+
+    <!-- Print Button -->
+    <button
+      (click)="print()"
+      class="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:print'"
+      ></mat-icon>
+      <span class="ml-2">Print</span>
+    </button>
+  </div>
+  <!-- Main -->
+  <div class="inline-block p-6 text-left sm:p-10 print:p-0">
+    <!-- Invoice -->
+    <div
+      class="bg-card w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:shadow-none"
+    >
+      <div class="text-right text-4xl font-bold text-primary">
+        <!-- <div class="text-primaryt">Nimesh Motor Works (PVT) LTD</div>
+        <div class="text-2xl font-bold">
+          Repairs to all Diesel & Petrol Motor Vehicles, Tinkering & Painting
+        </div>
+
+        <div class="text-lg text-sm font-bold">
+          No: 27/1, Jubile Rd, Laxapathiya, Moratuwa
+        </div>
+        <div class="text-lg text-sm font-bold">
+          Tel: 11-2648438 / 0743888718
+        </div>
+        <div class="text-lg text-sm font-bold">
+          E-mail: nimeshmotorw&#64;gmail.com
+        </div> -->
+      </div>
+      <hr class="mt-40" />
+
+      <h2 class="text-2xl font-bold underline text-center mb-6">GATE PASS</h2>
+
+      <!-- Gate Pass Info -->
+      <div class="border border-gray-300 rounded-lg mb-6">
+        <div
+          class="bg-gray-100 text-left p-2 font-semibold text-sm rounded-t-lg"
+        >
+          Gate Pass Information
+        </div>
+        <table class="table-fixed w-full text-sm border-t border-gray-200">
+          <tr class="border-b">
+            <td class="p-2 w-1/3">
+              <strong>Gate Pass ID:</strong> {{ gatePassDetails?.id }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Vehicle License No:</strong>
+              {{ gatePassDetails?.vehicleLicenseNumber }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Entry Date & Time:</strong>
+              {{ gatePassDetails?.entryDateTime | date: "medium" }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Vehicle Details -->
+      <div class="border border-gray-300 rounded-lg mb-6">
+        <div
+          class="bg-gray-100 text-left p-2 font-semibold text-sm rounded-t-lg"
+        >
+          Vehicle Details
+        </div>
+        <table class="table-fixed w-full text-sm border-t border-gray-200">
+          <tr class="border-b">
+            <td class="p-2 w-1/3">
+              <strong>License No:</strong>
+              {{ gatePassDetails?.vehicleLicenseNumber }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Owner Name:</strong>
+              {{ gatePassDetails?.vehicleOwnerName }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Brand:</strong> {{ gatePassDetails?.vehicleBrand }}
+            </td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-2">
+              <strong>Model:</strong> {{ gatePassDetails?.vehicleModel }}
+            </td>
+            <td class="p-2">
+              <strong>Fuel Level:</strong> {{ gatePassDetails?.fuelLevel }}%
+            </td>
+            <td class="p-2">
+              <strong>Meter Reading:</strong>
+              {{ gatePassDetails?.meterReading }} KM
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Job Card Details -->
+      <div class="border border-gray-300 rounded-lg mb-6">
+        <div
+          class="bg-gray-100 text-left p-2 font-semibold text-sm rounded-t-lg"
+        >
+          Job Card Details
+        </div>
+        <table class="table-fixed w-full text-sm border-t border-gray-200">
+          <tr class="border-b">
+            <td class="p-2 w-1/3">
+              <strong>Job Card Number:</strong>
+              {{ gatePassDetails?.jobCardNumber }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Invoice Number:</strong>
+              {{ gatePassDetails?.invoiceNumber }}
+            </td>
+            <td class="p-2 w-1/3">
+              <strong>Receipt Value:</strong>
+              {{ gatePassDetails?.receiptValue }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Vehicle Images -->
+      <div class="border border-gray-300 rounded-lg mb-6">
+        <div
+          class="bg-gray-100 text-left p-2 font-semibold text-sm rounded-t-lg"
+        >
+          Vehicle Images
+        </div>
+        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            *ngIf="gatePassDetails?.frontView1"
+            class="flex flex-col items-center mb-3"
+          >
+            <p class="text-sm font-semibold mb-2">Front View</p>
+            <img
+              [src]="frontImgUrl"
+              class="h-32 w-auto object-cover rounded border"
+              alt="Front View"
+            />
+          </div>
+
+          <div
+            *ngIf="gatePassDetails?.sideRView1"
+            class="flex flex-col items-center"
+          >
+            <p class="text-sm font-semibold mb-2">Right Side View</p>
+            <img
+              [src]="sideRImgUrl"
+              class="h-32 w-auto object-cover rounded border"
+              alt="Right Side View"
+            />
+          </div>
+
+          <div
+            *ngIf="gatePassDetails?.sideLView1"
+            class="flex flex-col items-center"
+          >
+            <p class="text-sm font-semibold mb-2">Left Side View</p>
+            <img
+              [src]="sideLImgUrl"
+              class="h-32 w-auto object-cover rounded border"
+              alt="Left Side View"
+            />
+          </div>
+
+          <div
+            *ngIf="gatePassDetails?.rearView1"
+            class="flex flex-col items-center"
+          >
+            <p class="text-sm font-semibold mb-2">Rear View</p>
+            <img
+              [src]="rearImgUrl"
+              class="h-32 w-auto object-cover rounded border"
+              alt="Rear View"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

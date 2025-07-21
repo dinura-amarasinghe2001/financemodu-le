@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jobItemTimeEstimation(); as jobItemTimeEstimationRef) {
+      <div>
+        <h2 data-cy="jobItemTimeEstimationDetailsHeading"><span>Job Item Time Estimation</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.id }}</span>
+          </dd>
+          <dt><span>Start Date Time</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.startDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>End Date Time</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.endDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Remark</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.remark }}</span>
+          </dd>
+          <dt><span>Job Item Type</span></dt>
+          <dd>
+            <span>{{
+              { null: '', SPARE_PARTS: 'SPARE_PARTS', TINKERING: 'TINKERING', PAINT: 'PAINT', QC: 'QC', SALES: 'SALES' }[
+                jobItemTimeEstimationRef.jobItemType ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ jobItemTimeEstimationRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Job Card</span></dt>
+          <dd>
+            @if (jobItemTimeEstimation()!.jobCard) {
+              <div>
+                <a [routerLink]="['/job-card', jobItemTimeEstimation()!.jobCard?.id, 'view']">{{ jobItemTimeEstimationRef.jobCard?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/job-item-time-estimation', jobItemTimeEstimationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<!-- Outer container centers all content horizontally with max width -->
+<div style="max-width: 9003px; margin: 0 auto; padding: 1rem; background: white;">
+
+  <!-- Upload Section: centered -->
+  <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+  <div style="background: white; padding: 0.5rem 1rem; border-radius: 4px;">
+  <label for="fileUpload" style="font-weight: 600; margin-right: 1rem;"> Extract XLSX or CSV:</label>
+  <input
+    id="fileUpload"
+    type="file"
+    accept=".xlsx, .xls, .csv"
+    (change)="onFileSelected($event)"
+    style="display: inline-block; margin-right: 1rem;"
+  />
+  <button mat-raised-button color="primary" (click)="processFile()" style="margin-right: 1rem;">
+   Extract
+  </button>
+  <button mat-raised-button color="primary" (click)="saveItems()" style="margin-right: 1rem;">
+    Save
+  </button>
+</div>
+
+  </div>
+
+  <!-- Table Container -->
+  <div style="overflow-x: auto; background: white; min-height: 300px; padding: 0.5rem;">
+    <table mat-table [dataSource]="pagedItems" class="w-full table-fixed border-separate border-spacing-y-1">
+
+      <!-- Item Name -->
+      <ng-container matColumnDef="itemName">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-24">Code</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.code }}</td>
+      </ng-container>
+
+      <!-- Manufacture Date -->
+      <ng-container matColumnDef="manufactureDate">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-32">Name</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Category -->
+      <ng-container matColumnDef="purcost">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-28">Category</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.checkType }}</td>
+      </ng-container>
+
+      <!-- Quantity -->
+      <ng-container matColumnDef="sellprice">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-20">Quantity</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.availableQuantity }}</td>
+      </ng-container>
+
+      <!-- Selling Price -->
+      <ng-container matColumnDef="sellingPrice">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-28">Selling Price</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.lastSellingPrice }}</td>
+      </ng-container>
+
+      <!-- Cost -->
+      <ng-container matColumnDef="lineTotal">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-20">Cost</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.lastCost }}</td>
+      </ng-container>
+
+      <!-- Re Order Qty -->
+      <ng-container matColumnDef="reorderQty">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-28">Re Order Qty</th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">{{ element.reOrderQty }}</td>
+      </ng-container>
+
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="px-2 py-1 text-left font-semibold w-12"></th>
+        <td mat-cell *matCellDef="let element" class="px-2 py-1">
+          <button
+            *ngIf="element.itemName"
+            mat-icon-button
+            (click)="deleteItem(element)"
+            style="background-color: white;"
+          >
+            <mat-icon style="color: red;">delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Header & Row Definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- No Data -->
+      <tr *ngIf="pagedItems.length === 0">
+        <td colspan="8" class="text-center py-4 text-gray-500 font-medium bg-white">
+          No data available.
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- Paginator -->
+<mat-paginator
+  [length]="items.length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 20]"
+  [pageIndex]="currentPage - 1"
+  (page)="onPaginateChange($event)"
+  style="
+    position: fixed;
+    bottom: 0;
+    left: 278px;
+    right: 0;
+    background: white;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
+">
+</mat-paginator>

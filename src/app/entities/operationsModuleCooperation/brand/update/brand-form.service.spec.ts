@@ -1,0 +1,100 @@
+import { TestBed } from '@angular/core/testing';
+
+import { sampleWithNewData, sampleWithRequiredData } from '../brand.test-samples';
+
+import { BrandFormService } from './brand-form.service';
+
+describe('Brand Form Service', () => {
+  let service: BrandFormService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(BrandFormService);
+  });
+
+  describe('Service methods', () => {
+    describe('createBrandFormGroup', () => {
+      it('should create a new form with FormControl', () => {
+        const formGroup = service.createBrandFormGroup();
+
+        expect(formGroup.controls).toEqual(
+          expect.objectContaining({
+            id: expect.any(Object),
+            brandName: expect.any(Object),
+            description: expect.any(Object),
+            opsUnitID: expect.any(Object),
+            emblem: expect.any(Object),
+            createdBy: expect.any(Object),
+            createdDate: expect.any(Object),
+            lastModifiedBy: expect.any(Object),
+            lastModifiedDate: expect.any(Object),
+          }),
+        );
+      });
+
+      it('passing IBrand should create a new form with FormGroup', () => {
+        const formGroup = service.createBrandFormGroup(sampleWithRequiredData);
+
+        expect(formGroup.controls).toEqual(
+          expect.objectContaining({
+            id: expect.any(Object),
+            brandName: expect.any(Object),
+            description: expect.any(Object),
+            opsUnitID: expect.any(Object),
+            emblem: expect.any(Object),
+            createdBy: expect.any(Object),
+            createdDate: expect.any(Object),
+            lastModifiedBy: expect.any(Object),
+            lastModifiedDate: expect.any(Object),
+          }),
+        );
+      });
+    });
+
+    describe('getBrand', () => {
+      it('should return NewBrand for default Brand initial value', () => {
+        const formGroup = service.createBrandFormGroup(sampleWithNewData);
+
+        const brand = service.getBrand(formGroup) as any;
+
+        expect(brand).toMatchObject(sampleWithNewData);
+      });
+
+      it('should return NewBrand for empty Brand initial value', () => {
+        const formGroup = service.createBrandFormGroup();
+
+        const brand = service.getBrand(formGroup) as any;
+
+        expect(brand).toMatchObject({});
+      });
+
+      it('should return IBrand', () => {
+        const formGroup = service.createBrandFormGroup(sampleWithRequiredData);
+
+        const brand = service.getBrand(formGroup) as any;
+
+        expect(brand).toMatchObject(sampleWithRequiredData);
+      });
+    });
+
+    describe('resetForm', () => {
+      it('passing IBrand should not enable id FormControl', () => {
+        const formGroup = service.createBrandFormGroup();
+        expect(formGroup.controls.id.disabled).toBe(true);
+
+        service.resetForm(formGroup, sampleWithRequiredData);
+
+        expect(formGroup.controls.id.disabled).toBe(true);
+      });
+
+      it('passing NewBrand should disable id FormControl', () => {
+        const formGroup = service.createBrandFormGroup(sampleWithRequiredData);
+        expect(formGroup.controls.id.disabled).toBe(true);
+
+        service.resetForm(formGroup, { id: null });
+
+        expect(formGroup.controls.id.disabled).toBe(true);
+      });
+    });
+  });
+});

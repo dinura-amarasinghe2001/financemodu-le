@@ -1,0 +1,539 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pt-3"
+  >
+    <div class="min-w-0 flex-1">
+      <div class="mt-2">
+        <!-- Make this a flex container to align buttons + search field -->
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <!-- Toggle Buttons -->
+          <div class="flex items-center gap-2">
+            <button
+              (click)="searchByVehicleNo = true"
+              [class.bg-amber-400]="searchByVehicleNo"
+              [class.bg-gray-300]="!searchByVehicleNo"
+              class="px-1 py-1 text-white rounded-xl transition-all hover:bg-amber-400"
+            >
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+            </button>
+            <button
+              (click)="searchByVehicleNo = false"
+              [class.bg-amber-400]="!searchByVehicleNo"
+              [class.bg-gray-300]="searchByVehicleNo"
+              class="px-1 py-1 text-white rounded-xl transition-all hover:bg-amber-400"
+            >
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'heroicons_outline:user-circle'"
+                ></mat-icon>
+              </div>
+            </button>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="flex w-full md:w-auto flex-1 items-center gap-2">
+            <div class="relative w-full">
+              <input
+                [formControl]="searchInputControl"
+                (keydown.enter)="searchVehicle()"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                [placeholder]="
+                  searchByVehicleNo
+                    ? 'Search by Vehicle Number'
+                    : 'Search by Client Name'
+                "
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <ng-container *ngIf="searchByVehicleNo; else clientIcon">
+                  <mat-icon
+                    class="text-current text-2xl"
+                    [svgIcon]="'mat_outline:directions_car_filled'"
+                  ></mat-icon>
+                </ng-container>
+                <ng-template #clientIcon>
+                  <mat-icon
+                    class="text-current text-2xl"
+                    [svgIcon]="'heroicons_outline:user-circle'"
+                  ></mat-icon>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row gap-4 px-6" *ngIf="allVehicleDetails?.length">
+    <div
+      class="rounded-2xl w-full md:w-[48%] lg:w-[48%]"
+      *ngFor="let vehicle of allVehicleDetails; let i = index"
+      (click)="selectCard(vehicle, allClientDetails[0])"
+    >
+      <div class="bg-card flex flex-col rounded-2xl p-4 shadow h-full">
+        <!-- Card Content -->
+        <div class="space-y-2">
+          <!-- Vehicle Info -->
+          <div class="flex items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'mat_outline:directions_car_filled'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 flex-auto leading-none">
+              <div class="text-secondary text-sm font-medium">License No</div>
+              <div class="mt-2 text-2xl font-medium">
+                {{ vehicle.licenseNo }}
+              </div>
+            </div>
+            <div class="ml-6 mt-auto flex min-w-18 items-end justify-end gap-2">
+              <div class="bg-gray-400 rounded-lg px-2 py-1 text-white">
+                <span class="text-white text-sm font-medium">
+                  {{ vehicle.brand }}
+                </span>
+              </div>
+              <div class="bg-red-400 rounded-lg px-2 py-1 text-white">
+                <span class="text-white text-sm font-medium">
+                  {{ vehicle.model }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Info (example for one client) -->
+          <div class="flex items-center w-full">
+            <!-- Icon -->
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:user-circle'"
+              ></mat-icon>
+            </div>
+
+            <!-- Client Info -->
+            <div class="ml-4 flex-auto leading-none">
+              <div class="text-secondary text-sm font-medium">Client Name</div>
+
+              <div
+                class="mt-2 text-2xl font-medium"
+                *ngIf="allClientDetails.length"
+              >
+                {{ allClientDetails[0]?.name }}
+              </div>
+
+              <div
+                class="mt-2 text-sm text-gray-500 italic"
+                *ngIf="!allClientDetails.length"
+              >
+                No client assigned
+              </div>
+            </div>
+
+            <!-- Settings icon if client exists -->
+            <div
+              class="bg-amber-400 rounded-lg px-2 py-1 text-white ml-4"
+              *ngIf="allClientDetails.length"
+              (click)="openClientEditDialog(allClientDetails[0], vehicle)"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                svgIcon="settings"
+              ></mat-icon>
+            </div>
+
+            <!-- Create Client Button (always at the end) -->
+            <div *ngIf="!allClientDetails.length" class="ml-auto">
+              <button
+                class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-lg"
+                (click)="
+                  openClientCreateDialog();
+                  openClientEditDialog(
+                    selectedCard.client,
+                    selectedCard?.vehicle
+                  )
+                "
+              >
+                + Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex w-full flex-row rounded-2xl dark:bg-gray-800 gap-3"
+      *ngIf="allVehicleDetails.length == 1"
+    >
+      <ng-container *ngFor="let vehicle of allVehicleDetails; let i = index">
+        <!-- Pre Estimates -->
+        <div
+          class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+        >
+          <div class="flex items-center justify-between">
+            <div class="truncate text-lg font-medium">Pre Estimates</div>
+            <div class="mt-2">
+              <button
+                mat-icon-button
+                (click)="
+                  selectCard(vehicle, allClientDetails[0]); goToPreEstimate()
+                "
+              >
+                <mat-icon
+                  class="icon-size-5"
+                  svgIcon="heroicons_mini:plus"
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-col items-center">
+            <div class="text-7xl font-bold leading-none text-amber-500">
+              {{ preEstimateCount }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="flex justify-center items-center">
+          <mat-icon
+            svgIcon="heroicons_outline:arrow-right"
+            class="text-red-500 h-8 w-8"
+          ></mat-icon>
+        </div>
+
+        <!-- Estimates -->
+        <div
+          class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+        >
+          <div class="flex items-center justify-between">
+            <div class="truncate text-lg font-medium">Estimates</div>
+            <div class="mt-2">
+              <button
+                mat-icon-button
+                (click)="
+                  selectCard(vehicle, allClientDetails[0]); goToEstimate()
+                "
+              >
+                <mat-icon
+                  class="icon-size-5"
+                  svgIcon="heroicons_mini:plus"
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-col items-center">
+            <div class="text-7xl font-bold leading-none text-amber-500">
+              {{ estimateCount }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="flex justify-center items-center">
+          <mat-icon
+            svgIcon="heroicons_outline:arrow-right"
+            class="text-red-500 h-8 w-8"
+          ></mat-icon>
+        </div>
+
+        <!-- Job Cards -->
+        <div
+          class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+        >
+          <div class="flex items-center justify-between">
+            <div class="truncate text-lg font-medium">Job Cards</div>
+            <div class="mt-2">
+              <button
+                mat-icon-button
+                (click)="
+                  selectCard(vehicle, allClientDetails[0]); goToJobCard()
+                "
+              >
+                <mat-icon
+                  class="icon-size-5"
+                  svgIcon="heroicons_mini:plus"
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-col items-center">
+            <div class="text-7xl font-bold leading-none text-amber-500">
+              {{ jobCardCount }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="flex justify-center items-center">
+          <mat-icon
+            svgIcon="heroicons_outline:arrow-right"
+            class="text-red-500 h-8 w-8"
+          ></mat-icon>
+        </div>
+
+        <!-- Invoices -->
+        <div
+          class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+        >
+          <div class="flex items-center justify-between">
+            <div class="truncate text-lg font-medium">Invoices</div>
+            <div class="mt-2">
+              <button
+                mat-icon-button
+                (click)="
+                  selectCard(vehicle, allClientDetails[0]); goToInvoice()
+                "
+              >
+                <mat-icon
+                  class="icon-size-5"
+                  svgIcon="heroicons_mini:plus"
+                ></mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-col items-center">
+            <div class="text-7xl font-bold leading-none text-amber-500">
+              {{ invoiceCount }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- // selected vehicle and client -->
+  <div class="flex flex-row gap-4 px-6 py-2" *ngIf="isVehicleSelected">
+    <div class="rounded-2xl w-full md:w-[48%] lg:w-[48%]">
+      <div class="bg-card flex flex-col rounded-2xl p-4 shadow h-full">
+        <!-- Card Content -->
+        <div class="space-y-2">
+          <!-- Vehicle Info -->
+          <div class="flex items-center">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'mat_outline:directions_car_filled'"
+              ></mat-icon>
+            </div>
+            <div class="ml-4 flex-auto leading-none">
+              <div class="text-secondary text-sm font-medium">License No</div>
+              <div class="mt-2 text-2xl font-medium">
+                {{ selectedCard.vehicle.licenseNo }}
+              </div>
+            </div>
+            <div class="ml-6 mt-auto flex min-w-18 items-end justify-end gap-2">
+              <div class="bg-gray-400 rounded-lg px-2 py-1 text-white">
+                <span class="text-white text-sm font-medium">
+                  {{ selectedCard.vehicle.brand }}
+                </span>
+              </div>
+              <div class="bg-red-400 rounded-lg px-2 py-1 text-white">
+                <span class="text-white text-sm font-medium">
+                  {{ selectedCard.vehicle.model }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Info (example for one client) -->
+          <div class="flex items-center w-full">
+            <!-- Icon -->
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-50"
+            >
+              <mat-icon
+                class="text-current text-xl"
+                [svgIcon]="'heroicons_outline:user-circle'"
+              ></mat-icon>
+            </div>
+
+            <!-- Client Info -->
+            <div class="ml-4 flex-auto leading-none">
+              <div class="text-secondary text-sm font-medium">Client Name</div>
+
+              <div
+                class="mt-2 text-2xl font-medium"
+                *ngIf="selectedCard?.client"
+              >
+                {{ selectedCard.client?.name }}
+              </div>
+
+              <div
+                class="mt-2 text-sm text-gray-500 italic"
+                *ngIf="!selectedCard?.client"
+              >
+                No client assigned
+              </div>
+            </div>
+
+            <!-- Settings icon if client exists -->
+            <div
+              class="bg-amber-400 rounded-lg px-2 py-1 text-white ml-4"
+              *ngIf="selectedCard?.client"
+              (click)="
+                openClientEditDialog(selectedCard.client, selectedCard?.vehicle)
+              "
+            >
+              <mat-icon
+                class="text-current text-xl"
+                svgIcon="settings"
+              ></mat-icon>
+            </div>
+
+            <!-- Create Client Button (always at the end) -->
+            <div *ngIf="!selectedCard?.client" class="ml-auto">
+              <button
+                class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-lg"
+                (click)="openClientEditDialog(selectedCard.client)"
+              >
+                + Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex w-full flex-row rounded-2xl dark:bg-gray-800 gap-3"
+      *ngIf="isVehicleSelected"
+    >
+      <!-- Pre Estimate Count -->
+      <div
+        class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+      >
+        <div class="flex items-center justify-between">
+          <div class="truncate text-lg font-medium">Pre Estimates</div>
+          <div class="mt-2">
+            <button mat-icon-button (click)="goToPreEstimate()">
+              <mat-icon
+                class="icon-size-5"
+                svgIcon="heroicons_mini:plus"
+              ></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 flex flex-col items-center">
+          <div class="text-7xl font-bold leading-none text-amber-500">
+            {{ preEstimateCount }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center">
+        <mat-icon
+          svgIcon="heroicons_outline:arrow-right"
+          class="text-red-500 h-8 w-8"
+        ></mat-icon>
+      </div>
+      <!-- Estimate Count -->
+      <div
+        class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+      >
+        <div class="flex items-center justify-between">
+          <div class="truncate text-lg font-medium">Estimates</div>
+          <div class="mt-2">
+            <button mat-icon-button (click)="goToEstimate()">
+              <mat-icon
+                class="icon-size-5"
+                svgIcon="heroicons_mini:plus"
+              ></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 flex flex-col items-center">
+          <div class="text-7xl font-bold leading-none text-amber-500">
+            {{ estimateCount }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center">
+        <mat-icon
+          svgIcon="heroicons_outline:arrow-right"
+          class="text-red-500 h-8 w-8"
+        ></mat-icon>
+      </div>
+
+      <!-- Job Card Count -->
+      <div
+        class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+      >
+        <div class="flex items-center justify-between">
+          <div class="truncate text-lg font-medium">Job Cards</div>
+          <div class="mt-2">
+            <button mat-icon-button (click)="goToJobCard()">
+              <mat-icon
+                class="icon-size-5"
+                svgIcon="heroicons_mini:plus"
+              ></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 flex flex-col items-center">
+          <div class="text-7xl font-bold leading-none text-amber-500">
+            {{ jobCardCount }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center">
+        <mat-icon
+          svgIcon="heroicons_outline:arrow-right"
+          class="text-red-500 h-8 w-8"
+        ></mat-icon>
+      </div>
+
+      <div
+        class="flex w-48 flex-col rounded-2xl bg-white p-6 shadow dark:bg-gray-800"
+      >
+        <div class="flex items-center justify-between">
+          <div class="truncate text-lg font-medium">Invoices</div>
+          <div class="mt-2">
+            <button mat-icon-button (click)="goToInvoice()">
+              <mat-icon
+                class="icon-size-5"
+                svgIcon="heroicons_mini:plus"
+              ></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 flex flex-col items-center">
+          <div class="text-7xl font-bold leading-none text-amber-500">
+            {{ invoiceCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- If no data found -->
+  <div
+    *ngIf="allVehicleDetails?.length === 0 && searchInputControl.value?.trim()"
+    class="flex justify-center items-center w-full h-full"
+  >
+    <app-vehicle-add-dashboard
+      (vehicleCreated)="handleVehicleCreated($event)"
+    ></app-vehicle-add-dashboard>
+  </div>
+</div>

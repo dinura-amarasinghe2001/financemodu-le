@@ -1,0 +1,15 @@
+export enum LevelType {
+  HEADQUARTERS = 'HEADQUARTERS',
+
+  HEAD_BRANCH = 'HEAD_BRANCH',
+
+  BRANCH = 'BRANCH',
+
+  SUBBRANCH = 'SUBBRANCH',
+
+  DEPARTMENT = 'DEPARTMENT',
+
+  UNIT = 'UNIT',
+
+  TEAM = 'TEAM',
+}

@@ -1,0 +1,22 @@
+@if (jobEstimateWorkLog) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(jobEstimateWorkLog.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="jobEstimateWorkLogDeleteDialogHeading">Confirm delete operation</h4>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error />
+      <p id="jhi-delete-jobEstimateWorkLog-heading">Are you sure you want to delete Job Estimate Work Log {{ jobEstimateWorkLog.id }}?</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+      </button>
+
+      <button id="jhi-confirm-delete-jobEstimateWorkLog" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span>Delete</span>
+      </button>
+    </div>
+  </form>
+}

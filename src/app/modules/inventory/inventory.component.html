@@ -1,0 +1,361 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+
+  <!-- Header: Title + Controls -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <!-- Title -->
+    <div class="min-w-0 flex-1">
+      <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
+        Inventory
+      </h2>
+    </div>
+
+    <!-- Controls: toggles + search + create -->
+    <div class="flex gap-2 mr-4">
+
+      <!-- Toggle Buttons -->
+    <!-- Search by Code / Name toggle buttons -->
+ 
+  <button
+    (click)="searchByCode = true"
+    [class.bg-amber-400]="searchByCode"
+    [class.bg-gray-300]="!searchByCode"
+    class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+    aria-label="Search by Code"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+    >
+      <mat-icon class="text-2xl" [svgIcon]="'mat_outline:qr_code_scanner'"></mat-icon>
+    </div>
+  </button>
+
+  <button
+    (click)="searchByCode = false"
+    [class.bg-amber-400]="!searchByCode"
+    [class.bg-gray-300]="searchByCode"
+    class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+    aria-label="Search by Name"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+    >
+      <mat-icon class="text-2xl" [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+    </div>
+  </button>
+  <button
+  (click)="refreshFilters()"
+  class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400 bg-gray-300"
+  aria-label="Refresh Filters"
+  title="Clear filters and reload"
+>
+  <div
+    class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+  >
+    <mat-icon class="text-2xl" svgIcon="mat_outline:refresh"></mat-icon>
+  </div>
+</button>
+  </div>
+ 
+
+<!-- Search Input + Buttons -->
+ 
+
+ <mat-form-field
+    class="fuse-mat-dense fuse-mat-rounded min-w-64"
+    [subscriptSizing]="'dynamic'"
+  >
+   <mat-icon
+      class="icon-size-5"
+      matPrefix
+      [svgIcon]="searchByCode ? 'mat_outline:qr_code_scanner' : 'heroicons_solid:magnifying-glass'"
+    ></mat-icon>
+    <input
+      matInput
+      [ngModel]="searchByCode ? filter.code : filter.name"
+      (ngModelChange)="searchByCode ? (filter.code = $event) : (filter.name = $event)"
+      (keydown.enter)="loadSuppliers()"
+      [placeholder]="searchByCode ? 'Search by Code' : 'Search by Name'"
+      autocomplete="off"
+    />
+ 
+  </mat-form-field>
+
+  <button
+    (click)="onFilterChange()"
+    class="ml-3  "
+    color="primary"
+    mat-flat-button
+    aria-label="Search button"
+  >
+    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:magnifying-glass'"></mat-icon>
+    <span class="ml-2">Search</span>
+  </button>
+
+  <button
+    (click)="openVehicleCreateDialog()"
+    class="ml-3 flex items-center gap-1 px-4 py-2"
+    color="primary"
+    mat-flat-button
+    aria-label="Create new inventory item"
+  >
+    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:plus'"></mat-icon>
+    <span class="ml-2">Create</span>
+  </button>
+
+   <button
+  class="ml-3 flex items-center gap-1 px-4 py-2"
+  color="primary"
+  mat-flat-button
+  aria-label="Create new inventory item"
+  (click)="navigateToExport()"
+>
+  <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:plus'"></mat-icon>
+  <span class="ml-2">Import</span>
+</button>
+
+
+
+
+      <!-- Create Button -->
+      
+      
+    </div>
+  
+
+<div
+  class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"
+  style="max-height: 6020px;"  
+>
+  <div class="flex flex-col flex-auto sm:mb-18"> <!-- Removed overflow-auto here -->
+      <table
+        mat-table
+        [dataSource]="supplier"
+        matSort
+        class="w-full table-fixed border-separate border-spacing-y-2"
+      >
+        <!-- Columns here -->
+        <ng-container matColumnDef="code">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Code
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.code }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            ID
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.id }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vehicleOwnerName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+           class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Name
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vehicleBrand">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Category
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.checkType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vehicleModel">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+             class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Quantity
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let suppliers"
+            class="px-4 py-2"
+            [ngClass]="{'low-stock': suppliers.availableQuantity < suppliers.reOrderQty}"
+          >
+           <ng-container *ngIf="editRowId === suppliers.id; else displayCode">
+             <input
+                [(ngModel)]="editInputCode"
+                class="border rounded px-2 py-1 w-full"
+              />
+           </ng-container>
+           <ng-template #displayCode>
+            {{ suppliers.availableQuantity }}</ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cost">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+             class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Cost
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.lastCost }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sellprice">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+             class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Selling Price
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+             <ng-container *ngIf="editRowId === suppliers.id; else displaysell">
+               <input
+                [(ngModel)]="editsell"
+                class="border rounded px-2 py-1 w-full"
+              />
+             </ng-container>
+              <ng-template #displaysell>
+            {{ suppliers.lastSellingPrice }}</ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reOrderQty">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+             class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Re Order Qty
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.reOrderQty }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef  class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold">
+          
+          </th>
+         <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+  <div class="flex gap-2">
+    <button
+      mat-flat-button
+      class="fuse-mat-button-large"
+      color="accent"
+      *ngIf="editRowId !== suppliers.id"
+      (click)="enableEdit(suppliers)"
+    >
+      Update
+    </button>
+
+    <button
+      mat-flat-button
+      class="fuse-mat-button-large"
+      color="warn"
+      *ngIf="editRowId === suppliers.id"
+      (click)="saveEdit(suppliers.id,suppliers.code,suppliers.name)"
+    >
+      Save
+    </button>
+
+    <button
+      mat-flat-button
+      class="fuse-mat-button-large"
+      color="warn"
+      (click)="deleteSupplier(suppliers.id)"
+    >
+      Delete
+    </button>
+  </div>
+</td>
+
+        </ng-container><ng-template #reasonDialog let-dialogRef="dialogRef">
+  <h2 mat-dialog-title>Reason for Quantity Reduction</h2>
+  <br>
+  <br>
+  <mat-dialog-content>
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>Select or type reason</mat-label>
+  <input
+    type="text"
+    matInput
+    placeholder="Type or select reason"
+    [matAutocomplete]="auto"
+    [(ngModel)]="reductionReason"
+  >
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option value="Item damaged">Item damaged</mat-option>
+    <mat-option value="Expired product">Expired product</mat-option>
+    <mat-option value="Incorrect delivery">Incorrect delivery</mat-option>
+    <mat-option value="Stock adjustment">Stock adjustment</mat-option>
+    <mat-option value="Other">Other</mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="confirmReasonFromDialog(dialogRef)">Confirm</button>
+  </mat-dialog-actions>
+</ng-template>
+
+
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{'low-stock': row.availableQuantity < row.reOrderQty}"
+        ></tr>
+      </table>
+    </div>
+  </div>
+ 
+
+  <!-- Paginator -->
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPaginateChange($event)"
+  
+  >
+  </mat-paginator>
+</div>

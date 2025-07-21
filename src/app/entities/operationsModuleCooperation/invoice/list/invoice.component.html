@@ -1,0 +1,288 @@
+<div>
+  <h2 id="page-heading" data-cy="InvoiceHeading">
+    <span>Invoices</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-invoice"
+        [routerLink]="['/invoice/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Invoice</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Invoice</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Invoice"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (invoices().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Invoices found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleID">
+              <div class="d-flex">
+                <span>Vehicle ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleBrand">
+              <div class="d-flex">
+                <span>Vehicle Brand</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleModel">
+              <div class="d-flex">
+                <span>Vehicle Model</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleLicenseNumber">
+              <div class="d-flex">
+                <span>Vehicle License Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerID">
+              <div class="d-flex">
+                <span>Vehicle Owner ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerName">
+              <div class="d-flex">
+                <span>Vehicle Owner Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerContactNumber1">
+              <div class="d-flex">
+                <span>Vehicle Owner Contact Number 1</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleOwnerContactNumber2">
+              <div class="d-flex">
+                <span>Vehicle Owner Contact Number 2</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jobID">
+              <div class="d-flex">
+                <span>Job ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalNetAmount">
+              <div class="d-flex">
+                <span>Total Net Amount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="discountRate">
+              <div class="d-flex">
+                <span>Discount Rate</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="discountAmount">
+              <div class="d-flex">
+                <span>Discount Amount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalAmount">
+              <div class="d-flex">
+                <span>Total Amount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="netTotalAmount">
+              <div class="d-flex">
+                <span>Net Total Amount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vatAmount">
+              <div class="d-flex">
+                <span>Vat Amount</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="customerVATNumber">
+              <div class="d-flex">
+                <span>Customer VAT Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="invoiceDate">
+              <div class="d-flex">
+                <span>Invoice Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="invoiceStatus">
+              <div class="d-flex">
+                <span>Invoice Status</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (invoice of invoices(); track trackId(invoice)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/invoice', invoice.id, 'view']">{{ invoice.id }}</a>
+              </td>
+              <td>{{ invoice.vehicleID }}</td>
+              <td>{{ invoice.vehicleBrand }}</td>
+              <td>{{ invoice.vehicleModel }}</td>
+              <td>{{ invoice.vehicleLicenseNumber }}</td>
+              <td>{{ invoice.vehicleOwnerID }}</td>
+              <td>{{ invoice.vehicleOwnerName }}</td>
+              <td>{{ invoice.vehicleOwnerContactNumber1 }}</td>
+              <td>{{ invoice.vehicleOwnerContactNumber2 }}</td>
+              <td>{{ invoice.jobID }}</td>
+              <td>{{ invoice.totalNetAmount }}</td>
+              <td>{{ invoice.discountRate }}</td>
+              <td>{{ invoice.discountAmount }}</td>
+              <td>{{ invoice.totalAmount }}</td>
+              <td>{{ invoice.netTotalAmount }}</td>
+              <td>{{ invoice.vatAmount }}</td>
+              <td>{{ invoice.customerVATNumber }}</td>
+              <td>{{ invoice.invoiceDate | formatMediumDatetime }}</td>
+              <td>{{ { null: '', PAID: 'PAID', UNPAID: 'UNPAID', PENDING: 'PENDING' }[invoice.invoiceStatus ?? 'null'] }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/invoice-item']"
+                    [queryParams]="{ 'filter[invoiceId.in]': invoice.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Show Invoice Item</span>
+                  </button>
+                  <a [routerLink]="['/invoice', invoice.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/invoice', invoice.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(invoice)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (invoices().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

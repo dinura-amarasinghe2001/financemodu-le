@@ -1,0 +1,103 @@
+<div
+  id="print-section"
+  class="min-h-screen min-w-full flex flex-col p-10 text-gray-800 text-base bg-card"
+>
+  <div class="flex space-x-4 mb-6 print:hidden">
+    <!-- Back Button -->
+    <button
+      (click)="goBack()"
+      class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:arrow_back'"
+      ></mat-icon>
+      <span class="ml-2">Back</span>
+    </button>
+
+    <!-- Print Button -->
+    <button
+      (click)="print()"
+      class="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:print'"
+      ></mat-icon>
+      <span class="ml-2">Print</span>
+    </button>
+  </div>
+  <!-- Header -->
+  <div class="flex justify-between items-center border-b-2 pb-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold uppercase">Company Name</h1>
+      <p class="text-sm">Address Line 1, Address Line 2</p>
+      <p class="text-sm">Phone: 123-456-7890 | Email: info.com</p>
+    </div>
+    <div>
+      <img src="your-logo-url.png" alt="Logo" class="h-20" />
+    </div>
+  </div>
+
+  <!-- Invoice Info -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div>
+      <p><strong>Customer:</strong> {{ invoiceDetails.vehicleOwnerName }}</p>
+      <p>
+        <strong>Vehicle No:</strong> {{ invoiceDetails.vehicleLicenseNumber }}
+      </p>
+    </div>
+    <div>
+      <p>
+        <strong>Contact:</strong>
+        {{ invoiceDetails.vehicleOwnerContactNumber1 || "N/A" }}
+      </p>
+      <p><strong>Model:</strong> {{ invoiceDetails.vehicleModel }}</p>
+    </div>
+    <div>
+      <p><strong>Invoice No:</strong> {{ invoiceDetails.id }}</p>
+      <p>
+        <strong>Date:</strong>
+        {{ invoiceDetails.invoiceDate | date: "yyyy-MM-dd" }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto border-collapse mb-8">
+      <thead>
+        <tr class="bg-gray-200 text-left">
+          <th class="px-4 py-2 border">Description</th>
+          <th class="px-4 py-2 border">Type</th>
+          <th class="px-4 py-2 border">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of vehicleEstimateTreatments"
+          class="hover:bg-gray-100"
+        >
+          <td class="px-4 py-2 border">{{ item.descriptions }}</td>
+          <td class="px-4 py-2 border">{{ item.types }}</td>
+          <td class="px-4 py-2 border">{{ item.amount | currency: " " }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-content">
+      <div class="left-section">
+        <p>
+          Customer Signature: ____________________ Cashier Signature:
+          ____________________
+        </p>
+      </div>
+      <div class="right-section">
+        <p><strong>Total Amount:</strong> {{ totalAmount }}</p>
+      </div>
+    </div>
+  </div>
+</div>

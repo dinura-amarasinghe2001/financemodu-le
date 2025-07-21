@@ -1,0 +1,481 @@
+<div>
+  <h2 id="page-heading" data-cy="SupplierHeading">
+    <span>Suppliers</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-supplier"
+        [routerLink]="['/supplier/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Supplier</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Supplier</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Supplier"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (suppliers().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Suppliers found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="code">
+              <div class="d-flex">
+                <span>Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="shortCode">
+              <div class="d-flex">
+                <span>Short Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span>Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="addressOffice">
+              <div class="d-flex">
+                <span>Address Office</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="streetOffice">
+              <div class="d-flex">
+                <span>Street Office</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cityOffice">
+              <div class="d-flex">
+                <span>City Office</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="provinceOffice">
+              <div class="d-flex">
+                <span>Province Office</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="addressFactory">
+              <div class="d-flex">
+                <span>Address Factory</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="streetFactory">
+              <div class="d-flex">
+                <span>Street Factory</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cityFactory">
+              <div class="d-flex">
+                <span>City Factory</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="provinceFactory">
+              <div class="d-flex">
+                <span>Province Factory</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="phone1">
+              <div class="d-flex">
+                <span>Phone 1</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="phone2">
+              <div class="d-flex">
+                <span>Phone 2</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fax">
+              <div class="d-flex">
+                <span>Fax</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span>Email</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="website">
+              <div class="d-flex">
+                <span>Website</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contactPersonName">
+              <div class="d-flex">
+                <span>Contact Person Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contactPersonPhone">
+              <div class="d-flex">
+                <span>Contact Person Phone</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contactPersonMobile">
+              <div class="d-flex">
+                <span>Contact Person Mobile</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contactPersonEmail">
+              <div class="d-flex">
+                <span>Contact Person Email</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="registeredDate">
+              <div class="d-flex">
+                <span>Registered Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span>Description</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="brNumber">
+              <div class="d-flex">
+                <span>Br Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vatRegNumber">
+              <div class="d-flex">
+                <span>Vat Reg Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tinNumber">
+              <div class="d-flex">
+                <span>Tin Number</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="brNumberFilePath">
+              <div class="d-flex">
+                <span>Br Number File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vatRegNumberFilePath">
+              <div class="d-flex">
+                <span>Vat Reg Number File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tinNumberFilePath">
+              <div class="d-flex">
+                <span>Tin Number File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="agreementFilePath">
+              <div class="d-flex">
+                <span>Agreement File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="roadMapFilePath">
+              <div class="d-flex">
+                <span>Road Map File Path</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isActive">
+              <div class="d-flex">
+                <span>Is Active</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmu">
+              <div class="d-flex">
+                <span>Lmu</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lmd">
+              <div class="d-flex">
+                <span>Lmd</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="accountId">
+              <div class="d-flex">
+                <span>Account Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="accountCode">
+              <div class="d-flex">
+                <span>Account Code</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isVATEnable">
+              <div class="d-flex">
+                <span>Is VAT Enable</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isNBTEnable">
+              <div class="d-flex">
+                <span>Is NBT Enable</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="leadTime">
+              <div class="d-flex">
+                <span>Lead Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isRegistered">
+              <div class="d-flex">
+                <span>Is Registered</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="creditPeriod">
+              <div class="d-flex">
+                <span>Credit Period</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="creditLimit">
+              <div class="d-flex">
+                <span>Credit Limit</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (supplier of suppliers(); track trackId(supplier)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/supplier', supplier.id, 'view']">{{ supplier.id }}</a>
+              </td>
+              <td>{{ supplier.code }}</td>
+              <td>{{ supplier.shortCode }}</td>
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.addressOffice }}</td>
+              <td>{{ supplier.streetOffice }}</td>
+              <td>{{ supplier.cityOffice }}</td>
+              <td>{{ supplier.provinceOffice }}</td>
+              <td>{{ supplier.addressFactory }}</td>
+              <td>{{ supplier.streetFactory }}</td>
+              <td>{{ supplier.cityFactory }}</td>
+              <td>{{ supplier.provinceFactory }}</td>
+              <td>{{ supplier.phone1 }}</td>
+              <td>{{ supplier.phone2 }}</td>
+              <td>{{ supplier.fax }}</td>
+              <td>{{ supplier.email }}</td>
+              <td>{{ supplier.website }}</td>
+              <td>{{ supplier.contactPersonName }}</td>
+              <td>{{ supplier.contactPersonPhone }}</td>
+              <td>{{ supplier.contactPersonMobile }}</td>
+              <td>{{ supplier.contactPersonEmail }}</td>
+              <td>{{ supplier.registeredDate | formatMediumDatetime }}</td>
+              <td>{{ supplier.description }}</td>
+              <td>{{ supplier.brNumber }}</td>
+              <td>{{ supplier.vatRegNumber }}</td>
+              <td>{{ supplier.tinNumber }}</td>
+              <td>{{ supplier.brNumberFilePath }}</td>
+              <td>{{ supplier.vatRegNumberFilePath }}</td>
+              <td>{{ supplier.tinNumberFilePath }}</td>
+              <td>{{ supplier.agreementFilePath }}</td>
+              <td>{{ supplier.roadMapFilePath }}</td>
+              <td>{{ supplier.isActive }}</td>
+              <td>{{ supplier.lmu }}</td>
+              <td>{{ supplier.lmd | formatMediumDatetime }}</td>
+              <td>{{ supplier.accountId }}</td>
+              <td>{{ supplier.accountCode }}</td>
+              <td>{{ supplier.isVATEnable }}</td>
+              <td>{{ supplier.isNBTEnable }}</td>
+              <td>{{ supplier.leadTime }}</td>
+              <td>{{ supplier.isRegistered }}</td>
+              <td>{{ supplier.creditPeriod }}</td>
+              <td>{{ supplier.creditLimit }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/supplier', supplier.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/supplier', supplier.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(supplier)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (suppliers().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page, totalItems, itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

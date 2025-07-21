@@ -1,0 +1,147 @@
+<!-- Dialog Title -->
+<h2 class="flex flex-col items-center p-3 text-center text-xl font-semibold text-gray-800 dark:text-white">
+    {{ data?.gatePass?.id ? 'Update GatePass' : 'Create GatePass' }}
+  </h2>
+  
+  <mat-dialog-content class="flex flex-col space-y-4">
+    <form [formGroup]="gatePassForm">
+  
+        <div class="grid grid-cols-3 md:grid-cols-3 gap-4">
+  
+            <!-- Vehicle ID -->
+            <mat-form-field class="w-full">
+            <mat-label>Vehicle ID</mat-label>
+            <input matInput formControlName="vehicleID" />
+            </mat-form-field>
+
+            <!-- Vehicle Brand -->
+            <mat-form-field class="w-full">
+            <mat-label>Vehicle Brand</mat-label>
+            <input matInput formControlName="vehicleBrand" />
+            </mat-form-field>
+    
+            <!-- Vehicle Model -->
+            <mat-form-field class="w-full">
+            <mat-label>Vehicle Model</mat-label>
+            <input matInput formControlName="vehicleModel" />
+            </mat-form-field>
+    
+            <!-- License Number -->
+            <mat-form-field class="w-full">
+            <mat-label>License Number</mat-label>
+            <input matInput formControlName="vehicleLicenseNumber" />
+            </mat-form-field>
+    
+            <!-- VOwner ID -->
+            <mat-form-field class="w-full">
+            <mat-label>Owner ID</mat-label>
+            <input matInput formControlName="vehicleOwnerID" />
+            </mat-form-field>
+    
+            <!-- VOwner Name -->
+            <mat-form-field class="w-full">
+            <mat-label>Owner Name</mat-label>
+            <input matInput formControlName="vehicleOwnerName" />
+            </mat-form-field>
+    
+            <!-- Owner Contact Number1 -->
+            <mat-form-field class="w-full">
+            <mat-label>Owner Contact Number1</mat-label>
+            <input matInput formControlName="vehicleOwnerContactNumber1" />
+            </mat-form-field>
+    
+            <!-- Owner Contact Number2 -->
+            <mat-form-field class="w-full">
+            <mat-label>Owner Contact Number2</mat-label>
+            <input matInput formControlName="vehicleOwnerContactNumber2" />
+            </mat-form-field>
+
+            <!-- Fuel Level -->
+            <mat-form-field class="w-full"> 
+                <mat-label>Fuel Level</mat-label>
+                <input matInput formControlName="fuelLevel" />
+            </mat-form-field>
+    
+            <!-- Meter Reading -->
+            <mat-form-field class="w-full">
+                <mat-label>Meter Reading</mat-label>
+                <input matInput formControlName="meterReading" />
+            </mat-form-field>
+    
+            <!-- Front View1 -->
+            <mat-form-field class="w-full">
+            <mat-label>Front View 1</mat-label>
+            <input matInput formControlName="frontView1" />
+            </mat-form-field>
+    
+            <!-- Side R View 1 -->
+            <mat-form-field class="w-full">
+            <mat-label>Side R View 1</mat-label>
+            <input matInput formControlName="sideRView1" />
+            </mat-form-field>
+    
+            <!-- Side L View 1 -->
+            <mat-form-field class="w-full">
+            <mat-label>Side L View 1</mat-label>
+            <input matInput formControlName="sideLView1" />
+            </mat-form-field>
+    
+            <!-- Rear View 1 -->
+            <mat-form-field class="w-full">
+            <mat-label>Rear View 1</mat-label>
+            <input matInput formControlName="rearView1" />
+            </mat-form-field>
+
+            <!-- JobCard Number -->
+            <mat-form-field class="w-full">
+                <mat-label>JobCard Number</mat-label>
+                <input matInput formControlName="jobCardNumber" />
+            </mat-form-field>
+
+            <!-- Receipt Value -->
+            <mat-form-field class="w-full">
+                <mat-label>Receipt Value</mat-label>
+                <input matInput type="number" formControlName="receiptValue" min="1"  step="1" />
+            </mat-form-field>
+              
+            <!-- Entry Date Time -->
+            <mat-form-field class="w-full -ml-2 ">
+                <mat-label>Entry Date Time</mat-label>
+                <input matInput [matDatepicker]="picker" [formControlName]="'entryDateTime'" [required]="true" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <input matInput [matTimepicker]="timepicker" [formControlName]="'entryDateTime'" [required]="true" />
+                <mat-timepicker-toggle matSuffix [for]="timepicker"></mat-timepicker-toggle>
+                <mat-timepicker #timepicker></mat-timepicker>
+            </mat-form-field>
+        
+            <!-- Ops Unit ID Number -->
+            <mat-form-field class="w-full"> 
+                <mat-label>Ops Unit ID</mat-label>
+                <input matInput formControlName="opsUnitID" />
+            </mat-form-field>
+
+        </div>
+    </form>
+  </mat-dialog-content>
+  
+  <!-- Dialog Actions -->
+  <mat-dialog-actions class="flex flex-col items-center p-1 text-center">
+    <div class="flex space-x-3">
+      <button
+        mat-button
+        class="rounded-lg bg-gray-200 px-4 py-2 text-2xl text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        mat-button
+        class="rounded-lg bg-red-500 px-4 py-2 text-2xl text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+        (click)="submitGatePass()"
+      >
+        {{ data?.gatePass?.id ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </mat-dialog-actions>
+  

@@ -1,0 +1,19 @@
+export enum JobCurrentState {
+  OPEN = 'OPEN',
+
+  CANCELED = 'CANCELED',
+
+  COMPLETE = 'COMPLETE',
+
+  CLOSED = 'CLOSED',
+
+  QC_PENDING = 'QC_PENDING',
+
+  QC_APPROVED = 'QC_APPROVED',
+
+  QCPD = 'QCPD',
+
+  QCPD_PENDING = 'QCPD_PENDING',
+
+  QCPD_TO_PENDING = 'QCPD_TO_PENDING',
+}

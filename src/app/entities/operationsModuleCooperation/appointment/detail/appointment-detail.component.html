@@ -1,0 +1,149 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (appointment(); as appointmentRef) {
+      <div>
+        <h2 data-cy="appointmentDetailsHeading"><span>Appointment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.id }}</span>
+          </dd>
+          <dt><span>Appointment Date Time</span></dt>
+          <dd>
+            <span>{{ appointmentRef.appointmentDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>License No</span></dt>
+          <dd>
+            <span>{{ appointmentRef.licenseNo }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ appointmentRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ appointmentRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>Client ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientID }}</span>
+          </dd>
+          <dt><span>Client Name</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientName }}</span>
+          </dd>
+          <dt><span>Client Contact Number 1</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientContactNumber1 }}</span>
+          </dd>
+          <dt><span>Client Contact Number 2</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientContactNumber2 }}</span>
+          </dd>
+          <dt><span>Client Address</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientAddress }}</span>
+          </dd>
+          <dt><span>Client City</span></dt>
+          <dd>
+            <span>{{ appointmentRef.clientCity }}</span>
+          </dd>
+          <dt><span>Remarks</span></dt>
+          <dd>
+            <span>{{ appointmentRef.remarks }}</span>
+          </dd>
+          <dt><span>Appointment Type</span></dt>
+          <dd>
+            <span>{{
+              {
+                null: '',
+                URGENT: 'URGENT',
+                MORNING: 'MORNING',
+                AFTERNOON: 'AFTERNOON',
+                EVENING: 'EVENING',
+                TO_BE_COLLECTED_FROM_CLIENT: 'TO_BE_COLLECTED_FROM_CLIENT',
+                GOV: 'GOV',
+                COOPERATE: 'COOPERATE',
+              }[appointmentRef.appointmentType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Is Paint</span></dt>
+          <dd>
+            <span>{{ appointmentRef.isPaint }}</span>
+          </dd>
+          <dt><span>Is Tinker</span></dt>
+          <dd>
+            <span>{{ appointmentRef.isTinker }}</span>
+          </dd>
+          <dt><span>Is Spare</span></dt>
+          <dd>
+            <span>{{ appointmentRef.isSpare }}</span>
+          </dd>
+          <dt><span>Is Service</span></dt>
+          <dd>
+            <span>{{ appointmentRef.isService }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ appointmentRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ appointmentRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ appointmentRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ appointmentRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Vehicle Registry</span></dt>
+          <dd>
+            @if (appointment()!.vehicleRegistry) {
+              <div>
+                <a [routerLink]="['/vehicle-registry', appointment()!.vehicleRegistry?.id, 'view']">{{
+                  appointmentRef.vehicleRegistry?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Client Registry</span></dt>
+          <dd>
+            @if (appointment()!.clientRegistry) {
+              <div>
+                <a [routerLink]="['/client-registry', appointment()!.clientRegistry?.id, 'view']">{{
+                  appointmentRef.clientRegistry?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/appointment', appointmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

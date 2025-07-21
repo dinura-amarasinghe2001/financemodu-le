@@ -1,0 +1,353 @@
+<div>
+  <h2 id="page-heading" data-cy="AppointmentHeading">
+    <span>Appointments</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-appointment"
+        [routerLink]="['/appointment/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down">Create a new Appointment</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Appointment</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="Search for Appointment"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  <jhi-filter [filters]="filters" />
+
+  @if (appointments().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Appointments found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="appointmentDateTime">
+              <div class="d-flex">
+                <span>Appointment Date Time</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="licenseNo">
+              <div class="d-flex">
+                <span>License No</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleID">
+              <div class="d-flex">
+                <span>Vehicle ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleBrand">
+              <div class="d-flex">
+                <span>Vehicle Brand</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleModel">
+              <div class="d-flex">
+                <span>Vehicle Model</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientID">
+              <div class="d-flex">
+                <span>Client ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientName">
+              <div class="d-flex">
+                <span>Client Name</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientContactNumber1">
+              <div class="d-flex">
+                <span>Client Contact Number 1</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientContactNumber2">
+              <div class="d-flex">
+                <span>Client Contact Number 2</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientAddress">
+              <div class="d-flex">
+                <span>Client Address</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientCity">
+              <div class="d-flex">
+                <span>Client City</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="remarks">
+              <div class="d-flex">
+                <span>Remarks</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="appointmentType">
+              <div class="d-flex">
+                <span>Appointment Type</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="opsUnitID">
+              <div class="d-flex">
+                <span>Ops Unit ID</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isPaint">
+              <div class="d-flex">
+                <span>Is Paint</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isTinker">
+              <div class="d-flex">
+                <span>Is Tinker</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isSpare">
+              <div class="d-flex">
+                <span>Is Spare</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isService">
+              <div class="d-flex">
+                <span>Is Service</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdBy">
+              <div class="d-flex">
+                <span>Created By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="createdDate">
+              <div class="d-flex">
+                <span>Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedBy">
+              <div class="d-flex">
+                <span>Last Modified By</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastModifiedDate">
+              <div class="d-flex">
+                <span>Last Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehicleRegistry.id">
+              <div class="d-flex">
+                <span>Vehicle Registry</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="clientRegistry.id">
+              <div class="d-flex">
+                <span>Client Registry</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (appointment of appointments(); track trackId(appointment)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/appointment', appointment.id, 'view']">{{ appointment.id }}</a>
+              </td>
+              <td>{{ appointment.appointmentDateTime | formatMediumDatetime }}</td>
+              <td>{{ appointment.licenseNo }}</td>
+              <td>{{ appointment.vehicleID }}</td>
+              <td>{{ appointment.vehicleBrand }}</td>
+              <td>{{ appointment.vehicleModel }}</td>
+              <td>{{ appointment.clientID }}</td>
+              <td>{{ appointment.clientName }}</td>
+              <td>{{ appointment.clientContactNumber1 }}</td>
+              <td>{{ appointment.clientContactNumber2 }}</td>
+              <td>{{ appointment.clientAddress }}</td>
+              <td>{{ appointment.clientCity }}</td>
+              <td>{{ appointment.remarks }}</td>
+              <td>
+                {{
+                  {
+                    null: '',
+                    URGENT: 'URGENT',
+                    MORNING: 'MORNING',
+                    AFTERNOON: 'AFTERNOON',
+                    EVENING: 'EVENING',
+                    TO_BE_COLLECTED_FROM_CLIENT: 'TO_BE_COLLECTED_FROM_CLIENT',
+                    GOV: 'GOV',
+                    COOPERATE: 'COOPERATE',
+                  }[appointment.appointmentType ?? 'null']
+                }}
+              </td>
+              <td>{{ appointment.opsUnitID }}</td>
+              <td>{{ appointment.isPaint }}</td>
+              <td>{{ appointment.isTinker }}</td>
+              <td>{{ appointment.isSpare }}</td>
+              <td>{{ appointment.isService }}</td>
+              <td>{{ appointment.createdBy }}</td>
+              <td>{{ appointment.createdDate | formatMediumDatetime }}</td>
+              <td>{{ appointment.lastModifiedBy }}</td>
+              <td>{{ appointment.lastModifiedDate | formatMediumDatetime }}</td>
+              <td>
+                @if (appointment.vehicleRegistry) {
+                  <div>
+                    <a [routerLink]="['/vehicle-registry', appointment.vehicleRegistry.id, 'view']">{{ appointment.vehicleRegistry.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (appointment.clientRegistry) {
+                  <div>
+                    <a [routerLink]="['/client-registry', appointment.clientRegistry.id, 'view']">{{ appointment.clientRegistry.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/appointment', appointment.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">View</span>
+                  </a>
+
+                  <a [routerLink]="['/appointment', appointment.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(appointment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (appointments().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

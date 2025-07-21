@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (supplierBankAccounts(); as supplierBankAccountsRef) {
+      <div>
+        <h2 data-cy="supplierBankAccountsDetailsHeading"><span>Supplier Bank Accounts</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.id }}</span>
+          </dd>
+          <dt><span>Bank Id</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankId }}</span>
+          </dd>
+          <dt><span>Bank Name</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankName }}</span>
+          </dd>
+          <dt><span>Bank Account Number</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankAccountNumber }}</span>
+          </dd>
+          <dt><span>Bank Branch</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankBranch }}</span>
+          </dd>
+          <dt><span>Bank Branch Code</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankBranchCode }}</span>
+          </dd>
+          <dt><span>Bank Code</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankCode }}</span>
+          </dd>
+          <dt><span>Bank Account Name</span></dt>
+          <dd>
+            <span>{{ supplierBankAccountsRef.bankAccountName }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/supplier-bank-accounts', supplierBankAccountsRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

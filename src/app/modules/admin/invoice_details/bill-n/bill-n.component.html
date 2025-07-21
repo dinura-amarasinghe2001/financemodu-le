@@ -1,0 +1,146 @@
+<div
+  class="absolute inset-0 min-w-0 overflow-auto text-center print:overflow-visible"
+  cdkScrollable
+>
+  <!-- Main -->
+  <div class="inline-block p-6 text-left sm:p-10 print:p-0">
+    <div class="flex space-x-4 mb-6 print:hidden">
+      <!-- Back Button -->
+      <button
+        (click)="goBack()"
+        class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800 rounded-lg shadow text-white flex items-center transition-all duration-200"
+      >
+        <mat-icon
+          class="icon-size-4 text-white"
+          [svgIcon]="'mat_outline:arrow_back'"
+        ></mat-icon>
+        <span class="ml-2">Back</span>
+      </button>
+
+      <!-- Print Button -->
+      <button
+        (click)="print()"
+        class="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+      >
+        <mat-icon
+          class="icon-size-4 text-white"
+          [svgIcon]="'mat_outline:print'"
+        ></mat-icon>
+        <span class="ml-2">Print</span>
+      </button>
+    </div>
+    <!-- Invoice -->
+    <div
+      class="bg-card w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:shadow-none"
+    >
+      <div class="text-right text-4xl font-bold text-primary">
+        <div class="text-primaryt">Nimesh Motor Works (PVT) LTD</div>
+        <div class="text-lg font-bold">
+          Repairs to all Diesel & Petrol Motor Vehicles, Tinkering & Painting
+        </div>
+
+        <div class="text-sm font-bold">
+          No: 25, Jubile Rd, Laxapathiya, Moratuwa
+        </div>
+        <div class="text-sm font-bold">Tel: 071 421 8718 / 077 782 5161</div>
+        <div class="text-sm font-bold">E-mail: nimeshmotorw&#64;gmail.com</div>
+      </div>
+
+      <section class="bill-meta mt-4 text-sm grid grid-cols-2 gap-4">
+        <div>
+          <div class="mb-2 flex text-xl">
+            <strong>INV NO: </strong><br />
+            <span class="w-40 ml-3">{{ invNo }}</span>
+            <!-- <div class="border-b border-dotted border-black w-40 mt-1"></div> -->
+          </div>
+          <div class="mb-2 flex">
+            <strong>Vehicle No: </strong><br />
+            <span class="border-b border-dotted border-black w-40 ml-3">{{
+              vehicleLicenseNumber
+            }}</span>
+            <!-- <div class="border-b border-dotted border-black w-40 mt-1"></div> -->
+          </div>
+
+          <div class="mb-2 flex">
+            <strong>Mr/Mrs: </strong><br />
+            <span class="border-b border-dotted border-black w-40 ml-3">{{
+              ownerName
+            }}</span>
+            <!-- <div class="border-b border-dotted border-black w-40 mt-1"></div> -->
+          </div>
+        </div>
+
+        <div class="text-center">
+          <div class="mb-2 flex justify-end items-end">
+            <strong>Date:</strong><br />
+            <span class="border-b border-dotted border-black w-40 ml-3">{{
+              invoiceDate
+            }}</span>
+            <!-- <div class="border-b border-dotted border-black w-40 mt-1"></div> -->
+          </div>
+        </div>
+      </section>
+
+      <div class="col-span-6 my-4"></div>
+      <!-- Divider -->
+      <div class="col-span-6 my-8 border-b-4"></div>
+
+      <table
+        class="w-full table-auto border-collapse border border-black text-sm"
+      >
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-black px-4 py-2 text-left font-bold">
+              Description
+            </th>
+            <th class="border border-black px-4 py-2 text-right font-bold">
+              Rs.
+            </th>
+            <th class="border border-black px-1 py-2 text-right font-bold">
+              Cts.
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of vehicleEstimateTreatments">
+            <td class="border border-black px-4 py-2">
+              {{ item.descriptions }}
+            </td>
+            <td class="border border-black px-4 py-2 text-right">
+              {{ item.amount | currency: " " }}
+            </td>
+            <td class="border border-black px-1 py-2 text-right"></td>
+          </tr>
+
+          <tr>
+            <td class="border border-black px-4 py-2"></td>
+            <td class="border border-black px-4 py-2 text-right">
+              <span class="font-bold">TOTAL :</span>
+              {{ totalAmount | currency: " " }}
+            </td>
+            <td class="border border-black px-1 py-2 text-right"></td>
+          </tr>
+          <tr>
+            <td class="border border-black px-4 py-2"></td>
+            <td class="border border-black px-4 py-2 text-right">
+              <span class="font-bold">TOTAL PAYED :</span>
+              {{ totalPaidAmount | currency: " " }}
+            </td>
+            <td class="border border-black px-1 py-2 text-right"></td>
+          </tr>
+
+          <tr *ngIf="dueAmount">
+            <td class="border border-black px-4 py-2"></td>
+            <td class="border border-black px-4 py-2 text-right">
+              <span class="font-bold">DUE AMOUNT :</span>
+              {{ dueAmount | currency: " " }}
+            </td>
+            <td class="border border-black px-1 py-2 text-right"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->

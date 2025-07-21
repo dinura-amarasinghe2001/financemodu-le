@@ -1,0 +1,138 @@
+<style>
+  .print-page {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+  }
+
+  @media screen {
+    .print-page {
+      min-height: auto;
+      height: auto;
+      justify-content: space-between;
+      overflow: visible;
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    table, tr, td, th {
+      page-break-inside: auto !important;
+      break-inside: auto !important;
+    }
+
+    .print-page {
+      height: 257mm !important;
+      justify-content: space-between !important;
+      page-break-inside: avoid !important;
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+    .absolute, .inset-0 {
+      position: static !important;
+    }
+
+    table.min-w-\[1000px\] {
+      min-width: auto !important;
+      width: 70% !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>
+
+<ng-container *ngFor="let chunk of chunkedItems; let i = index; let last = last">
+  <div class="print-page">
+    <!-- Invoice Header -->
+    <div class="bg-white w-full rounded-2xl p-6 print:rounded-none print:shadow-none print:p-0 text-black">
+      <!-- Header Section -->
+       <br>
+      <div class="grid grid-cols-3 text-sm font-medium mb-4">
+        <div class="space-y-1 text-left pl-4">
+          <div><strong>Date Of Issue:</strong> {{ today | date: 'MM/dd/yyyy' }}</div>
+          <div><strong>Issue Number:</strong> {{ issueNumber }}</div>
+        </div>
+        <div class="text-center text-xl font-bold underline self-center col-span-1">
+          GRN - RAC
+        </div>
+        <div class="space-y-1 text-right pr-4">
+          <div><strong>GRN Date:</strong> {{ grnDate | date:'MM/dd/yyyy' }}</div>
+          <div><strong>GRN No:</strong> {{ grncode }}</div>
+          <div><strong>GRN Total:</strong> {{ grnTotal | number: '1.2-2' }}</div>
+          <div><strong>S.I No:</strong> {{ supinvoc }}</div>
+          <div><strong>S.I Date:</strong> {{ supinvonam | date:'MM/dd/yyyy' }}</div>
+        </div>
+      </div>
+
+      <!-- Supplier Info -->
+      <div class="mb-6 text-sm pl-4">
+        <div><strong>Supplier Name:</strong> {{ supplierName }}</div>
+        <div><strong>Supplier Address:</strong> {{ supplierAddress }}</div>
+      </div>
+
+      <!-- Item Table -->
+      <table class="min-w-[1000px] w-[70%] mx-auto text-sm border border-black border-collapse table-fixed mb-6" cellspacing="0" cellpadding="6">
+        <thead class="border border-black bg-gray-100">
+          <tr class="text-center font-semibold border border-black">
+            <th class="border border-black p-1">Code</th>
+            <th class="border border-black p-1">Item Name</th>
+            <th class="border border-black p-1">UMO</th>
+            <th class="border border-black p-1">Order Qty</th>
+            <th class="border border-black p-1">Cost Price</th>
+            <th class="border border-black p-1">Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of chunk" class="text-center border border-black">
+            <td class="border border-black p-1">{{ item.itemCode }}</td>
+            <td class="border border-black text-left p-1">{{ item.itemName }}</td>
+            <td class="border border-black p-1">{{ item.unit }}</td>
+            <td class="border border-black p-1 text-right">{{ item.quantity }}</td>
+            <td class="border border-black p-1 text-right">{{ item.price | number: '1.2-2' }}</td>
+            <td class="border border-black p-1 text-right">{{ item.lineTotal | number: '1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Signature Section -->
+    <div *ngIf="last" class="grid grid-cols-4 gap-6 text-md text-center mt-4">
+      <div>
+        <div class="h-16 border-b border-black mb-2"></div>
+        <div class="font-medium">Prepared By</div>
+      </div>
+      <div>
+        <div class="h-16 border-b border-black mb-2"></div>
+        <div class="font-medium">Checked By</div>
+      </div>
+      <div>
+        <div class="h-16 border-b border-black mb-2"></div>
+        <div class="font-medium">Authorized By</div>
+      </div>
+      <div>
+        <div class="h-16 border-b border-black mb-2"></div>
+        <div class="font-medium">Acc Det Re Date</div>
+      </div>
+    </div>
+
+    <!-- Page break -->
+    <div *ngIf="!last" class="page-break"></div>
+  </div>
+</ng-container>

@@ -1,0 +1,150 @@
+<div
+  class="absolute inset-0 min-w-0 overflow-auto text-center print:overflow-visible"
+  cdkScrollable
+>
+  <div class="flex space-x-4 mb-3 print:hidden justify-end items-end p-6">
+    <!-- Back Button -->
+    <button
+      (click)="goBack()"
+      class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:arrow_back'"
+      ></mat-icon>
+      <span class="ml-2">Back</span>
+    </button>
+
+    <!-- Print Button -->
+    <button
+      (click)="print()"
+      class="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+    >
+      <mat-icon
+        class="icon-size-4 text-white"
+        [svgIcon]="'mat_outline:print'"
+      ></mat-icon>
+      <span class="ml-2">Print</span>
+    </button>
+  </div>
+  <!-- Main -->
+  <div class="inline-block p-6 text-left sm:p-10 print:p-0">
+    <!-- Invoice -->
+    <div
+      class="bg-card w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:shadow-none"
+    >
+      <div class="text-right text-4xl font-bold bg-gradient-to-r from-white-500 to-white-500 bg-clip-text text-transparent">
+  <div class="text-primaryt">Nimesh Motor Works (PVT) LTD</div>
+  <div class="text-2xl font-bold">
+    Repairs to all Diesel & Petrol Motor Vehicles, Tinkering & Painting
+  </div>
+  <div class="text-sm font-bold">
+    No: 27/1, Jubile Rd, Laxapathiya, Moratuwa
+  </div>
+  <div class="text-sm font-bold">Tel: 11-2648438 / 0743888718</div>
+  <div class="text-sm font-bold">E-mail: nimeshmotorw&#64;gmail.com</div>
+</div>
+
+
+      <!-- Divider -->
+      <div class="col-span-10 my-8 border-b-4"></div>
+
+      <div class="bill-container justify-right">
+        <section class="bill-meta">
+          <div class="mb-2 flex text-xl">
+            <strong>INV NO: </strong><br />
+            <span class="w-40 ml-3">{{ invNo }}</span>
+            <!-- <div class="border-b border-dotted border-black w-40 mt-1"></div> -->
+          </div>
+          <div>
+            <strong>Insurance:</strong> {{ insurance }}<br />
+            <strong>Vehicle No:</strong> {{ vehicleLicenseNumber }}
+          </div>
+          <div>
+            <strong>Date:</strong>
+            {{ invoiceDate | date: "medium" }}<br />
+            <strong>Model:</strong> {{ vehicleModel }}
+          </div>
+        </section>
+        <!-- Invoice Information -->
+
+        <!-- Divider -->
+        <div class="col-span-10 my-4"></div>
+
+        <div class="text-secondary text-center text-2xl font-bold underline">
+          <section class="bill-title">
+            <div class="text-xl font-medium">FINAL BILL</div>
+          </section>
+        </div>
+        <div class="mt-12 grid gap-x-1">
+          <table class="w-full table-auto border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b">
+                <th class="px-12 py-2 font-medium">No</th>
+                <th class="px-12 py-2 font-medium">Description</th>
+                <th class="px-12 py-2 text-right font-medium">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="border-b"
+                *ngFor="let item of vehicleEstimateTreatments; let i = index"
+              >
+                <td class="px-12 py-2">{{ i + 1 }}</td>
+                <td class="px-12 py-2">{{ item.descriptions }}</td>
+                <td class="px-12 py-2 text-right">
+                  {{ item.amount | currency: " " }}
+                </td>
+              </tr>
+
+              <!-- <tr class="text-base font-semibold">
+                <td class="px-12 py-2"></td>
+                <td class="px-12 py-2 text-right">DISCOUNT</td>
+                <td class="double px-12 py-2 text-right underline">200</td>
+              </tr> -->
+
+              <tr class="text-base font-semibold">
+                <td class="px-12 py-2"></td>
+                <td class="px-12 py-2 text-right whitespace-nowrap">TOTAL :</td>
+
+                <td
+                  class="px-12 py-2 text-right"
+                  style="text-decoration: underline double"
+                >
+                  {{ totalAmount | currency: " " }}
+                </td>
+              </tr>
+
+              <tr class="text-base font-semibold">
+                <td class="px-auto py-2"></td>
+                <td class="py-2 text-right whitespace-nowrap">TOTAL PAYED :</td>
+
+                <td
+                  class="px-12 py-2 text-right"
+                  style="text-decoration: underline double"
+                >
+                  {{ totalPaidAmount | currency: " " }}
+                </td>
+              </tr>
+              <tr class="text-base font-semibold" *ngIf="dueAmount">
+                <td class="px-12 py-2"></td>
+                <td class="px-12 py-2 text-right whitespace-nowrap">
+                  DUE AMOUNT :
+                </td>
+
+                <td
+                  class="px-12 py-2 text-right"
+                  style="text-decoration: underline double"
+                >
+                  {{ dueAmount | currency: " " }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->

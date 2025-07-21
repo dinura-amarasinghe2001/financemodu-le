@@ -1,0 +1,307 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-estimate-heading" data-cy="EstimateCreateUpdateHeading">Create or edit a Estimate</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleID">Vehicle ID</label>
+          <input type="text" class="form-control" name="vehicleID" id="field_vehicleID" data-cy="vehicleID" formControlName="vehicleID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleBrand">Vehicle Brand</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleBrand"
+            id="field_vehicleBrand"
+            data-cy="vehicleBrand"
+            formControlName="vehicleBrand"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleModel">Vehicle Model</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleModel"
+            id="field_vehicleModel"
+            data-cy="vehicleModel"
+            formControlName="vehicleModel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_licenseNo">License No</label>
+          <input type="text" class="form-control" name="licenseNo" id="field_licenseNo" data-cy="licenseNo" formControlName="licenseNo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerID">Vehicle Owner ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerID"
+            id="field_vehicleOwnerID"
+            data-cy="vehicleOwnerID"
+            formControlName="vehicleOwnerID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerName">Vehicle Owner Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerName"
+            id="field_vehicleOwnerName"
+            data-cy="vehicleOwnerName"
+            formControlName="vehicleOwnerName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerContactNumber1">Vehicle Owner Contact Number 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerContactNumber1"
+            id="field_vehicleOwnerContactNumber1"
+            data-cy="vehicleOwnerContactNumber1"
+            formControlName="vehicleOwnerContactNumber1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleOwnerContactNumber2">Vehicle Owner Contact Number 2</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleOwnerContactNumber2"
+            id="field_vehicleOwnerContactNumber2"
+            data-cy="vehicleOwnerContactNumber2"
+            formControlName="vehicleOwnerContactNumber2"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isInsurance">Is Insurance</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isInsurance"
+            id="field_isInsurance"
+            data-cy="isInsurance"
+            formControlName="isInsurance"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_insuranceName">Insurance Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="insuranceName"
+            id="field_insuranceName"
+            data-cy="insuranceName"
+            formControlName="insuranceName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_insuranceID">Insurance ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="insuranceID"
+            id="field_insuranceID"
+            data-cy="insuranceID"
+            formControlName="insuranceID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opsUnitID">Ops Unit ID</label>
+          <input type="text" class="form-control" name="opsUnitID" id="field_opsUnitID" data-cy="opsUnitID" formControlName="opsUnitID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_totalPrice">Total Price</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalPrice"
+            id="field_totalPrice"
+            data-cy="totalPrice"
+            formControlName="totalPrice"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estimateID">Estimate ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="estimateID"
+            id="field_estimateID"
+            data-cy="estimateID"
+            formControlName="estimateID"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_preEstimateNumber">Pre Estimate Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="preEstimateNumber"
+            id="field_preEstimateNumber"
+            data-cy="preEstimateNumber"
+            formControlName="preEstimateNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estimateNumber">Estimate Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="estimateNumber"
+            id="field_estimateNumber"
+            data-cy="estimateNumber"
+            formControlName="estimateNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numberOfPanels">Number Of Panels</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberOfPanels"
+            id="field_numberOfPanels"
+            data-cy="numberOfPanels"
+            formControlName="numberOfPanels"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_serviceAdvisor">Service Advisor</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serviceAdvisor"
+            id="field_serviceAdvisor"
+            data-cy="serviceAdvisor"
+            formControlName="serviceAdvisor"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_serviceAdvisorID">Service Advisor ID</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serviceAdvisorID"
+            id="field_serviceAdvisorID"
+            data-cy="serviceAdvisorID"
+            formControlName="serviceAdvisorID"
+          />
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

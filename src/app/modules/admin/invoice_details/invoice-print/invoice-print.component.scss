@@ -1,0 +1,91 @@
+
+#print-section {
+
+    /* Reserved space for the top logo section (5.5cm) */
+  .header-space {
+    margin-bottom: 5.5cm;
+  }
+
+  /* General text */
+  .invoice-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem; // text-sm
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .subsection-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+  }
+
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: auto;
+
+    th,
+    td {
+      border: 1px solid #d1d5db; // Tailwind gray-300
+      padding: 0.5rem;
+      text-align: left;
+    }
+
+    thead {
+      background-color: #f3f4f6; // Tailwind gray-100
+    }
+  }
+
+  .footer {
+    width: 100%;
+    margin-top: auto; // Push the footer to the bottom
+    text-align: right;
+    padding-top: 1rem;
+    border-top: 1px solid #000;
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem; // text-sm
+
+      .left-section {
+        text-align: left;
+      }
+
+      .right-section {
+        text-align: right;
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+}
+
+@media print {
+  #print-section {
+    margin: 0 auto;
+    width: 90%; // Center content
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: #fff;
+  }
+}

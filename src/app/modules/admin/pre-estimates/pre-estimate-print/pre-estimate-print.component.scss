@@ -1,0 +1,55 @@
+@media print {
+  /* Basic reset */
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    overflow: visible !important;
+  }
+
+  /* Show only print section */
+  body * {
+    visibility: hidden;
+  }
+
+  #print-section,
+  #print-section * {
+    visibility: visible;
+  }
+
+  /* Hide scrollbars */
+  #print-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto !important;
+    overflow: visible !important;
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  #print-section::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  /* Hide print/back buttons */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Avoid breaking table rows between pages */
+  table,
+  tr,
+  td,
+  th {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force long sections to flow across pages */
+  div,
+  table {
+    page-break-inside: auto;
+  }
+}

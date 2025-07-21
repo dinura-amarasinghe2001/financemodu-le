@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (invoice(); as invoiceRef) {
+      <div>
+        <h2 data-cy="invoiceDetailsHeading"><span>Invoice</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ invoiceRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>Vehicle License Number</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleLicenseNumber }}</span>
+          </dd>
+          <dt><span>Vehicle Owner ID</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleOwnerID }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Name</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleOwnerName }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 1</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleOwnerContactNumber1 }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 2</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vehicleOwnerContactNumber2 }}</span>
+          </dd>
+          <dt><span>Job ID</span></dt>
+          <dd>
+            <span>{{ invoiceRef.jobID }}</span>
+          </dd>
+          <dt><span>Total Net Amount</span></dt>
+          <dd>
+            <span>{{ invoiceRef.totalNetAmount }}</span>
+          </dd>
+          <dt><span>Discount Rate</span></dt>
+          <dd>
+            <span>{{ invoiceRef.discountRate }}</span>
+          </dd>
+          <dt><span>Discount Amount</span></dt>
+          <dd>
+            <span>{{ invoiceRef.discountAmount }}</span>
+          </dd>
+          <dt><span>Total Amount</span></dt>
+          <dd>
+            <span>{{ invoiceRef.totalAmount }}</span>
+          </dd>
+          <dt><span>Net Total Amount</span></dt>
+          <dd>
+            <span>{{ invoiceRef.netTotalAmount }}</span>
+          </dd>
+          <dt><span>Vat Amount</span></dt>
+          <dd>
+            <span>{{ invoiceRef.vatAmount }}</span>
+          </dd>
+          <dt><span>Customer VAT Number</span></dt>
+          <dd>
+            <span>{{ invoiceRef.customerVATNumber }}</span>
+          </dd>
+          <dt><span>Invoice Date</span></dt>
+          <dd>
+            <span>{{ invoiceRef.invoiceDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Invoice Status</span></dt>
+          <dd>
+            <span>{{ { null: '', PAID: 'PAID', UNPAID: 'UNPAID', PENDING: 'PENDING' }[invoiceRef.invoiceStatus ?? 'null'] }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/invoice', invoiceRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

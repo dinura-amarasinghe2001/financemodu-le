@@ -1,0 +1,457 @@
+<div class="flex h-screen w-full">
+  <!-- Sidebar -->
+  <div class="w-60 bg-white">
+    <fuse-vertical-navigation
+      [navigation]="menuData"
+      [inner]="true"
+      [mode]="'side'"
+      [opened]="true"
+    ></fuse-vertical-navigation>
+  </div>
+
+  <!-- Right Content Area -->
+  <div
+    class="flex-1 p-6 overflow-y-auto bg-gray-50 transition-all duration-300 ease-in-out relative"
+  >
+    <!-- Main Sections -->
+    <ng-container
+      *ngFor="
+        let section of ['part', 'fitting_charge', 'repair', 'paint', 'other']
+      "
+    >
+      <div
+        *ngIf="true"
+        [hidden]="selectedMenu !== section"
+        class="animate-fade-in"
+      >
+        <div class="flex justify-between items-center mb-6 border-b">
+          <fuse-card
+            class="flex flex-col px-4 py-2 pb-4 w-full bg-transparent border-none shadow-none"
+            #fuseCard
+          >
+            <div class="flex flex-col gap-4">
+              <!-- Heading Row -->
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2 class="text-xl font-bold capitalize">
+                    {{ preEstimateNumber }}
+                  </h2>
+                  <h2 class="text-2xl font-bold text-indigo-600 capitalize">
+                    {{ section }} Estimate
+                  </h2>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+                    mat-button
+                    (click)="toggleEstimateAndTreatments()"
+                  >
+                    <span class="mr-2">Details</span>
+                    <mat-icon
+                      class="icon-size-5 text-white"
+                      *ngIf="!preEstimateDetails"
+                      [svgIcon]="'heroicons_solid:chevron-down'"
+                    ></mat-icon>
+                    <mat-icon
+                      class="icon-size-5 text-white"
+                      *ngIf="preEstimateDetails"
+                      [svgIcon]="'heroicons_solid:chevron-up'"
+                    ></mat-icon>
+                  </button>
+
+                  <button
+                    *ngIf="!preEstimateID"
+                    class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+                    (click)="createPreEstimate()"
+                  >
+                    <mat-icon
+                      class="icon-size-4 text-white"
+                      [svgIcon]="'heroicons_mini:plus'"
+                    ></mat-icon>
+                    <span class="ml-2">Create</span>
+                  </button>
+
+                  <button
+                    *ngIf="isUpdating || preEstimateID"
+                    class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+                    (click)="updatePreEstimate()"
+                  >
+                    <span class="ml-2">Update</span>
+                  </button>
+
+                  <button
+                    *ngIf="preEstimateID"
+                    (click)="print()"
+                    class="px-4 py-2 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+                  >
+                    <mat-icon
+                      class="icon-size-4 text-white"
+                      [svgIcon]="'mat_outline:print'"
+                    ></mat-icon>
+                    <span class="ml-2">Print</span>
+                  </button>
+
+                  <button
+                    *ngIf="preEstimateID"
+                    (click)="createEstimate()"
+                    class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+                  >
+                    <mat-icon
+                      class="icon-size-4 text-white"
+                      [svgIcon]="'mat_outline:receipt_long'"
+                    ></mat-icon>
+                    <span class="ml-2">Create Estimate</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Alert Section -->
+              <div class="flex flex-col gap-2" *ngIf="!selectedVehicleandClientDetails?.vehicle?.licenseNo">
+                <fuse-alert
+                  [appearance]="'soft'"
+                  [dismissible]="true"
+                  [dismissed]="true"
+                  [name]="'alertBox4'"
+                  [type]="'warn'"
+                >
+                  Please Select Vehicle Before Save Pre Estimate.
+                </fuse-alert>
+              </div>
+            </div>
+
+            <!-- Expansion -->
+            <div *ngIf="preEstimateDetails">
+              <div class="flex flex-col md:flex-row gap-4 w-full mt-2">
+                <div class="ml-4 leading-tight">
+                  <div class="block text-sm font-medium text-gray-700 mb-1">
+                    Estimate Type
+                  </div>
+                  <div class="text-lg font-semibold">
+                    <mat-button-toggle-group
+                      [(ngModel)]="preEstimateType"
+                      class="flex gap-2"
+                    >
+                      <mat-button-toggle value="SUPPLEMENTARY"
+                        >Supplementary</mat-button-toggle
+                      >
+                      <mat-button-toggle value="PRE-ESTIMATE"
+                        >Pre-Estimate</mat-button-toggle
+                      >
+                    </mat-button-toggle-group>
+                  </div>
+                </div>
+                <!-- Is Insurance? -->
+                <div class="w-full md:w-1/4 h-full">
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Is Insurance?</label
+                  >
+                  <select
+                    [(ngModel)]="isInsurance"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+                  >
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+
+                <!-- Number of Panels -->
+                <div class="w-full md:w-1/3 h-full">
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Number of Panels</label
+                  >
+                  <input
+                    type="number"
+                    [ngModel]="numberOfPanels"
+                    (ngModelChange)="numberOfPanels = $event"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                    placeholder="Enter number of panels"
+                  />
+                </div>
+
+                <!-- Insurance Provider -->
+                <div class="w-full md:w-1/3 h-full" *ngIf="isInsurance">
+                  <label class="block text-sm font-medium text-gray-700 mb-1"
+                    >Insurance Provider</label
+                  >
+                  <input
+                    type="text"
+                    matInput
+                    [matAutocomplete]="insuranceAuto"
+                    placeholder="Search Insurance"
+                    [ngModel]="insuranceProvider"
+                    (ngModelChange)="insuranceProvider = $event"
+                    (input)="filterInsuranceOptions($event.target.value)"
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+                  />
+                  <mat-autocomplete #insuranceAuto="matAutocomplete">
+                    <mat-option
+                      *ngFor="let option of filteredInsuranceOptions"
+                      [value]="option"
+                    >
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+            </div>
+          </fuse-card>
+        </div>
+
+        <!-- Form Lines Stack -->
+        <div class="flex flex-col gap-2">
+          <div
+            *ngFor="
+              let line of formLines[section];
+              let i = index;
+              trackBy: trackByIndex
+            "
+            class="flex flex-row gap-4"
+          >
+            <!-- Work Autocomplete -->
+            <div
+              class="relative w-1/3"
+              [ngClass]="{
+                'w-1/2': section != 'part',
+                'w-1/3': section === 'part',
+              }"
+            >
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Select Work
+              </label>
+              <input
+                type="text"
+                matInput
+                [matAutocomplete]="auto"
+                placeholder="Select Work"
+                [ngModel]="line.works"
+                (ngModelChange)="
+                  onLineInputChange('works', $event, line, section)
+                "
+                (focus)="filterWorks('', section)"
+                (input)="filterWorks($event.target.value, section)"
+                class="w-full h-13 pt-5 pb-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+              />
+
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="
+                  onWorkSelected($event.option.value, line, section)
+                "
+              >
+                <mat-option
+                  *ngFor="let work of filteredWorks[section]"
+                  [value]="getWorkName(work)"
+                >
+                  {{ getWorkName(work) }}
+                </mat-option>
+              </mat-autocomplete>
+            </div>
+
+            <!-- Quantity -->
+            <!-- <div class="relative w-45">
+              <input
+                [ngModel]="line.quantity"
+                (ngModelChange)="
+                  onLineInputChange('quantity', $event, line, section)
+                "
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Quantity"
+                type="number"
+              />
+            </div> -->
+
+            <!-- Type -->
+            <!-- <div class="relative w-45">
+              <input
+                [ngModel]="line.type"
+                (ngModelChange)="
+                  onLineInputChange('type', $event, line, section)
+                "
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Type"
+                type="text"
+              />
+            </div> -->
+
+            <!-- Price Type -->
+            <div *ngIf="section === 'part'" class="relative w-1/3">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                S/H
+              </label>
+              <select
+                [ngModel]="line.sh"
+                (ngModelChange)="onLineInputChange('sh', $event, line, section)"
+                class="w-full h-13 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 appearance-none"
+              >
+                <option value="" disabled selected hidden>Select S/H</option>
+                <option value="SH">SH</option>
+                <option value="MR">MR</option>
+              </select>
+            </div>
+
+            <!-- Custom Price -->
+            <!-- <div class="relative w-45">
+              <input
+                [ngModel]="line.customPrice"
+                (ngModelChange)="
+                  onLineInputChange('customPrice', $event, line, section)
+                "
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Custom Price"
+                type="text"
+                [disabled]="line.priceType === 'ESTIMATE'"
+              />
+            </div> -->
+
+            <div *ngIf="section === 'part'" class="relative w-1/3">
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Market Price
+              </label>
+              <input
+                [value]="line.marketPrice | number: '1.0-0'"
+                (input)="onMarketPriceInput($event, line, section)"
+                class="w-full h-13 pl-12 p-3 text-right border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Price"
+                type="text"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 text-lg font-semibold"
+              >
+                Rs
+              </div>
+            </div>
+
+            <!-- Price -->
+            <div
+              *ngIf="section != 'part'"
+              class="relative"
+              [ngClass]="{
+                'w-1/2': section != 'part',
+                'w-1/3': section === 'part',
+              }"
+            >
+              <label
+                class="absolute -top-2 left-3 text-xs px-1 bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-300 transform scale-90"
+              >
+                Estimate Price
+              </label>
+              <input
+                [value]="line.price | number: '1.0-0'"
+                (input)="onEstimatePriceInput($event, line, section)"
+                class="w-full h-13 text-right pl-12 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                placeholder="Price"
+                type="text"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500 text-lg font-semibold"
+              >
+                Rs
+              </div>
+            </div>
+
+            <!-- Remove Button -->
+            <div class="flex items-center justify-center w-10 h-12">
+              <mat-icon
+                (click)="removeLine(section, line)"
+                svgIcon="delete_outline"
+                class="cursor-pointer w-10 h-12 text-red-500 hover:text-red-700"
+              ></mat-icon>
+            </div>
+          </div>
+          <!-- Total -->
+          <div class="flex flex-row mt-4">
+            <div>
+              <div class="flex justify-start">
+                <!-- Add Line Button -->
+                <button
+                  (click)="addLine(section)"
+                  class="bg-indigo-100 text-lg text-indigo-700 font-semibold px-2 py-1 rounded hover:bg-indigo-200 shadow"
+                >
+                  + Add {{ section }}
+                </button>
+              </div>
+            </div>
+            <div *ngIf="formLines[section]?.length > 0">
+              <div class="flex justify-end">
+                <!-- <div class="text-right text-lg font-bold text-gray-700 mr-40">
+              Total Price: Rs {{ getSectionTotal(section) | number: "1.2-2" }}
+            </div> -->
+                <div
+                  class="bg-indigo-100 text-indigo-700 font-semibold px-2 py-1 rounded hover:bg-indigo-200 shadow ml-2"
+                >
+                  <span class="text-indigo-700 text-lg font-semibold">
+                    Total Price: Rs
+                    {{ getSectionTotal(section) | currency: " " }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Optional fade animation -->
+<!-- <style>
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style> -->
+
+<!-- PRINT TEMPLATE (Initially hidden) -->
+<div id="print-section" class="hidden print:block p-6 text-sm text-gray-800">
+  <div
+    *ngFor="
+      let section of ['part', 'fitting_Charge', 'repair', 'paint', 'other']
+    "
+  >
+    <div *ngIf="formLines[section]?.length > 0" class="mb-6 border-b pb-4">
+      <h2 class="text-xl font-bold capitalize mb-2">{{ section }} Items</h2>
+      <table
+        class="w-full border border-collapse border-gray-300 text-left text-sm"
+      >
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="border p-2">Work</th>
+            <th class="border p-2">Quantity</th>
+            <th class="border p-2">Type</th>
+            <th class="border p-2">Price Type</th>
+            <th class="border p-2">Custom Price</th>
+            <th class="border p-2">Final Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let line of formLines[section]">
+            <td class="border p-2">{{ line.works }}</td>
+            <td class="border p-2">{{ line.quantity }}</td>
+            <td class="border p-2">{{ line.type }}</td>
+            <td class="border p-2">{{ line.priceType | currency: " " }}</td>
+            <td class="border p-2">{{ line.customPrice }}</td>
+            <td class="border p-2">{{ line.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

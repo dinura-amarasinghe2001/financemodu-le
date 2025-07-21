@@ -1,0 +1,232 @@
+ 
+<style>
+  mat-card {
+    margin: 20px 0;
+    padding: 16px;
+  }
+
+  mat-card-title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  mat-card-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
+  }
+
+  .detail-item {
+    margin-bottom: 16px;
+  }
+
+  .detail-item strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  
+ .stepper-wrapper {
+  min-height: 500px;
+  transition: min-height 0.3s ease;
+  overflow: hidden;
+}
+
+mat-horizontal-stepper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 500px;
+}
+
+mat-step {
+  flex-grow: 1;
+}
+
+
+
+</style>
+
+
+<div class="stepper-wrapper">
+<mat-horizontal-stepper linear>
+  <!-- Step 1: Supplier Details -->
+  
+
+  <!-- Step 2: Bank Account -->
+  <mat-step [stepControl]="bankAccountFormGroup" label="Bank Account">
+    <form [formGroup]="bankAccountFormGroup">
+   <br>
+        <mat-card-title>Bank Account Information</mat-card-title>
+        <br>
+        <br>
+       <mat-card-content>
+  <!-- Account Name -->
+  <div class="detail-item" *ngIf="bankAccount">
+    <strong>Account Name:</strong>
+    <ng-container *ngIf="isEditing; else viewAccountName">
+      <input [(ngModel)]="bankAccountName" [ngModelOptions]="{standalone: true}" type="text" class="form-control" />
+    </ng-container>
+    <ng-template #viewAccountName>
+      <span>{{ bankAccount.bankAccountName }}</span>
+    </ng-template>
+  </div>
+
+  <!-- Branch -->
+  <div class="detail-item">
+    <strong>Branch:</strong>
+    <ng-container *ngIf="isEditing; else viewBranch">
+      <input [(ngModel)]="bankBranch" [ngModelOptions]="{standalone: true}" type="text" class="form-control" />
+    </ng-container>
+    <ng-template #viewBranch>
+      <span>{{ bankAccount.bankBranch }}</span>
+    </ng-template>
+  </div>
+
+  <!-- Account Number -->
+  <div class="detail-item">
+    <strong>Account Number:</strong>
+    <ng-container *ngIf="isEditing; else viewAccountNumber">
+      <input [(ngModel)]="bankAccountNumber" [ngModelOptions]="{standalone: true}" type="text" class="form-control" />
+    </ng-container>
+    <ng-template #viewAccountNumber>
+      <span>{{ bankAccount.bankAccountNumber }}</span>
+    </ng-template>
+  </div>
+
+  <!-- Bank Name -->
+  <div class="detail-item">
+    <strong>Bank Name:</strong>
+    <ng-container *ngIf="isEditing; else viewBankName">
+      <input [(ngModel)]="bankName" [ngModelOptions]="{standalone: true}" type="text" class="form-control" />
+    </ng-container>
+    <ng-template #viewBankName>
+      <span>{{ bankAccount.bankName }}</span>
+    </ng-template>
+  </div>
+
+  <!-- Buttons -->
+  
+</mat-card-content>
+
+<br>
+<br>
+    
+     <div style="display: flex; align-items: center;">
+  <!-- Left side: Edit/Save/Cancel -->
+  <div>
+    <ng-container *ngIf="isEditing; else editButton">
+      <button mat-raised-button color="primary" (click)="saveEdit()">Save</button>
+      <button mat-button color="warn" (click)="cancelEdit()">Cancel</button>
+    </ng-container>
+    <ng-template #editButton>
+      <button mat-stroked-button color="primary" (click)="enableEdit()">Edit</button>
+    </ng-template>
+  </div>
+
+  <!-- Right side: Next button with little space -->
+  <button
+    mat-button
+    matStepperNext
+    style="margin-left: 1.5rem; display: flex; align-items: center; gap: 0.5rem;"
+  >
+    Next
+  </button>
+</div>
+
+
+
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="supplierFormGroup" label="Supplier Details">
+    <form [formGroup]="supplierFormGroup">
+    
+        
+        <mat-card-title>General Information</mat-card-title>
+        <br>
+        <br>
+        <mat-card-content *ngIf="supplierDetails">
+           
+          
+          <div class="detail-item">
+            <strong>VAT Enabled:</strong>
+            <span>{{ supplierDetails.isVATEnable ? 'Yes' : 'No' }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>VAT Reg Number:</strong>
+            <span>{{ supplierDetails.vatRegNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>NBT Enabled:</strong>
+            <span>{{ supplierDetails.isNBTEnable ? 'Yes' : 'No' }}</span>
+          </div>
+           <div class="detail-item">
+            <strong>TIN Number:</strong>
+            <span>{{ supplierDetails.tinNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Contact Person:</strong>
+            <span>{{ supplierDetails.contactPersonName }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Mobile:</strong>
+            <span>{{ supplierDetails.contactPersonMobile }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Office Address:</strong>
+            <span>{{ supplierDetails.addressOffice }}</span>
+          </div>
+        <div class="detail-item">
+            <strong>Web:</strong>
+            <span>{{ supplierDetails.website }}</span>
+          </div>
+        
+        </mat-card-content>
+     <br>
+      <div  style="display: flex; align-items: center; gap: 1rem;">
+         <button mat-button matStepperPrevious  mat-stroked-button color="primary">Back</button>
+        <button mat-button matStepperNext  mat-stroked-button color="primary">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Step 3: Bank Details -->
+  <mat-step [stepControl]="bankFormGroup" label="Bank Details">
+    <form [formGroup]="bankFormGroup">
+      
+        <mat-card-title>Bank Details</mat-card-title>
+        <br>
+        <br>
+        <mat-card-content *ngIf="bank">
+          <div class="detail-item">
+            <strong>Maximum Credit Limit:</strong>
+            <span>{{ bank.maximumCreditLimit }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Credit Period (days):</strong>
+            <span>{{ bank.creditPeriod }}</span>
+          </div>
+          <div class="detail-item">
+            <strong>Cheque Drawn:</strong>
+            <span>{{ bank.chequeDrawn }}</span>
+          </div>
+          
+        </mat-card-content>
+         <br>
+         <br>
+          <br>
+         <br>
+          <br>
+         <br>
+          <br>
+          <br>
+     
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" (click)="dialogRef.close()">Close</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
+</div>

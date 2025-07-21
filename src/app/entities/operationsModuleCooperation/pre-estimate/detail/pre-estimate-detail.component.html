@@ -1,0 +1,106 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (preEstimate(); as preEstimateRef) {
+      <div>
+        <h2 data-cy="preEstimateDetailsHeading"><span>Pre Estimate</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>License No</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.licenseNo }}</span>
+          </dd>
+          <dt><span>Vehicle Owner ID</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleOwnerID }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Name</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleOwnerName }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 1</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleOwnerContactNumber1 }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 2</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.vehicleOwnerContactNumber2 }}</span>
+          </dd>
+          <dt><span>Pre Estimate Number</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.preEstimateNumber }}</span>
+          </dd>
+          <dt><span>Number Of Panels</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.numberOfPanels }}</span>
+          </dd>
+          <dt><span>Job Type</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.jobType }}</span>
+          </dd>
+          <dt><span>Is Insurance</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.isInsurance }}</span>
+          </dd>
+          <dt><span>Insurance Name</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.insuranceName }}</span>
+          </dd>
+          <dt><span>Insurance ID</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.insuranceID }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ preEstimateRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/pre-estimate', preEstimateRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

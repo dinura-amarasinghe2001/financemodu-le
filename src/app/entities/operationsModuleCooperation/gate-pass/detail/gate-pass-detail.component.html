@@ -1,0 +1,142 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (gatePass(); as gatePassRef) {
+      <div>
+        <h2 data-cy="gatePassDetailsHeading"><span>Gate Pass</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ gatePassRef.id }}</span>
+          </dd>
+          <dt><span>Vehicle ID</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleID }}</span>
+          </dd>
+          <dt><span>Vehicle Brand</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleBrand }}</span>
+          </dd>
+          <dt><span>Vehicle Model</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleModel }}</span>
+          </dd>
+          <dt><span>Vehicle License Number</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleLicenseNumber }}</span>
+          </dd>
+          <dt><span>Vehicle Owner ID</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleOwnerID }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Name</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleOwnerName }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 1</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleOwnerContactNumber1 }}</span>
+          </dd>
+          <dt><span>Vehicle Owner Contact Number 2</span></dt>
+          <dd>
+            <span>{{ gatePassRef.vehicleOwnerContactNumber2 }}</span>
+          </dd>
+          <dt><span>Fuel Level</span></dt>
+          <dd>
+            <span>{{ gatePassRef.fuelLevel }}</span>
+          </dd>
+          <dt><span>Meter Reading</span></dt>
+          <dd>
+            <span>{{ gatePassRef.meterReading }}</span>
+          </dd>
+          <dt><span>Status</span></dt>
+          <dd>
+            <span>{{
+              { null: '', OPEN: 'OPEN', CANCELED: 'CANCELED', COMPLETE: 'COMPLETE', CLOSED: 'CLOSED', ONGOING: 'ONGOING' }[
+                gatePassRef.status ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span>Front View 1</span></dt>
+          <dd>
+            <span>{{ gatePassRef.frontView1 }}</span>
+          </dd>
+          <dt><span>Side R View 1</span></dt>
+          <dd>
+            <span>{{ gatePassRef.sideRView1 }}</span>
+          </dd>
+          <dt><span>Side L View 1</span></dt>
+          <dd>
+            <span>{{ gatePassRef.sideLView1 }}</span>
+          </dd>
+          <dt><span>Rear View 1</span></dt>
+          <dd>
+            <span>{{ gatePassRef.rearView1 }}</span>
+          </dd>
+          <dt><span>Job Card Number</span></dt>
+          <dd>
+            <span>{{ gatePassRef.jobCardNumber }}</span>
+          </dd>
+          <dt><span>Receipt Value</span></dt>
+          <dd>
+            <span>{{ gatePassRef.receiptValue }}</span>
+          </dd>
+          <dt><span>Entry Date Time</span></dt>
+          <dd>
+            <span>{{ gatePassRef.entryDateTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ gatePassRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Invoice Number</span></dt>
+          <dd>
+            <span>{{ gatePassRef.invoiceNumber }}</span>
+          </dd>
+          <dt><span>Owner Belongings</span></dt>
+          <dd>
+            <span>{{ gatePassRef.ownerBelongings }}</span>
+          </dd>
+          <dt><span>Created By</span></dt>
+          <dd>
+            <span>{{ gatePassRef.createdBy }}</span>
+          </dd>
+          <dt><span>Created Date</span></dt>
+          <dd>
+            <span>{{ gatePassRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Last Modified By</span></dt>
+          <dd>
+            <span>{{ gatePassRef.lastModifiedBy }}</span>
+          </dd>
+          <dt><span>Last Modified Date</span></dt>
+          <dd>
+            <span>{{ gatePassRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Job Card</span></dt>
+          <dd>
+            @if (gatePass()!.jobCard) {
+              <div>
+                <a [routerLink]="['/job-card', gatePass()!.jobCard?.id, 'view']">{{ gatePassRef.jobCard?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/gate-pass', gatePassRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

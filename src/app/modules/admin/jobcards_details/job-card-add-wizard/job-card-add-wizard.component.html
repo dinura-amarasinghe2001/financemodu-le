@@ -1,0 +1,383 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+  <!-- Header -->
+  <div
+    class="bg-default flex flex-0 flex-col dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pt-3"
+  >
+    <div class="min-w-0 flex-1 mb-6 border-b">
+      <div class="mt-2">
+        <!-- Make this a flex container to align buttons + search field -->
+        <div class="flex justify-between items-center mb-6 gap-3">
+          <!-- Search Bar -->
+          <div class="flex items-center gap-2">
+            <button
+              class="px-1 py-1 text-white rounded-xl transition-all bg-amber-400"
+            >
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+              >
+                <mat-icon
+                  class="text-current text-2xl"
+                  [svgIcon]="'mat_outline:directions_car_filled'"
+                ></mat-icon>
+              </div>
+            </button>
+          </div>
+          <div class="flex w-full flex-1 items-center gap-2">
+            <div class="relative w-full">
+              <input
+                [formControl]="searchInputControl"
+                (keydown.enter)="loadEstimate()"
+                class="w-full p-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400"
+                [placeholder]="'Enter Estimate ID'"
+              />
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
+              >
+                <ng-container>
+                  <mat-icon
+                    class="text-current text-2xl"
+                    [svgIcon]="'mat_outline:directions_car_filled'"
+                  ></mat-icon>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="px-4 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg shadow text-white flex items-center transition-all duration-200"
+            mat-button
+            (click)="toggleDetails()"
+          >
+            <span class="mr-2">Details</span>
+            <mat-icon
+              class="icon-size-5 text-white"
+              *ngIf="!showDetails"
+              [svgIcon]="'heroicons_solid:chevron-down'"
+            ></mat-icon>
+            <mat-icon
+              class="icon-size-5 text-white"
+              *ngIf="showDetails"
+              [svgIcon]="'heroicons_solid:chevron-up'"
+            ></mat-icon>
+          </button>
+        </div>
+        <ng-container *ngIf="showDetails">
+          <div class="w-full bg-card p-6 rounded-lg mb-3">
+            <div class="flex gap-4 px-6" *ngIf="jobCardDetails">
+              <div class="rounded-2xl w-full">
+                <div
+                  class="bg-white flex flex-col rounded-lg p-6 h-full space-y-0"
+                >
+                  <!-- Vehicle & Client Side-by-Side -->
+                  <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Vehicle Info -->
+                    <div class="flex flex-1 items-center">
+                      <div
+                        class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+                      >
+                        <mat-icon
+                          class="text-current text-xl"
+                          [svgIcon]="'mat_outline:directions_car_filled'"
+                        ></mat-icon>
+                      </div>
+                      <div class="ml-4 leading-tight">
+                        <div class="text-secondary text-sm font-medium">
+                          Vehicle ID
+                        </div>
+                        <div class="text-lg font-semibold">
+                          {{ jobCardDetails.vehicleID }}
+                          <div
+                            class="bg-amber-500 text-white px-3 py-1 mt-2 text-sm rounded-lg"
+                          >
+                            Panels: {{ jobCardDetails.numberOfPanels ?? 0 }}
+                          </div>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          <div class="flex flex-wrap gap-2 mt-2">
+                            <div
+                              class="bg-amber-500 text-white px-3 py-1 rounded-lg"
+                            >
+                              {{ jobCardDetails.vehicleBrand }}
+                            </div>
+                            <div
+                              class="bg-red-500 text-white px-3 py-1 rounded-lg"
+                            >
+                              {{ jobCardDetails.vehicleModel }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Owner Info -->
+                    <div class="flex flex-1 items-center">
+                      <div
+                        class="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-600 dark:text-teal-50"
+                      >
+                        <mat-icon
+                          class="text-current text-xl"
+                          [svgIcon]="'heroicons_outline:user-circle'"
+                        ></mat-icon>
+                      </div>
+                      <div class="ml-4 leading-tight">
+                        <div class="text-secondary text-sm font-medium">
+                          Owner
+                        </div>
+                        <div class="text-lg font-semibold">
+                          {{ jobCardDetails.vehicleOwnerName }}
+                        </div>
+                        <div class="text-sm text-gray-500 mt-1">
+                          <div
+                            class="bg-teal-500 text-white px-3 py-1 rounded-lg"
+                          >
+                            {{ jobCardDetails.vehicleOwnerContactNumber1 }}
+                          </div>
+
+                          <div
+                            class="bg-teal-500 text-white px-3 mt-1 py-1 rounded-lg"
+                          >
+                            {{ jobCardDetails.vehicleOwnerContactNumber2 }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-1 items-center">
+                      <div
+                        class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 text-red-800 dark:bg-teal-600 dark:text-teal-50"
+                      >
+                        <mat-icon
+                          class="text-current text-xl"
+                          [svgIcon]="
+                            'heroicons_outline:clipboard-document-list'
+                          "
+                        ></mat-icon>
+                      </div>
+                      <div class="ml-4 leading-tight">
+                        <div class="text-secondary text-sm font-medium">
+                          Insurance
+                        </div>
+                        <div class="text-lg font-semibold">
+                          {{ jobCardDetails.insuranceName }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <form [formGroup]="jobCardForm" class="space-y-6">
+              <!-- Top Section - 3 or 4 per row on larger screens -->
+              <div class="flex gap-4 justify-center items-center">
+                <mat-form-field class="w-full">
+                  <mat-label>Fuel Level</mat-label>
+                  <input matInput formControlName="fuelLevel" />
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                  <mat-label>Meter Reading</mat-label>
+                  <input matInput formControlName="meterReading" />
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                  <mat-label>JobCard Number</mat-label>
+                  <input matInput formControlName="jobCardNumber" />
+                </mat-form-field>
+              </div>
+
+              <!-- Date & Time Section -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Start Date & Time -->
+                <div class="flex justify-between gap-3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Start Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      formControlName="startDate"
+                      required
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <div class="flex items-center justify-center">
+                    <mat-icon class="text-2xl text-red-500"
+                      >swap_horiz</mat-icon
+                    >
+                  </div>
+
+                  <!-- Job Complete Date -->
+                  <mat-form-field class="w-full">
+                    <mat-label>Job Complete Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="jpicker"
+                      formControlName="jobCompleteDate"
+                      required
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="jpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #jpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <!-- Booth Date -->
+                <mat-form-field class="w-full">
+                  <mat-label>Booth Date</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="bpicker"
+                    formControlName="boothDate"
+                    required
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="bpicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #bpicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outer container — no horizontal scroll here -->
+  <div class="px-6 mt-2 w-full" *ngIf="vehiclePreEstimateTreatments.length > 0">
+    <div class="p-3 bg-white rounded-lg">
+      <h2 class="text-2xl font-bold capitalize mb-4 text-indigo-600">
+        Job Estimate Details
+      </h2>
+
+      <!-- Inner scrollable container -->
+      <div class="overflow-x-auto">
+        <div class="flex flex-col gap-2 min-w-max text-sm text-gray-800">
+          <!-- Headers -->
+          <div class="flex gap-4 font-semibold text-gray-700">
+            <div class="w-48">Job ID</div>
+            <div class="w-48">Department ID</div>
+            <!-- <div class="w-48">Start Date</div>
+            <div class="w-48">End Date</div>
+            <div class="w-48">State</div>
+            <div class="w-48">Remarks</div>
+            <div class="w-48">Est. Start</div>
+            <div class="w-48">Est. End</div>
+            <div class="w-48">Ops Unit</div> -->
+          </div>
+
+          <!-- Inputs -->
+          <div
+            class="flex gap-4 h-full"
+            *ngFor="let treatment of vehicleEstimateTreatments"
+          >
+            <!-- Inputs as before -->
+            <!-- You can keep all your input/date components here with w-48 widths -->
+            <input
+              class="w-48 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.id"
+              type="text"
+            />
+            <!-- <input
+              class="w-48 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.departmentID"
+              type="text"
+            />
+
+            <div class="relative w-48">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="picker"
+                [(ngModel)]="treatment.startDate"
+                matInput
+                placeholder="Start date"
+              />
+              <mat-datepicker-toggle
+                [for]="picker"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </div>
+
+            <div class="relative w-48">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="end"
+                [(ngModel)]="treatment.endDate"
+                matInput
+                placeholder="End date"
+              />
+              <mat-datepicker-toggle
+                [for]="end"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #end></mat-datepicker>
+            </div>
+
+            <select
+              class="w-48 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.currentState"
+            >
+              <option *ngFor="let state of jobCurrentStateKeys" [value]="state">
+                {{ state }}
+              </option>
+            </select> -->
+
+            <input
+              class="w-48 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.remark"
+              type="text"
+            />
+
+            <!-- <div class="relative w-48">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="estStart"
+                [(ngModel)]="treatment.estStartDate"
+                matInput
+                placeholder="Est. Start"
+              />
+              <mat-datepicker-toggle
+                [for]="estStart"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #estStart></mat-datepicker>
+            </div>
+
+            <div class="relative w-48">
+              <input
+                class="p-3 pr-10 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-amber-400"
+                [matDatepicker]="estEnd"
+                [(ngModel)]="treatment.estEndDate"
+                matInput
+                placeholder="Est. End"
+              />
+              <mat-datepicker-toggle
+                [for]="estEnd"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                matSuffix
+              ></mat-datepicker-toggle>
+              <mat-datepicker #estEnd></mat-datepicker>
+            </div>
+
+            <input
+              class="w-48 p-3 border border-gray-300 rounded-lg"
+              [(ngModel)]="treatment.opsUnitID"
+              type="text"
+            /> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

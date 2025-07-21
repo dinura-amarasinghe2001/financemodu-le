@@ -1,0 +1,307 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-appointment-heading" data-cy="AppointmentCreateUpdateHeading">Create or edit a Appointment</h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_appointmentDateTime">Appointment Date Time</label>
+          <div class="d-flex">
+            <input
+              id="field_appointmentDateTime"
+              data-cy="appointmentDateTime"
+              type="datetime-local"
+              class="form-control"
+              name="appointmentDateTime"
+              formControlName="appointmentDateTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_licenseNo">License No</label>
+          <input type="text" class="form-control" name="licenseNo" id="field_licenseNo" data-cy="licenseNo" formControlName="licenseNo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleID">Vehicle ID</label>
+          <input type="text" class="form-control" name="vehicleID" id="field_vehicleID" data-cy="vehicleID" formControlName="vehicleID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleBrand">Vehicle Brand</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleBrand"
+            id="field_vehicleBrand"
+            data-cy="vehicleBrand"
+            formControlName="vehicleBrand"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleModel">Vehicle Model</label>
+          <input
+            type="text"
+            class="form-control"
+            name="vehicleModel"
+            id="field_vehicleModel"
+            data-cy="vehicleModel"
+            formControlName="vehicleModel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientID">Client ID</label>
+          <input type="text" class="form-control" name="clientID" id="field_clientID" data-cy="clientID" formControlName="clientID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientName">Client Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clientName"
+            id="field_clientName"
+            data-cy="clientName"
+            formControlName="clientName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientContactNumber1">Client Contact Number 1</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clientContactNumber1"
+            id="field_clientContactNumber1"
+            data-cy="clientContactNumber1"
+            formControlName="clientContactNumber1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientContactNumber2">Client Contact Number 2</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clientContactNumber2"
+            id="field_clientContactNumber2"
+            data-cy="clientContactNumber2"
+            formControlName="clientContactNumber2"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientAddress">Client Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clientAddress"
+            id="field_clientAddress"
+            data-cy="clientAddress"
+            formControlName="clientAddress"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientCity">Client City</label>
+          <input
+            type="text"
+            class="form-control"
+            name="clientCity"
+            id="field_clientCity"
+            data-cy="clientCity"
+            formControlName="clientCity"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
+          <input type="text" class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_appointmentType">Appointment Type</label>
+          <select
+            class="form-control"
+            name="appointmentType"
+            formControlName="appointmentType"
+            id="field_appointmentType"
+            data-cy="appointmentType"
+          >
+            <option [ngValue]="null"></option>
+            @for (appointmentType of appointmentTypeValues; track $index) {
+              <option [value]="appointmentType">
+                {{
+                  {
+                    null: '',
+                    URGENT: 'URGENT',
+                    MORNING: 'MORNING',
+                    AFTERNOON: 'AFTERNOON',
+                    EVENING: 'EVENING',
+                    TO_BE_COLLECTED_FROM_CLIENT: 'TO_BE_COLLECTED_FROM_CLIENT',
+                    GOV: 'GOV',
+                    COOPERATE: 'COOPERATE',
+                  }[appointmentType]
+                }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_opsUnitID">Ops Unit ID</label>
+          <input type="text" class="form-control" name="opsUnitID" id="field_opsUnitID" data-cy="opsUnitID" formControlName="opsUnitID" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isPaint">Is Paint</label>
+          <input type="checkbox" class="form-check" name="isPaint" id="field_isPaint" data-cy="isPaint" formControlName="isPaint" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isTinker">Is Tinker</label>
+          <input type="checkbox" class="form-check" name="isTinker" id="field_isTinker" data-cy="isTinker" formControlName="isTinker" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isSpare">Is Spare</label>
+          <input type="checkbox" class="form-check" name="isSpare" id="field_isSpare" data-cy="isSpare" formControlName="isSpare" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isService">Is Service</label>
+          <input type="checkbox" class="form-check" name="isService" id="field_isService" data-cy="isService" formControlName="isService" />
+        </div>
+
+        @if (editForm.controls.createdBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdBy">Created By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="createdBy"
+              id="field_createdBy"
+              data-cy="createdBy"
+              formControlName="createdBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.createdDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_createdDate">Created Date</label>
+            <div class="d-flex">
+              <input
+                id="field_createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                class="form-control"
+                name="createdDate"
+                formControlName="createdDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedBy.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedBy">Last Modified By</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastModifiedBy"
+              id="field_lastModifiedBy"
+              data-cy="lastModifiedBy"
+              formControlName="lastModifiedBy"
+              [readonly]="true"
+            />
+          </div>
+        }
+
+        @if (editForm.controls.lastModifiedDate.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_lastModifiedDate">Last Modified Date</label>
+            <div class="d-flex">
+              <input
+                id="field_lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                class="form-control"
+                name="lastModifiedDate"
+                formControlName="lastModifiedDate"
+                placeholder="YYYY-MM-DD HH:mm"
+                [readonly]="true"
+              />
+            </div>
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehicleRegistry">Vehicle Registry</label>
+          <select
+            class="form-control"
+            id="field_vehicleRegistry"
+            data-cy="vehicleRegistry"
+            name="vehicleRegistry"
+            formControlName="vehicleRegistry"
+            [compareWith]="compareVehicleRegistry"
+          >
+            <option [ngValue]="null"></option>
+            @for (vehicleRegistryOption of vehicleRegistriesCollection; track $index) {
+              <option [ngValue]="vehicleRegistryOption">{{ vehicleRegistryOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_clientRegistry">Client Registry</label>
+          <select
+            class="form-control"
+            id="field_clientRegistry"
+            data-cy="clientRegistry"
+            name="clientRegistry"
+            formControlName="clientRegistry"
+            [compareWith]="compareClientRegistry"
+          >
+            <option [ngValue]="null"></option>
+            @for (clientRegistryOption of clientRegistriesCollection; track $index) {
+              <option [ngValue]="clientRegistryOption">{{ clientRegistryOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

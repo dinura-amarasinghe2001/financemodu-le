@@ -1,0 +1,12 @@
+:host {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+ 
+}
+
+::ng-deep .fuse-vertical-navigation-item-active{
+    background-color:   #f59f0b2d   !important;
+    // background-color:   #f59f0b2d   !important;
+}

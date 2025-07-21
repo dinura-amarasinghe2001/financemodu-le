@@ -1,0 +1,7 @@
+# version: '2'
+services:
+  nginx-nimesh:
+    image: ozisolutions/nimesh-dashboard:v0.0.0001  
+    ports:
+      - 80:80
+      - 443:443
