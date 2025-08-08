@@ -1,0 +1,311 @@
+
+<style>
+/* Container for the entire form */
+/* Outer container for the stepper */
+/* Container for the entire form */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.stepper-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  
+  background-color: #f5f7fa;
+  border-radius: 0; /* Remove rounded corners if you want edge-to-edge */
+  font-family: 'Poppins', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+
+/* Stylish box for each step */
+.step-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-radius: 12px;  /* fully rounded */
+  background: linear-gradient(to bottom right, #ffffff, #f0f2f5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e6ed;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.step-card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Angular Material Cards */
+mat-card {
+  border-radius: 12px !important;  /* fully rounded cards */
+}
+
+/* Fields inside the card */
+.form-field {
+  flex: 1 1 280px;
+  min-width: 250px;
+  border-radius:0; /* fully rounded input containers */
+  overflow: visible; /* prevent overflow of input border-radius */
+  
+}
+
+/* Angular Material fields full width */
+.mat-form-field {
+  width: 100%;
+  background-color: azure;
+  border-radius: 0px !important;  /* fully rounded */
+    overflow: visible; /* <-- Add this */
+}
+
+/* Buttons style */
+button {
+  min-width: 130px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;  /* fully rounded buttons */
+   
+  color: white;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #a5aab0;
+}
+
+/* Material table */
+.mat-table {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-radius: 9999px;  /* fully rounded */
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+.mat-form-field,
+.mat-form-field-wrapper {
+  overflow: visible !important;
+}
+/* Rounded corners on table headers and cells */
+/* Round top left and top right corners */
+th.mat-header-cell:first-child {
+  border-top-left-radius: 9999px;
+}
+th.mat-header-cell:last-child {
+  border-top-right-radius: 9999px;
+}
+
+/* Round bottom left and bottom right corners of last row cells */
+tr.mat-row:last-child td.mat-cell:first-child {
+  border-bottom-left-radius: 12px;
+}@media print {
+  button {
+    display: none;
+  }
+
+  .example-table-container {
+    margin-left: 0 !important;
+    box-shadow: none;
+  }
+
+  /* Optional: force background to white */
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+tr.mat-row:last-child td.mat-cell:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+th.mat-header-cell {
+  
+  font-weight: bold;
+  text-align: center;
+}
+
+td.mat-cell,
+th.mat-header-cell {
+  padding: 12px 16px;
+  text-align: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .step-card {
+    flex-direction: column;
+    padding: 1.2rem;
+  }
+
+  .form-field {
+    flex: 1 1 100%;
+  }
+
+  .step-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+ 
+ 
+</style><div style="background-color: white; min-height: 100vh; width: 100%;">
+  <mat-drawer-container style="height: 100vh; background-color: white;">
+    
+    <!-- Drawer (Sidebar Form) -->
+    <mat-drawer
+      #drawer
+      mode="over"
+      [opened]="drawerOpened"
+      (backdropClick)="preventClose()"
+      disableClose
+      style="width: 400px; padding: 1rem; background-color: white;">
+      
+      <form [formGroup]="grnForm" (ngSubmit)="onContinue()" style="flex: 1; min-width: 300px;">
+        <h1 style="margin-bottom: 1rem;">Enter Details for Account Statement:</h1>
+
+        <!-- Account Name Field -->
+        <mat-form-field appearance="outline" class="form-field" style="width: 100%;">
+          <mat-label>Account Name*</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput required formControlName="supplierName" [matAutocomplete]="autov" />
+          <mat-autocomplete #autov="matAutocomplete" (optionSelected)="onItemSelectedvendor($event.option.value)">
+            <mat-option *ngFor="let vendor of searchResultsvendor" [value]="vendor">
+              {{ vendor.code }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- Date Range Field -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>DATE RANGE*</mat-label>
+          <mat-date-range-input [formGroup]="grnForm" [rangePicker]="grnDatePicker">
+            <input matStartDate formControlName="grnStartDate" placeholder="Start date" [max]="today">
+            <input matEndDate formControlName="grnEndDate" placeholder="End date" [max]="today">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="grnDatePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #grnDatePicker></mat-date-range-picker>
+        </mat-form-field>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 1rem; text-align: right;">
+          <button mat-raised-button color="primary" type="submit" [disabled]="grnForm.invalid" (click)="fetchData()">
+            Continue
+          </button>
+        </div>
+      </form>
+    </mat-drawer>
+
+    <!-- Main Content -->
+ <div
+  class="example-table-container"
+  [style.marginLeft.px]="drawer.opened ? 400 : 0"
+  style="background-color: white; padding: 2rem; transition: margin-left 0.3s ease; min-height: 100vh; width: 100%; font-family: Arial, sans-serif; color: #000;"
+>
+
+  <!-- Company Header -->
+  <div style="text-align: center; margin-bottom: 16px;">
+    <h2 style="margin: 0; font-size: 1.5rem;">Nimesh Motor (Pvt) Ltd</h2>
+    <p style="margin: 0;">Embilipitiya, Sri Lanka</p>
+    <p style="margin: 0;">Tel: 0472261163 | Fax: 0472261181</p>
+  </div>
+
+  <!-- Issue Info -->
+  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    <div style="font-size: 0.9rem;">
+      <p><strong>Date of Issue:</strong> {{ todayDate }}</p>
+      <p><strong>Issue Number:</strong> -</p>
+      <p><strong>Rev Number:</strong> -</p>
+    </div>
+    <div style="text-align: right; font-size: 0.9rem;">
+      <p><strong>Time:</strong> {{ currentTime }}</p>
+      <p><strong>Doc Number:</strong> -</p>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <h3 style="text-align: center; margin: 24px 0; text-transform: uppercase;">
+    Account Statement - (Account wise - Full Detail)
+  </h3>
+
+  <!-- Date Range -->
+  <p style="text-align: center; margin-bottom: 16px;">
+    for the period of <strong>{{ grnForm.value.grnStartDate | date:'yyyy-MM-dd' }}</strong>
+    to <strong>{{ grnForm.value.grnEndDate | date:'yyyy-MM-dd' }}</strong>
+  </p>
+
+  <!-- Summary Fields -->
+  <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 20px; font-size: 1rem; font-weight: 600;">
+    <label>Account Code:</label>
+    <input matInput [value]="grnForm.get('supplierName')?.value || 'N/A'" readonly style="width: 150px; border: none; background: transparent;" />
+
+    <label>Account Name:</label>
+    <input matInput [value]="res?.name || 'N/A'" readonly style="width: 200px; border: none; background: transparent;" />
+
+    <label>Opening Balance:</label>
+    <input matInput [value]="openingBalance" readonly style="width: 150px; border: none; background: transparent;" />
+
+    <label style="color: rgb(0, 0, 0);">Closing Balance:</label>
+    <input matInput [value]="closingBalance" readonly style="width: 200px; border: none; background: transparent;" />
+  </div>
+
+  <!-- Transaction Table -->
+  <table mat-table [dataSource]="flatRelatedData" class="w-full table-auto border-collapse" style="width: 100%; font-size: 0.9rem; border: 1px solid #ccc;">
+    
+    <!-- Columns -->
+    <ng-container matColumnDef="groupIndex">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Group</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.groupIndex }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemName">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Rel ID</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.relid }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="lineTotal">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Account Code</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.accountCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="manufactureDate">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Date</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.date | date:'yyyy-MM-dd' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="purcost">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Debit</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.debit | number:'1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sellprice">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Credit</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.credit | number:'1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">RefDoc</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.refDoc }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="source">
+      <th mat-header-cell *matHeaderCellDef style="border: 1px solid #ccc; padding: 8px;">Source</th>
+      <td mat-cell *matCellDef="let element" style="border: 1px solid #ccc; padding: 8px;">{{ element.source }}</td>
+    </ng-container>
+
+    <!-- Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+</div>
+
+  </mat-drawer-container>
+</div>

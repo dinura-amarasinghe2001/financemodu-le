@@ -374,6 +374,37 @@ export const appRoutes: Route[] = [
           import("app/modules/admin/grn-create/grn-create.routes"),
       },
       {
+        path: "transaction",
+        loadChildren: () => import("app/modules/transaction/transaction.routes"),
+      },
+            {
+        path: "accounttree",
+        loadChildren: () => import("app/modules/accounttree/accounttree.routes"),
+      },
+            {
+        path: "accounts",
+        loadChildren: () => import("app/modules/accounts/accounts.routes"),
+      },
+         {
+        path: "accountstatement",
+        loadChildren: () => import("app/modules/admin/accountstatement/accountstatement.routes"),
+      },
+      {
+        path: "agingreport",
+        loadChildren: () => import("app/modules/admin/agingreport/agingreport.routes"),
+      },
+      {
+        path: "agingreport-print",
+        loadChildren: () => import("app/modules/admin/agingrportprint/agingrportprint.routes"),
+      },{
+        path: "trailbalance",
+        loadChildren: () => import("app/modules/trailbalance/trailbalance.routes"),
+      },
+      {
+        path: "dayendtransaction",
+        loadChildren: () => import("app/modules/dayendtransaction/dayendtransaction.routes"),
+      },
+      {
         path: "inventory",
         loadChildren: () => import("app/modules/inventory/inventory.routes"),
       },

@@ -1,5 +1,5 @@
 import { Component, inject, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
@@ -19,8 +19,10 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { BankService } from 'app/entities/inventorymicro/bank/service/bank.service';
 import { IBank } from 'app/entities/inventorymicro/bank/bank.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { debounceTime, distinctUntilChanged, switchMap, Observable, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, Observable, map, startWith } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { AccountsService } from 'app/entities/financemicro/accounts/service/accounts.service';
+import { AccountTypeService } from 'app/entities/financemicro/account-type/service/account-type.service';
 
 @Component({
   selector: 'app-supplier-create',
@@ -47,7 +49,89 @@ export class SupplierCreateComponent {
   suplierprof=inject(SupplierService)
   supplierbank=inject(SupplierBankService)
   supplierbankdetails=inject(SupplierBankAccountsService)
+    categories: any[] = [];
   bank=inject(BankService);
+ categoryService = inject(AccountTypeService);
+  AccountsService = inject(AccountsService);
+lmuControl = new FormControl('');
+filteredLmuOptions: string[] = [];
+
+ 
+
+catfetch() {
+  this.categoryService.query({ size: 10000 }).subscribe({
+    next: (data) => {
+      this.categories = data.body || [];
+      this.updateLmuOptions(); // prepare autocomplete list
+    },
+    error: (error) => {
+      console.error('Error fetching categories:', error);
+    }
+  });
+}
+ 
+
+updateLmuOptions() {
+  const allCategories = this.categories.filter(
+    (cat, index, self) => cat.lmu && self.findIndex(c => c.lmu === cat.lmu) === index
+  ); // remove duplicates by lmu
+
+  this.lmuControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this.filterLmu(value, allCategories))
+  ).subscribe(filtered => {
+    this.filteredLmuOptions = filtered;
+  });
+}
+
+filterLmu(value: string, options: any[]): any[] {
+  const filterValue = value.toLowerCase();
+  return options.filter(option => option.lmu.toLowerCase().includes(filterValue));
+}
+
+ 
+
+displayFn(option: any): string {
+  return option && option.lmu ? option.lmu : '';
+}
+  selected: any = null; // store selected category
+
+onSelectLmu(selected: any) {
+  this.selected = selected;
+
+  console.log('Selected Category - lmu:', selected.lmu);
+  console.log('Selected Category - code:', selected.code);
+  console.log('Selected Category - type:', selected.type);
+}
+
+createacc() {
+  if (!this.selected || !this.generalForm.valid) {
+    console.warn('Form is invalid or no category selected.');
+    return;
+  }
+
+  const payload = {
+    id: null,
+    parent: this.selected.type,
+    path: this.selected.lmu,
+    code: this.generalForm.value.code,      // assume you're manually entering or auto-generating this
+    child: this.selected.code || '',
+    name: this.generalForm.value.name || '',
+  };
+
+  console.log('Payload to send:', payload);
+  this.AccountsService.create(payload).subscribe({
+    next: (response) => {
+      console.log('Account created successfully:', response);
+    },
+    error: (error) => {
+      console.error('Error creating account:', error);
+    }
+  });
+
+  
+}
+
 activeTabIndex: number = 0;
   constructor(
     private fb: FormBuilder,
@@ -93,6 +177,7 @@ activeTabIndex: number = 0;
   }
  
   ngOnInit(): void {
+    this.catfetch()
        this.filteredBanks = this.bankForm.get('bankName')!.valueChanges.pipe(
     debounceTime(300),
     distinctUntilChanged(),
@@ -191,15 +276,15 @@ onStepChange(event: StepperSelectionEvent): void {
     console.log('Saving supplier:', supplierData);
 
     this.suplierprof.create(supplierData).subscribe({
-      next: (response) => {
+   next: (response) => {
         console.log('Supplier created successfully:', response);
-        this.supplierbanksave(response.body.id);
+       this.supplierbanksave(response.body.id);
  this.supplierbankaccount(response.body.id);
-
+this.createacc()
         this.dialogRef.close(supplierData);
       },
-      error: (error) => {
-        console.error('Error creating supplier:', error);
+     error: (error) => {
+         console.error('Error creating supplier:', error);
       }
     });
 

@@ -1,0 +1,37 @@
+<h2 class="form-heading">Add details for Aging Report</h2>
+<br>
+<form [formGroup]="inventoryForm" (ngSubmit)="navgate()">
+  <div class="form-grid">
+    <!-- Name Field -->
+    <div class="form-pair">
+       <mat-form-field appearance="outline" class="form-field" style="flex: 1; min-width: 200px;">
+                <mat-label>Vendor*</mat-label>
+                <mat-icon matPrefix>person</mat-icon>
+                <input matInput required formControlName="name" [matAutocomplete]="autov" />
+                <mat-autocomplete #autov="matAutocomplete" (optionSelected)="onItemSelectedvendor($event.option.value)">
+                  <mat-option *ngFor="let vendor of searchResultsvendor" [value]="vendor">
+                    {{ vendor.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+    </div>
+
+    <!-- Date Range Picker -->
+    <div class="form-pair">
+      <mat-form-field appearance="outline" class="form-field" style="width: 100%;">
+  <mat-label>Date Range</mat-label>
+  <mat-date-range-input [rangePicker]="picker" formGroupName="dateRange">
+    <input matStartDate formControlName="start" placeholder="Start date">
+    <input matEndDate formControlName="end" placeholder="End date">
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>
+
+    </div>
+  </div>
+
+  <div class="button-row">
+    <button mat-raised-button color="primary" type="submit" class="save-button" [disabled]="inventoryForm.invalid">Save</button>
+  </div>
+</form>

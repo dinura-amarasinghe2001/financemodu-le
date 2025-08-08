@@ -1,8 +1,24 @@
 <!-- Outer container centers all content horizontally with max width -->
 <div style="max-width: 9003px; margin: 0 auto; padding: 1rem; background: white;">
-
-  <!-- Upload Section: centered -->
-  <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+ 
+    <div class="form-pair"> 
+      
+<mat-form-field appearance="fill" class="form-field" style="width: 400px;">
+  <input
+    type="text"
+    placeholder="Search Category Path"
+    matInput
+    [formControl]="lmuControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectLmu($event.option.value)">
+    <mat-option *ngFor="let option of filteredLmuOptions" [value]="option">
+      {{ option.lmu }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+<!-- Upload Section: centered -->
+<div style="display: flex; justify-content: center; margin-bottom: 1rem;">
   <div style="background: white; padding: 0.5rem 1rem; border-radius: 4px;">
   <label for="fileUpload" style="font-weight: 600; margin-right: 1rem;"> Extract XLSX or CSV:</label>
   <input

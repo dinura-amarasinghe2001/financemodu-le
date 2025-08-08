@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SupplierCreateComponent } from '../supplier-create/supplier-create.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,22 +15,26 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { InventoryService } from 'app/entities/inventorymicro/inventory/service/inventory.service';
 import { CategoryService } from 'app/entities/inventorymicro/category/service/category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AccountTypeService } from 'app/entities/financemicro/account-type/service/account-type.service';
+import { AccountsService } from 'app/entities/financemicro/accounts/service/accounts.service';
+import { startWith, map } from 'rxjs';
+import { MatAutocomplete, MatAutocompleteModule } from "@angular/material/autocomplete";
  
 
 @Component({
   selector: 'app-inventory-create',
   standalone: true,
   imports: [CommonModule, MatIconModule,
-          FormsModule,
-          ReactiveFormsModule,
-          MatStepperModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatSelectModule,
-          MatOptionModule,
-          MatButtonModule,
-          MatCheckboxModule,
-          MatRadioModule,],
+    FormsModule,
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatRadioModule, MatAutocomplete,   MatAutocompleteModule],
   templateUrl: './inventory-create.component.html',
   styleUrl: './inventory-create.component.scss'
 })
@@ -52,10 +56,90 @@ constructor(
       lastCost: [null],
       lastSellingPrice: [null],
     });}
+  
+ categoryService1 = inject(AccountTypeService);
+  AccountsService = inject(AccountsService);
+lmuControl = new FormControl('');
+filteredLmuOptions: string[] = [];
 
+ categories1: any[] = [];
+
+catfetch() {
+  this.categoryService1.query({ size: 10000 }).subscribe({
+    next: (data) => {
+      this.categories1 = data.body || [];
+      this.updateLmuOptions(); // prepare autocomplete list
+    },
+    error: (error) => {
+      console.error('Error fetching categories:', error);
+    }
+  });
+}
+ 
+
+updateLmuOptions() {
+  const allCategories = this.categories1.filter(
+    (cat, index, self) => cat.lmu && self.findIndex(c => c.lmu === cat.lmu) === index
+  ); // remove duplicates by lmu
+
+  this.lmuControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this.filterLmu(value, allCategories))
+  ).subscribe(filtered => {
+    this.filteredLmuOptions = filtered;
+  });
+}
+
+filterLmu(value: string, options: any[]): any[] {
+  const filterValue = value.toLowerCase();
+  return options.filter(option => option.lmu.toLowerCase().includes(filterValue));
+}
+
+ 
+
+displayFn(option: any): string {
+  return option && option.lmu ? option.lmu : '';
+}
+  selected: any = null; // store selected category
+
+onSelectLmu(selected: any) {
+  this.selected = selected;
+
+  console.log('Selected Category - lmu:', selected.lmu);
+  console.log('Selected Category - code:', selected.code);
+  console.log('Selected Category - type:', selected.type);
+}
+
+createacc() {
+  if (!this.selected || !this.inventoryForm.valid) {
+    console.warn('Form is invalid or no category selected.');
+    return;
+  }
+
+  const payload = {
+    id: null,
+    parent: this.selected.type,
+    path: this.selected.lmu,
+    code: this.inventoryForm.value.code,      // assume you're manually entering or auto-generating this
+    child: this.selected.code || '',
+    name: this.inventoryForm.value.name || '',
+  };
+
+  console.log('Payload to send:', payload);
+   this.AccountsService.create(payload).subscribe({
+    next: (response) => {
+      console.log('Account created successfully:', response);
+   },
+     error: (error) => {
+     console.error('Error creating account:', error);
+     }
+   });
+
+  
+}
 
       ngOnInit(): void {
-
+this.catfetch()
 
   if (this.data?.supplier) {
     this.inventoryForm.patchValue(this.data.supplier);
@@ -145,7 +229,8 @@ onSave(): void {
     formData.reOrderQty = parseInt(formData.reOrderQty, 10) || 0;
     formData.lastCost = parseFloat(formData.lastCost) || 0;
     formData.lastSellingPrice = parseFloat(formData.lastSellingPrice) || 0;
-this.itemsave();
+ this.itemsave();
+this.createacc()
     console.log('Parsed Inventory Form Data:', formData);
     this.dialogRef.close(formData); // optionally pass data to parent
   } else {

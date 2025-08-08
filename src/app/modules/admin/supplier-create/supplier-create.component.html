@@ -132,10 +132,20 @@
                 <mat-label>Tel No*</mat-label>
                 <input matInput formControlName="phone1" />
               </mat-form-field>
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Fax</mat-label>
-                <input matInput formControlName="fax" />
-              </mat-form-field>
+<mat-form-field appearance="fill" class="form-field">
+  <input
+    type="text"
+    placeholder="Search Category Path"
+    matInput
+    [formControl]="lmuControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectLmu($event.option.value)">
+    <mat-option *ngFor="let option of filteredLmuOptions" [value]="option">
+      {{ option.lmu }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Email</mat-label>
                 <input matInput type="email" formControlName="email" />
@@ -176,7 +186,8 @@
                 <mat-label>Tin Number</mat-label>
                 <input matInput formControlName="tinNumber" />
               </mat-form-field>
-              
+            
+
             </div>
 
      <div class="button-right">

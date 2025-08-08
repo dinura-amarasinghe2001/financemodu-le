@@ -1,12 +1,20 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgFor, NgIf } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
 import { InventoryService } from "app/entities/inventorymicro/inventory/service/inventory.service";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { AccountTypeService } from "app/entities/financemicro/account-type/service/account-type.service";
+import { AccountsService } from "app/entities/financemicro/accounts/service/accounts.service";
+import { startWith, map } from "rxjs";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatFormField, MatFormFieldControl, MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { RouterModule } from "@angular/router";
 
 
 @Component({
@@ -18,8 +26,25 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
-    MatButtonModule
-  ],
+    MatButtonModule,
+    MatAutocompleteModule,
+    MatFormField, ReactiveFormsModule,
+    CommonModule,
+  FormsModule,
+  NgFor,
+  NgIf,
+  RouterModule,
+  // Material modules
+MatPaginatorModule,
+  MatTableModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatButtonModule,
+  MatIconModule,
+  MatAutocompleteModule,
+  MatIconModule
+],
   templateUrl: './inventory-export.component.html',
   styleUrls: ['./inventory-export.component.scss']
 })
@@ -38,8 +63,91 @@ snackBar = inject(MatSnackBar);
   // Store the last code number for incrementing
   lastCodePrefix = 'ITEM';
   lastCodeNumber = 1;
+categoryService1 = inject(AccountTypeService);
+  AccountsService = inject(AccountsService);
+lmuControl = new FormControl('');
+filteredLmuOptions: string[] = [];
+
+ categories1: any[] = [];
+
+catfetch() {
+  this.categoryService1.query({ size: 10000 }).subscribe({
+    next: (data) => {
+      this.categories1 = data.body || [];
+      this.updateLmuOptions(); // prepare autocomplete list
+    },
+    error: (error) => {
+      console.error('Error fetching categories:', error);
+    }
+  });
+}
+ 
+
+updateLmuOptions() {
+  const allCategories = this.categories1.filter(
+    (cat, index, self) => cat.lmu && self.findIndex(c => c.lmu === cat.lmu) === index
+  ); // remove duplicates by lmu
+
+  this.lmuControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this.filterLmu(value, allCategories))
+  ).subscribe(filtered => {
+    this.filteredLmuOptions = filtered;
+  });
+}
+
+filterLmu(value: string, options: any[]): any[] {
+  const filterValue = value.toLowerCase();
+  return options.filter(option => option.lmu.toLowerCase().includes(filterValue));
+}
+
+ 
+
+displayFn(option: any): string {
+  return option && option.lmu ? option.lmu : '';
+}
+  selected: any = null; // store selected category
+
+onSelectLmu(selected: any) {
+  this.selected = selected;
+
+  console.log('Selected Category - lmu:', selected.lmu);
+  console.log('Selected Category - code:', selected.code);
+  console.log('Selected Category - type:', selected.type);
+}
+
+createacc() {
+  if (!this.selected || !this.items.length) {
+    console.warn('No category selected or no items available.');
+    return;
+  }
+
+  const payloadList = this.items.map(item => ({
+    id: null,
+    parent: this.selected.type,
+    path: this.selected.lmu,
+    code: item.code,             // from parsed CSV item
+    child: this.selected.code || '',
+    name: item.name || ''
+  }));
+
+  console.log('Payloads to send:', payloadList);
+
+  // Send all items (e.g., one by one)
+  payloadList.forEach(payload => {
+    this.AccountsService.create(payload).subscribe({
+      next: (response) => {
+        console.log('Account created successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error creating account:', error);
+      }
+    });
+  });
+}
 
   ngOnInit(): void {
+   this.catfetch() 
     this.fetchInventoryCode();
   }
 
@@ -128,6 +236,8 @@ snackBar = inject(MatSnackBar);
     this.currentPage = 1;
     this.pageSize = 5;
     this.onPaginateChange({ pageIndex: 0, pageSize: this.pageSize, length: this.items.length });
+
+    console.log('Parsed items:', this.items);
   }
 
 saveItems() {
@@ -154,6 +264,7 @@ saveItems() {
       next: (response) => {
         successCount++;
         if (successCount === totalItems) {
+          this.createacc() ;
           this.snackBar.open('All items created successfully!', 'Close', {
             duration: 3000,
             verticalPosition: 'top'

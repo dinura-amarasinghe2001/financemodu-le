@@ -22,6 +22,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { GrnViewsComponent } from '../admin/grn-views/grn-views.component';
+import { AccountTypeService } from 'app/entities/financemicro/account-type/service/account-type.service';
+import { AccountsService } from 'app/entities/financemicro/accounts/service/accounts.service';
+import { TransactionService } from 'app/entities/financemicro/transaction/service/transaction.service';
+import { NextpaymentagingComponent } from '../admin/nextpaymentaging/nextpaymentaging.component';
 
 @Component({
   selector: 'app-nextpayment',
@@ -55,7 +59,8 @@ grnservice = inject(GRNService);
 supplierbanks = inject(SupplierBankService);
 supplier = inject(SupplierService);
   supservice: any;
-
+  categoryService1 = inject(AccountTypeService);
+    AccountsService = inject(AccountsService);
  
 
 fetchpaymentdata(): void {
@@ -119,7 +124,7 @@ return {
 upservice = inject(SupplierService);
 supplierbank=inject(SupplierBankAccountsService);
 supplierbankacc=inject(SupplierBankService);
-  
+  TransactionService=inject(TransactionService);
   currentPage = 1;
   pageSize = 10;
   totalItems = 0;
@@ -239,16 +244,214 @@ deleteSupplier(id: number): void {
   });
 }
 
-updateAmountOwing(id: number, amount: number): void {
+transaction(code: string, grnvalue: number, invoicecode: string) {
+  this.TransactionService.query({
+    'refDoc.contains': 'voucher',
+    sort: ['id,desc']
+  }).subscribe({
+    next: (response) => {
+      const latestTransaction = response.body?.[0];
+
+      let newRefDoc = 'voucher1';
+      if (latestTransaction?.refDoc) {
+        const match = latestTransaction.refDoc.match(/^voucher(\d+)$/);
+        if (match) {
+          const number = parseInt(match[1], 10);
+          newRefDoc = `voucher${number + 1}`;
+        }
+      }
+
+      const relid = Math.floor(1e5 + Math.random() * 5e5);
+
+      // First: Get the cash account (ID 1124)
+      this.AccountsService.query({ 'id.equals': 1124 }).subscribe({
+        next: (accountResponse) => {
+          const cashAccount = accountResponse.body?.[0];
+
+          if (cashAccount?.id != null) {
+            // Create the voucher (credit to cash)
+            const voucherPayload = {
+              id: null,
+              credit: grnvalue,
+              source: 'voucher',
+              refDoc: newRefDoc,
+              date: dayjs(),
+              subId: cashAccount.amount,
+              accountCode: 'cash',
+              relid: relid
+            };
+
+            this.TransactionService.create(voucherPayload).subscribe({
+              next: () => console.log('Transaction (voucher) created successfully'),
+              error: (err) => console.error('Transaction (voucher) creation failed:', err)
+            });
+
+            // Second: Get the supplier name from GRN
+            this.grnservice.query({ 'grnCode.equals': code }).subscribe({
+              next: (grnResponse) => {
+                const grn = grnResponse.body?.[0];
+                const supplierName = grn?.supplierName;
+
+                if (!supplierName) {
+                  console.warn('Supplier name not found in GRN');
+                  return;
+                }
+
+                // Third: Get the supplier account by name
+                this.AccountsService.query({ 'name.equals': supplierName }).subscribe({
+                  next: (supplierResponse) => {
+                    const supplierAccount = supplierResponse.body?.[0];
+                    if (!supplierAccount?.code) {
+                      console.warn('Supplier account not found or missing code');
+                      return;
+                    }
+
+                    // Create the supplier invoice transaction (debit)
+                    const supplierPayload = {
+                      id: null,
+                      debit: grnvalue,
+                      source: 'supplierinvoice',
+                      refDoc: invoicecode,
+                      date: dayjs(),
+                      subId: cashAccount.amount,
+                        accountCode: `${supplierAccount.code}-${code}`,
+                      relid: relid
+                    };
+
+                    console.log('Voucher Payload:', voucherPayload);
+                    console.log('Supplier Invoice Payload:', supplierPayload);
+
+                    this.TransactionService.create(supplierPayload).subscribe({
+                      next: () => console.log('Transaction (supplierinvoice) created successfully'),
+                      error: (err) => console.error('Transaction (supplierinvoice) creation failed:', err)
+                    });
+                  },
+                  error: (err) => {
+                    console.error('Failed to fetch supplier account:', err);
+                  }
+                });
+              },
+              error: (err) => {
+                console.error('Failed to fetch GRN:', err);
+              }
+            });
+
+          } else {
+            console.warn('Cash account not found with ID 1124');
+          }
+        },
+        error: (err) => {
+          console.error('Failed to fetch cash account:', err);
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Failed to fetch previous transactions:', err);
+    }
+  });
+}
+
+
+
+
+updatecash(grnvalue: number) {
+  this.AccountsService.query({ 'id.equals': 1124 }).subscribe({
+    next: (accountResponse) => {
+      const account = accountResponse.body?.[0];
+
+      if (account && account.id != null) {
+        const updatedAmount = (account.amount || 0) - grnvalue;
+        const updatedCreditAmount = (account.creditAmount || 0) + grnvalue;
+
+        const updatePayload = {
+          id: 1124,
+          creditAmount: updatedCreditAmount,
+          amount: updatedAmount
+        };
+
+        this.AccountsService.partialUpdate(updatePayload).subscribe({
+          next: () => console.log('Account cash updated successfully'),
+          error: (err) => console.error('Account update failed:', err)
+        });
+      }
+    },
+    error: (err) => console.error('Failed to fetch account:', err)
+  });
+}
+
+
+
+updateAmountOwing(id: number, amount: number,grnvalue: number,supname:String,grncode:string,invoicecode:string): void {
+  this.transaction(grncode, grnvalue, invoicecode);
   const updatePayload = {
     inspected: true,
-    total: amount
+    total: amount 
   };
 
   this.grnservice.partialUpdate({ id, ...updatePayload }).subscribe({
     next: (response) => {
       console.log('Update successful:', response);
+this.grnservice.query({ 'id.equals': id }).subscribe({
+  next: (grnResponse) => {
+    const grnData = grnResponse.body?.[0];
+    if (!grnData) {
+      console.warn('GRN not found for ID:', id);
+      return;
+    }
 
+    const supname = grnData.supplierName;
+
+    this.supplier.query({ 'name.equals': supname }).subscribe({
+      next: (supplierResponse) => {
+        const supplier = supplierResponse.body?.[0];
+        if (!supplier || !supplier.code) {
+          console.warn('Supplier not found or missing code for name:', supname);
+          return;
+        }
+
+      //  const grnvalue = grnData.total || 0; // or whatever field has the GRN value
+
+        this.AccountsService.query({ 'code.equals': supplier.code }).subscribe({
+          next: (accountResponse) => {
+            const account = accountResponse.body?.[0];
+
+            if (account && account.id != null) {
+              const updatedAmount = (account.amount || 0) + grnvalue;
+              const updatedDebitAmount = (account.debitAmount || 0) + grnvalue;
+
+              const updatePayload = {
+                id: account.id,
+                debitAmount: updatedDebitAmount,
+                amount: updatedAmount
+              };
+
+              this.AccountsService.partialUpdate(updatePayload).subscribe({
+                next: () => console.log('Account updated successfully'),
+                error: (err) => console.error('Account update failed:', err)
+              });
+
+              this.updatecash(grnvalue); // Call to update cash account
+               
+            } else {
+              console.warn('No matching account found for code:', supplier.code);
+            }
+          },
+          error: (err) => {
+            console.error('Account query failed:', err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Supplier query failed:', err);
+      }
+    });
+  },
+  error: (err) => {
+    console.error('GRN query failed:', err);
+  }
+});
+
+      
       // Reset paginator UI (optional)
       if (this.paginator) {
         this.paginator.firstPage(); // Resets UI and emits change
@@ -270,6 +473,7 @@ updateAmountOwing(id: number, amount: number): void {
 
 itemsPerPage: number = 10;
   ngOnInit(): void {
+   // this.transaction('hi', 1234)
    this.loadSuppliers();
   }
  
@@ -320,7 +524,7 @@ get displayedColumns(): string[] {
     
   }
   openVehicleCreateDialog(): void {
-    const dialogRef = this._dialogService.open(SupplierCreateComponent , {
+    const dialogRef = this._dialogService.open(NextpaymentagingComponent , {
       width: "80vh",
       maxHeight: "95vh",
     });

@@ -33,7 +33,21 @@
         </mat-select>
       </mat-form-field>
     </div>
-
+     <div class="form-pair">
+<mat-form-field appearance="fill" class="form-field">
+  <input
+    type="text"
+    placeholder="Search Category Path"
+    matInput
+    [formControl]="lmuControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectLmu($event.option.value)">
+    <mat-option *ngFor="let option of filteredLmuOptions" [value]="option">
+      {{ option.lmu }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field></div>
     <div class="form-pair">
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Last Cost</mat-label>

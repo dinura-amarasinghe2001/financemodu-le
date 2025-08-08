@@ -1,0 +1,304 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+
+  <!-- Header Section -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <div class="min-w-0 flex-1">
+      <!-- Title -->
+      <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
+       Transactions
+      </h2>
+    </div>
+
+    <!-- Actions Section -->
+   <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+
+ <!-- Toggle Buttons -->
+<div class="flex gap-2 mr-4">
+  <button
+    (click)="searchByCode = true; showDateRange = false"
+    [class.bg-amber-400]="searchByCode && !showDateRange"
+    [class.bg-gray-300]="!searchByCode || showDateRange"
+    class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+    aria-label="Search by Code"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+    >
+      <mat-icon class="text-2xl" [svgIcon]="'mat_outline:qr_code_scanner'"></mat-icon>
+    </div>
+  </button>
+
+  <button
+    (click)="searchByCode = false; showDateRange = false"
+    [class.bg-amber-400]="!searchByCode && !showDateRange"
+    [class.bg-gray-300]="searchByCode || showDateRange"
+    class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+    aria-label="Search by Name"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+    >
+      <mat-icon class="text-2xl" [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+    </div>
+  </button>
+
+  <button
+    (click)="showDateRange = !showDateRange"
+    class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+    [class.bg-amber-400]="showDateRange"
+    [class.bg-gray-300]="!showDateRange"
+    aria-label="Toggle Date Filter"
+  >
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+    >
+      <mat-icon class="text-2xl" [svgIcon]="'mat_outline:calendar_today'"></mat-icon>
+    </div>
+  </button>
+  <!-- Add this button inside your <div class="flex gap-2 mr-4"> -->
+<button
+  (click)="refreshFilters()"
+  class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400 bg-gray-300"
+  aria-label="Refresh Filters"
+  title="Clear filters and reload"
+>
+  <div
+    class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+  >
+    <mat-icon class="text-2xl" svgIcon="mat_outline:refresh"></mat-icon>
+  </div>
+</button>
+
+</div>
+
+<!-- Search Input or Date Range Picker -->
+<mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+
+  <!-- Show either search input OR date range picker -->
+  <ng-container *ngIf="!showDateRange; else dateRangePicker">
+    <mat-icon
+      class="icon-size-5"
+      matPrefix
+      [svgIcon]="searchByCode ? 'mat_outline:qr_code_scanner' : 'heroicons_solid:magnifying-glass'"
+    ></mat-icon>
+    <input
+      matInput
+      [placeholder]="searchByCode ? 'Search by Code' : 'Search by Name'"
+      [ngModel]="searchByCode ? filter.code : filter.name"
+      (ngModelChange)="searchByCode ? filter.code = $event : filter.name = $event"
+      (keydown.enter)="loadSuppliers()"
+      autocomplete="off"
+    />
+  </ng-container>
+
+  <ng-template #dateRangePicker>
+    <mat-date-range-input [rangePicker]="rangePicker">
+      <input
+        matStartDate
+        placeholder="From date"
+        [(ngModel)]="filter.dateRange.start"
+        name="startDate"
+        (dateChange)="onDateChange()"
+      />
+      <input
+        matEndDate
+        placeholder="To date"
+        [(ngModel)]="filter.dateRange.end"
+        name="endDate"
+        (dateChange)="onDateChange()"
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #rangePicker></mat-date-range-picker>
+  </ng-template>
+
+</mat-form-field>
+
+
+
+
+  <!-- Conditional Date Picker Field 
+<mat-form-field appearance="outline" class="min-w-64 mr-4">
+  <mat-label>Choose date range</mat-label>
+  <mat-date-range-input [rangePicker]="rangePicker">
+    <input matStartDate placeholder="From date" [(ngModel)]="filter.dateRange.start" name="startDate" (dateChange)="onDateChange()" />
+    <input matEndDate placeholder="To date" [(ngModel)]="filter.dateRange.end" name="endDate" (dateChange)="onDateChange()" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+  <mat-date-range-picker #rangePicker></mat-date-range-picker>
+</mat-form-field>-->
+
+
+  <!-- Search Button -->
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="onFilterChange()"
+    class="ml-3"
+  >
+    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:magnifying-glass'"></mat-icon>
+    <span class="ml-2">Search</span>
+  </button>
+
+  <!-- Create Button -->
+  
+  
+
+
+  
+</div>
+
+  </div>
+
+  <!-- Table Container -->
+<div
+  class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"
+  style="min-height: 0; max-height: 6020px;"  
+>
+  <div class="flex flex-col flex-auto sm:mb-18"> <!-- ❌ remove 'overflow-auto' here -->
+
+      <table
+        mat-table
+        [dataSource]="supplier"
+        matSort
+        class="w-full table-fixed border-separate border-spacing-y-2"
+      >
+        <!-- Columns -->
+
+        <!-- Supplier Code -->
+        <ng-container matColumnDef="code">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Code
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.accountCode }}
+          </td>
+        </ng-container>
+
+        <!-- ID -->
+      <ng-container matColumnDef="id">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+</ng-container>
+
+
+        <!-- Name -->
+        <ng-container matColumnDef="vehicleOwnerName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+           Debit
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers. debit }}
+          </td>
+        </ng-container>
+
+        <!-- Phone -->
+        <ng-container matColumnDef="vehicleBrand">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+           Credit
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.credit }}
+          </td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="vehicleModel">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            Date
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.date }}
+          </td>
+        </ng-container>
+          <ng-container matColumnDef="subid">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+            REF
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.refDoc }}
+          </td>
+        </ng-container>
+          <ng-container matColumnDef="source">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="sticky top-0 z-10 bg-white dark:bg-gray-900 px-4 py-3 text-left font-semibold"
+          >
+           Source
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.source}}
+          </td>
+        </ng-container>
+    
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Paginator -->
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPaginateChange($event)"
+  >
+  </mat-paginator>
+  <button
+  mat-flat-button
+  color="primary"
+  class="fixed bottom-4 right-20 z-50 w-48 h-16   font-semibold rounded-xl shadow-lg" (click)="onAddMore()">
+  Generate day end report
+</button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

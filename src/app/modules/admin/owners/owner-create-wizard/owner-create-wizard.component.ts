@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, inject, Inject, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
@@ -25,6 +25,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { AccountTypeService } from "app/entities/financemicro/account-type/service/account-type.service";
+import { AccountsService } from "app/entities/financemicro/accounts/service/accounts.service";
 import { IClientRegistry } from "app/entities/operationsModuleCooperation/client-registry/client-registry.model";
 import { ClientRegistryService } from "app/entities/operationsModuleCooperation/client-registry/service/client-registry.service";
 import { IVehicleModel } from "app/entities/operationsModuleCooperation/vehicle-model/vehicle-model.model";
@@ -81,8 +83,10 @@ export class OwnerCreateWizardComponent implements OnInit {
     private _clientService: ClientRegistryService,
     private _vehicleService: VehicleRegistryService
   ) {}
-
+ categoryService1 = inject(AccountTypeService);
+  AccountsService = inject(AccountsService);
   ngOnInit(): void {
+    this.catfetch();
     this.clientForm = this._fb.group({
       id: [null], // Optional, useful for edit scenarios
       name: ["", Validators.required],
@@ -171,8 +175,92 @@ export class OwnerCreateWizardComponent implements OnInit {
     return client?.name || "";
   }
 
-  submitClient(): void {
+lmuControl = new FormControl('');
+filteredLmuOptions: string[] = [];
+
+ categories1: any[] = [];
+
+catfetch() {
+  this.categoryService1.query({ size: 10000 }).subscribe({
+    next: (data) => {
+      this.categories1 = data.body || [];
+      this.updateLmuOptions(); // prepare autocomplete list
+    },
+    error: (error) => {
+      console.error('Error fetching categories:', error);
+    }
+  });
+}
+ 
+
+updateLmuOptions() {
+  const allCategories = this.categories1.filter(
+    (cat, index, self) => cat.lmu && self.findIndex(c => c.lmu === cat.lmu) === index
+  ); // remove duplicates by lmu
+
+  this.lmuControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this.filterLmu(value, allCategories))
+  ).subscribe(filtered => {
+    this.filteredLmuOptions = filtered;
+  });
+}
+
+filterLmu(value: string, options: any[]): any[] {
+  const filterValue = value.toLowerCase();
+  return options.filter(option => option.lmu.toLowerCase().includes(filterValue));
+}
+
+ 
+
+displayFn(option: any): string {
+  return option && option.lmu ? option.lmu : '';
+}
+  selected: any = null; // store selected category
+
+onSelectLmu(selected: any) {
+  this.selected = selected;
+
+  console.log('Selected Category - lmu:', selected.lmu);
+  console.log('Selected Category - code:', selected.code);
+  console.log('Selected Category - type:', selected.type);
+}
+
+createacc() {
+  if (!this.selected || !this.clientForm.valid) {
+    console.warn('Form is invalid or no category selected.');
+    return;
+  }
+
+const generatedrandomclient='CUS'+ Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+  console.log('Generated Client Code:', generatedrandomclient);
+
+  const payload = {
+    id: null,
+    parent: this.selected.type,
+    path: this.selected.lmu,
+    code: generatedrandomclient,      // assume you're manually entering or auto-generating this
+    child: this.selected.code || '',
+    name: this.clientForm.value.name || '',
+  };
+
+  console.log('Payload to send:', payload);
+   this.AccountsService.create(payload).subscribe({
+    next: (response) => {
+      console.log('Account created successfully:', response);
+   },
+     error: (error) => {
+     console.error('Error creating account:', error);
+     }
+   });
+
+  
+}
+  submitClient(): void { //ituru
     const clientData = this.clientForm.value;
+console.log("Client Data to Submit:", clientData);
+
+
 
     if (this.data?.owner?.id) {
       const updatedData = { ...this.data.owner, ...clientData };
@@ -181,6 +269,7 @@ export class OwnerCreateWizardComponent implements OnInit {
         this.dialogRef.close(response);
       });
     } else {
+      this.createacc();
       this._clientRegistryService.create(clientData).subscribe((response) => {
         console.log("Client Created Successfully", response);
         this._vehicleService.find(this.data?.vehicle.id).subscribe((res) => {

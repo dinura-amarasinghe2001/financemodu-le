@@ -1,0 +1,66 @@
+.report-title {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding: 10px 0;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  z-index: 20;
+  border-bottom: 1px solid #ddd;
+  margin: 0; /* remove vertical margin for sticky */
+}
+
+.container {
+  position: relative;
+  height: 400px; /* adjust to your need */
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1rem 0;
+}
+
+/* Style for sub-section headings inside scroll */
+.table-wrapper p {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 1rem 0 0.5rem 10px; /* add some left indent and spacing */
+}
+
+/* Table styling */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  margin-bottom: 1.5rem; /* space below each table */
+}
+
+.styled-table th,
+.styled-table td {
+  border: 1px solid #000;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.styled-table thead th {
+  position: sticky;
+  top: 40px; /* height of .report-title + border */
+  background-color: #f9f9f9;
+  font-weight: bold;
+  z-index: 10;
+  border-bottom: 2px solid #ddd;
+  padding: 8px;
+}
+
+.styled-table .amount {
+  text-align: right;
+  white-space: nowrap;
+}

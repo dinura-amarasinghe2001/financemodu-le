@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (transaction(); as transactionRef) {
+      <div>
+        <h2 data-cy="transactionDetailsHeading"><span>Transaction</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ transactionRef.id }}</span>
+          </dd>
+          <dt><span>Ops Unit ID</span></dt>
+          <dd>
+            <span>{{ transactionRef.opsUnitID }}</span>
+          </dd>
+          <dt><span>Account Id</span></dt>
+          <dd>
+            <span>{{ transactionRef.accountId }}</span>
+          </dd>
+          <dt><span>Account Code</span></dt>
+          <dd>
+            <span>{{ transactionRef.accountCode }}</span>
+          </dd>
+          <dt><span>Debit</span></dt>
+          <dd>
+            <span>{{ transactionRef.debit }}</span>
+          </dd>
+          <dt><span>Credit</span></dt>
+          <dd>
+            <span>{{ transactionRef.credit }}</span>
+          </dd>
+          <dt><span>Date</span></dt>
+          <dd>
+            <span>{{ transactionRef.date | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Ref Doc</span></dt>
+          <dd>
+            <span>{{ transactionRef.refDoc }}</span>
+          </dd>
+          <dt><span>Relid</span></dt>
+          <dd>
+            <span>{{ transactionRef.relid }}</span>
+          </dd>
+          <dt><span>Sub Id</span></dt>
+          <dd>
+            <span>{{ transactionRef.subId }}</span>
+          </dd>
+          <dt><span>Source</span></dt>
+          <dd>
+            <span>{{ transactionRef.source }}</span>
+          </dd>
+          <dt><span>Lmu</span></dt>
+          <dd>
+            <span>{{ transactionRef.lmu }}</span>
+          </dd>
+          <dt><span>Lmd</span></dt>
+          <dd>
+            <span>{{ transactionRef.lmd | formatMediumDatetime }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/transaction', transactionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

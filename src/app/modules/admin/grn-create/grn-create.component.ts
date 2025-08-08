@@ -39,6 +39,8 @@ import { TheInventoryBatchesService } from 'app/entities/inventorymicro/the-inve
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
  import { MatTooltipModule } from '@angular/material/tooltip';
+import { AccountTypeService } from 'app/entities/financemicro/account-type/service/account-type.service';
+import { AccountsService } from 'app/entities/financemicro/accounts/service/accounts.service';
  
 
 @Component({
@@ -71,6 +73,8 @@ export class GrnCreateComponent {
   bincard=inject(BinCardService)
  inventory=inject(InventoryService);
   supplierbankdetails=inject(SupplierBankAccountsService)
+  categoryService1 = inject(AccountTypeService);
+    AccountsService = inject(AccountsService);
 activeTabIndex: number = 1;
   constructor(
     private fb: FormBuilder,
@@ -167,6 +171,41 @@ confirmReset(): void {
 }
 
 
+check() {
+  console.log('Checking items:', this.items);
+
+  this.items.forEach(item => {
+    this.AccountsService.query({ 'code.equals': item.itemCode }).subscribe({
+      next: (response) => {
+        const res = response.body?.[0]; // assuming response is an array
+
+        if (res && res.id != null) {
+          const updatedAmount = (res.amount || 0) + (item.purcost || 0);
+
+          const updatePayload = {
+            id: res.id,
+            debitAmount: item.purcost+res.debitAmount,
+            amount: updatedAmount
+          };
+
+          this.AccountsService.partialUpdate(updatePayload).subscribe({
+            next: () => {
+              console.log(`Updated account ${res.id} with amount ${updatedAmount}`);
+            },
+            error: (err) => {
+              console.error(`Failed to update account ${res.id}`, err);
+            }
+          });
+        } else {
+          console.warn(`No account found for code: ${item.itemCode}`);
+        }
+      },
+      error: (err) => {
+        console.error(`Failed to fetch account for code: ${item.itemCode}`, err);
+      }
+    });
+  });
+}
 
 
 
@@ -342,6 +381,7 @@ deleteItem(item: any): void {
 pageSize = 10;
 currentPage = 1;
 pagedItems: any[] = [];
+
 
 onPaginateChange(event: PageEvent): void {
   this.pageSize = event.pageSize;
@@ -595,14 +635,16 @@ console.log('batch lines',this.items)
     next: (responses) => {
       console.log('All inventory items created:', responses);
        console.log('everything finisheddddddd');
+        this.check();
         this._snackBar.open('GRN created successfully!', 'Close', {
     duration: 3000,
     verticalPosition: 'top',
     panelClass: ['bg-green-600', 'text-white'] // optional styling
   });
-       setTimeout(() => {
-      this.router.navigate(['/grn']);
-    }, 500);
+ 
+      setTimeout(() => {
+        this.router.navigate(['/grn']);
+     }, 500);
       // Optional: navigate or reload after delay
     },
     error: (error) => {

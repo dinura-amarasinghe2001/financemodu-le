@@ -1,0 +1,333 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+
+  <!-- Header Section -->
+  <div
+    class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12"
+  >
+    <div class="min-w-0 flex-1">
+      <!-- Title -->
+      <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
+         Account types
+      </h2>
+    </div>
+
+    <!-- Actions Section -->
+   <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+
+  <!-- Toggle Buttons -->
+  <div class="flex gap-2 mr-4">
+    <button
+      (click)="searchByCode = true"
+      [class.bg-amber-400]="searchByCode"
+      [class.bg-gray-300]="!searchByCode"
+      class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+      aria-label="Search by Code"
+    >
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+      >
+        <mat-icon class="text-2xl" [svgIcon]="'mat_outline:qr_code_scanner'"></mat-icon>
+      </div>
+    </button>
+
+    <button
+      (click)="searchByCode = false"
+      [class.bg-amber-400]="!searchByCode"
+      [class.bg-gray-300]="searchByCode"
+      class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400"
+      aria-label="Search by Name"
+    >
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+      >
+        <mat-icon class="text-2xl" [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+      </div>
+    </button>
+    <button
+  (click)="refreshFilters()"
+  class="px-2 py-2 text-white rounded-xl transition-all hover:bg-amber-400 bg-gray-300"
+  aria-label="Refresh Filters"
+  title="Clear filters and reload"
+>
+  <div
+    class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-600 dark:text-indigo-50"
+  >
+    <mat-icon class="text-2xl" svgIcon="mat_outline:refresh"></mat-icon>
+  </div>
+</button>
+  </div>
+
+  <!-- Search Input -->
+  <mat-form-field
+    class="fuse-mat-dense fuse-mat-rounded min-w-64"
+    [subscriptSizing]="'dynamic'"
+  >
+    <mat-icon
+      class="icon-size-5"
+      matPrefix
+      [svgIcon]="searchByCode ? 'mat_outline:qr_code_scanner' : 'heroicons_solid:magnifying-glass'"
+    ></mat-icon>
+    <input
+      matInput
+      [placeholder]="searchByCode ? 'Search by Fullpath' : 'Search by Name'"
+      [ngModel]="searchByCode ? filter.code : filter.name"
+      (ngModelChange)="searchByCode ? filter.code = $event : filter.name = $event"
+      (keydown.enter)="loadSuppliers()"
+      autocomplete="off"
+    />
+  </mat-form-field>
+
+  <!-- Search Button -->
+  <button
+    class="ml-3"
+    mat-flat-button
+    color="primary"
+    (click)="onFilterChange()"
+  >
+    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:magnifying-glass'"></mat-icon>
+    <span class="ml-2">Search</span>
+  </button>
+
+  <!-- Create Button -->
+  <button
+    class="ml-3"
+    mat-flat-button
+    color="primary"
+    (click)="openVehicleCreateDialog()"
+  >
+    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_mini:plus'"></mat-icon>
+    <span class="ml-2">Create</span>
+  </button>
+
+</div>
+
+  </div>
+
+  <!-- Table Container -->
+  <div
+    class="example-table-container bg-card -mt-16 h-full rounded-t-2xl shadow overflow-auto"     style="min-height: 0;"
+  >
+    <div class="flex flex-col flex-auto sm:mb-18 overflow-auto">
+      <table
+        mat-table
+        [dataSource]="supplier"
+        matSort
+        class="w-full table-fixed border-separate border-spacing-y-2"
+      >
+        <!-- Columns -->
+
+        <!-- Supplier Code -->
+        <ng-container matColumnDef="code">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            FullPath
+          </th>
+           <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+    <ng-container *ngIf="editRowId === suppliers.id; else displayFullPath">
+      <input
+        type="text"
+        [(ngModel)]="editfullPath"
+        class="w-full px-2 py-1 border border-gray-300 rounded-md"
+      />
+    </ng-container>
+    <ng-template #displayFullPath>
+      {{ suppliers.lmu}}
+    </ng-template>
+  </td>
+        </ng-container>
+<!-- Parent Name -->
+<ng-container matColumnDef="parentName">
+  <th
+    mat-header-cell
+    *matHeaderCellDef
+    mat-sort-header
+    class="px-4 py-3 text-left font-semibold"
+  >
+    Parent Name
+  </th>
+  <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+    {{ suppliers.type }}
+  </td>
+</ng-container>
+
+        <!-- ID -->
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            ID
+          </th>
+          <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+            {{ suppliers.id }}
+          </td>
+        </ng-container>
+
+        <!-- Name -->
+        <ng-container matColumnDef="vehicleOwnerName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            class="px-4 py-3 text-left font-semibold"
+          >
+            Child Name
+          </th>
+        <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+    <ng-container *ngIf="editRowId === suppliers.id; else displayName">
+      <input
+        type="text"
+        [(ngModel)]="editInputname"
+        class="w-full px-2 py-1 border border-gray-300 rounded-md"
+      />
+    </ng-container>
+    <ng-template #displayName>
+      {{ suppliers.code}}
+    </ng-template>
+  </td>
+        </ng-container>
+
+        <!-- Phone -->
+        
+
+        <!-- Actions -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="px-4 py-3 text-left font-semibold">
+           
+          </th>
+        <td mat-cell *matCellDef="let suppliers" class="px-4 py-2">
+  <div class="flex space-x-2">
+    
+
+    <button
+      mat-flat-button
+      class="fuse-mat-button-large"
+      color="warn"
+      (click)="deleteSupplier(suppliers.id)"
+    >
+      Delete
+    </button>
+  </div>
+</td>
+
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Paginator -->
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPaginateChange($event)"
+  >
+  </mat-paginator>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <mat-card class="content-box">
+  <h2>🔎 View Supplier</h2> -->
+
+  <!-- Filter Section -->
+  <!-- <div class="filter-section">
+    <mat-form-field appearance="outline" class="form-group">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="filter.name" placeholder="Enter name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-group">
+      <mat-label>Code</mat-label>
+      <input matInput [(ngModel)]="filter.code" placeholder="Enter code" />
+    </mat-form-field>
+
+   
+      <button mat-raised-button color="primary" (click)="loadSuppliers()">Load Suppliers</button>
+    
+  </div> -->
+
+  <!-- Row Count Selector -->
+  <!-- <div class="row-count-selector">
+    <label>Row count:</label>
+    <mat-form-field appearance="fill">
+      <mat-select [(value)]="pageSize" (selectionChange)="onRowCountChange()">
+        <mat-option *ngFor="let count of [10, 25, 50]" [value]="count">{{ count }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div> -->
+
+  <!-- Supplier Material Table -->
+  <!-- <div class="table-container mat-elevation-z2">
+    <table mat-table [dataSource]="suppliers" class="mat-table" multiTemplateDataRows>
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef> Code </th>
+        <td mat-cell *matCellDef="let supplier"> {{ supplier.code }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let supplier"> {{ supplier.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef> Phone </th>
+        <td mat-cell *matCellDef="let supplier"> {{ supplier.phone }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fax">
+        <th mat-header-cell *matHeaderCellDef> Fax </th>
+        <td mat-cell *matCellDef="let supplier"> {{ supplier.fax }} </td>
+      </ng-container> -->
+
+      <!-- <ng-container matColumnDef="balanceOwing">
+        <th mat-header-cell *matHeaderCellDef> Balance Owing </th>
+        <td mat-cell *matCellDef="let supplier"> {{ supplier.balanceOwing | currency }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="view">
+        <th mat-header-cell *matHeaderCellDef> View </th>
+        <td mat-cell *matCellDef="let supplier">
+          <button mat-stroked-button color="primary" (click)="viewSupplier(supplier)">View</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+<!-- 
+      <tr class="mat-row" *ngIf="suppliers.length === 0">
+        <td class="mat-cell" colspan="6">No records found</td>
+      </tr>
+    </table>
+  </div> -->
+<!-- </mat-card> -->

@@ -270,7 +270,7 @@
         mat-flat-button
         class="fuse-mat-button-large"
         color="primary"
-        (click)="updateAmountOwing(suppliers.id, suppliers.amountowing)"
+        (click)="updateAmountOwing(suppliers.id, suppliers.amountowing, suppliers.amountowing, suppliers.suppliername, suppliers.grncode,suppliers.invoicecode)"
       >
         Paid
       </button>
@@ -296,6 +296,12 @@
   >
     
   </mat-paginator>
+  <button
+  mat-flat-button
+  color="primary"
+  class="fixed bottom-4 right-20 z-50 w-48 h-16   font-semibold rounded-xl shadow-lg" (click)="openVehicleCreateDialog()">
+  Aging Report
+</button>
    <div class="fixed bottom-2 left-1/2 transform -translate-x-1/2 p-4 font-semibold text-2xl w-auto">
   Total Amount Owing: {{ totalOwing | number:'1.2-2' }}
 </div>

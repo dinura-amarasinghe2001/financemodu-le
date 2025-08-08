@@ -74,6 +74,9 @@ import { IVehicleTreatmentRegistry } from "app/entities/operationsModuleCooperat
 import { InventoryService } from "app/entities/inventorymicro/inventory/service/inventory.service";
 import { TheInventoryBatchesService } from "app/entities/inventorymicro/the-inventory-batches/service/the-inventory-batches.service";
 import { BinCardService } from "app/entities/inventorymicro/bin-card/service/bin-card.service";
+import { AccountsService } from "app/entities/financemicro/accounts/service/accounts.service";
+import { AccountTypeService } from "app/entities/financemicro/account-type/service/account-type.service";
+import { TransactionService } from "app/entities/financemicro/transaction/service/transaction.service";
 
 @Component({
   selector: "app-invoice-create",
@@ -168,9 +171,10 @@ export class QuickInvoiceCreateComponent implements OnInit {
   invSts: string = "";
 
   // Form controls
-
+TransactionService=inject(TransactionService)
   searchInputControl = new FormControl();
-
+categoryService1 = inject(AccountTypeService);
+    AccountsService = inject(AccountsService);
   private _route = inject(ActivatedRoute);
   inventoryService = inject(InventoryService);
   gatePassService = inject(GatePassService);
@@ -202,6 +206,7 @@ export class QuickInvoiceCreateComponent implements OnInit {
   }
   ngOnInit(): void {
     // alert(this .dueAmount)
+    
     this.invoiceDetails = createEmptyInvoice();
 
     this._selectedCardService.selectedCard$.subscribe((selected) => {
@@ -342,6 +347,7 @@ export class QuickInvoiceCreateComponent implements OnInit {
   }
 
   createEmptyLineitem(): void {
+   // this.fetchinv()
     this.isCreating = true;
     const index = this.vehicleEstimateTreatments.length;
 
@@ -658,6 +664,225 @@ export class QuickInvoiceCreateComponent implements OnInit {
     this._fuseAlertService.show(name);
   }
 
+fetchinv() {
+  console.log("Fetching treatments...", this.vehicleEstimateTreatments);
+
+  if (this.vehicleEstimateTreatments && this.vehicleEstimateTreatments.length > 0) {
+    const combined = this.vehicleEstimateTreatments.flatMap(treatment => {
+      const amount = treatment.amount;
+      const descriptionsRaw = treatment.descriptions;
+      const descriptions = Array.isArray(descriptionsRaw) ? descriptionsRaw : [descriptionsRaw];
+
+      return descriptions.map(desc => {
+        if (typeof desc === 'string') {
+          const parts = desc.split(' - ');
+          const itemCode = parts[1] ? parts[1].trim() : null;
+
+          if (itemCode) {
+            return { itemCode, amount };
+          }
+        }
+        return null;
+      }).filter(Boolean);
+    });
+
+    console.log('Combined:', combined);
+
+    // Loop through each itemCode + amount pair
+    combined.forEach(item => {
+      this.AccountsService.query({ 'code.equals': item.itemCode }).subscribe({
+        next: (res) => {
+          const account = res.body?.[0];
+          if (account && account.id != null) {
+            const updatedAmount = (account.amount ?? 0) - (account.creditAmount ?? 0);
+            const updatedCredit = (account.creditAmount ?? 0) + item.amount;
+
+            this.AccountsService.partialUpdate({
+              id: account.id,
+              amount: updatedAmount,
+              creditAmount: updatedCredit
+            }).subscribe({
+              next: (updateRes) => {
+                console.log(`Updated accountttttt ${account.id} with itemCode ${item.itemCode}`);
+              },
+              error: (err) => {
+                console.error(`Error updating account ${account.id}:`, err);
+              }
+            });
+          } else {
+            console.warn(`No account found for itemCode ${item.itemCode}`);
+          }
+        },
+        error: (err) => {
+          console.error(`Error fetching account for itemCode ${item.itemCode}:`, err);
+        }
+      });
+    });
+
+  } else {
+    console.log('No treatments or descriptions found');
+  }
+}
+
+
+fetchcus(name: string, amount: number) {
+
+
+
+
+
+
+
+  console.log("Fetching customer account for nameeeeee:", name);
+
+this.AccountsService.query({
+    'name.equals': 'Cash'
+  }).subscribe({
+    next: (res) => {
+      const account = res.body?.[0];
+      if (account && account.id != null) {
+        console.log("Customer:", account);
+
+        this.AccountsService.partialUpdate({
+          id: account.id,
+          amount: (account.amount ?? 0) + amount,
+          debitAmount: (account.debitAmount ?? 0) + amount
+        }).subscribe({
+          next: (updateRes) => {
+            console.log("Account cash updated successfully", updateRes);
+          },
+          error: (updateErr) => {
+            console.error("Error updating account:", updateErr);
+          }
+        });
+
+      } else {
+        console.warn(`No account found for customer name ${name}`);
+      }
+    },
+    error: (err) => {
+      console.error("Error fetching customer account:", err);
+    }
+  });
+
+
+
+
+  this.AccountsService.query({
+    'name.equals': name
+  }).subscribe({
+    next: (res) => {
+      const account = res.body?.[0];
+      if (account && account.id != null) {
+        console.log("Customer:", account);
+
+        this.AccountsService.partialUpdate({
+          id: account.id,
+          amount: (account.amount ?? 0) + amount,
+          debitAmount: (account.debitAmount ?? 0) + amount
+        }).subscribe({
+          next: (updateRes) => {
+            console.log("Account updated successfully", updateRes);
+          },
+          error: (updateErr) => {
+            console.error("Error updating account:", updateErr);
+          }
+        });
+
+      } else {
+        console.warn(`No account found for customer name ${name}`);
+      }
+    },
+    error: (err) => {
+      console.error("Error fetching customer account:", err);
+    }
+  });
+}
+
+transaction(name: string, grnvalue: number, invoicecode: string) {
+  this.TransactionService.query({
+    'refDoc.contains': 'recipt',
+    sort: ['id,desc']
+  }).subscribe({
+    next: (response) => {
+      const latestTransaction = response.body?.[0];
+      let newRefDoc = 'recipt1';
+
+      if (latestTransaction?.refDoc) {
+        const match = latestTransaction.refDoc.match(/^recipt(\d+)$/);
+        if (match) {
+          const number = parseInt(match[1], 10);
+          newRefDoc = `recipt${number + 1}`;
+        }
+      }
+
+      const relid = Math.floor(1e5 + Math.random() * 9e5); // 15-digit number
+
+      this.AccountsService.query({ 'id.equals': 1124 }).subscribe({
+        next: (accountResponse) => {
+          const account = accountResponse.body?.[0];
+
+          if (!account?.id) {
+            console.warn('Account not found with ID 1124');
+            return;
+          }
+
+          const payload = {
+            id: null,
+            debit: grnvalue,
+            source: 'receipt',
+            refDoc: newRefDoc,
+            date: dayjs(),
+            subId: account.amount, // <-- double-check this logic
+            accountCode: 'cash',
+            relid: relid
+          };
+
+          this.TransactionService.create(payload).subscribe({
+            next: () => console.log('Transaction (receipt) created successfully'),
+            error: (err) => console.error('Transaction (receipt) creation failed:', err)
+          });
+
+          // Now handle the supplier transaction
+          this.AccountsService.query({ 'name.equals': name }).subscribe({
+            next: (supplierResponse) => {
+              const supplierAccount = supplierResponse.body?.[0];
+
+              if (!supplierAccount?.code) {
+                console.warn('Supplier account not found or missing code');
+                return;
+              }
+
+              const payload2 = {
+                id: null,
+                credit: grnvalue,
+                source: 'Invoice',
+                refDoc: invoicecode,
+                date: dayjs(),
+                subId: account.amount,
+                accountCode: supplierAccount.code,
+                relid: relid
+              };
+
+              console.log('Payload 1 (receipt):', payload);
+              console.log('Payload 2 (supplier credit):', payload2);
+
+              this.TransactionService.create(payload2).subscribe({
+                next: () => console.log('Transaction (supplier credit) created successfully'),
+                error: (err) => console.error('Transaction (supplier credit) creation failed:', err)
+              });
+            },
+            error: (err) => console.error('Failed to fetch supplier account:', err)
+          });
+        },
+        error: (err) => console.error('Failed to fetch cash account:', err)
+      });
+    },
+    error: (err) => console.error('Failed to fetch transactions:', err)
+  });
+}
+
+ 
   async createInvoice(): Promise<void> {
     if (this.paymentType === "") {
       this._snackBarService.open("Please Add Payment!", "Close", {
@@ -696,8 +921,15 @@ export class QuickInvoiceCreateComponent implements OnInit {
       invoiceStatus:
         this.paymentAmount === this.totalAmount ? "PAID" : "UNPAID",
     };
+    console.log('zzzzzzzzzzz',invoice);
+   invoice. invoiceNumber
+invoice.vehicleOwnerName
+console.log("Creating invoice with detailsssssssvvvvvvvvvvvvvvvs:", invoice);
+ this.transaction(invoice.vehicleOwnerName, invoice.totalNetAmount, invoice.invoiceNumber);
+this.fetchcus(invoice.vehicleOwnerName, invoice.totalNetAmount);
     this.processInventoryFlow();
-
+   
+this.fetchinv()
     this._invoiceService.create(invoice).subscribe((res) => {
       this.invoiceID = res.body.id;
       this.isCreating = false;
